@@ -429,7 +429,7 @@ es:{
   tag_rico_1: "encantador",
   tag_rico_2: "crítico gastronómico",
   role_pip: "Broadway, skyline y café",
-  line_pip: "“¡Valevalevale… mira arriba!”",
+  line_pip: "“¡Vale, vale, vale… mira hacia arriba!”",
   tag_pip_0: "cafeinado",
   tag_pip_1: "ansioso",
   tag_pip_2: "explorador de shows",
@@ -632,8 +632,7 @@ es:{
   toast_live: "Tu tarjeta está activa.",
   toast_photo_fail: "Falló la subida de la foto — inténtalo de nuevo.",
   toast_photo_prep: "Preparando tu foto — un momento…",
-  toast_photo_bad: "No pudimos usar esa foto — prueba otra."
-,
+  toast_photo_bad: "No pudimos usar esa foto — prueba otra.",
   alt_scurry: "Scurry, la rata gris callejera astuta",
   alt_rico: "Monsieur Rico, el mapache gris-marrón dramático",
   alt_pip: "Pip, la paloma gris cafeinada con un vaso de café para llevar",
@@ -1360,13 +1359,16 @@ de:{
 let lang="en";
 try{const _sl=localStorage.getItem("souvs-lang");if(_sl&&I18N[_sl])lang=_sl;}catch(e){}
 function t(key,vars){let s=(I18N[lang]&&I18N[lang][key]!=null)?I18N[lang][key]:((I18N.en&&I18N.en[key]!=null)?I18N.en[key]:key);s=String(s);if(vars){for(const k in vars)s=s.split("{"+k+"}").join(vars[k]);}return s;}
-function applyI18n(){
-  try{document.documentElement.lang=lang;}catch(e){}
-  try{localStorage.setItem("souvs-lang",lang);}catch(e){}
+window.__i18nAttrs=function(){
   document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=t(el.getAttribute("data-i18n"));});
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>{el.setAttribute("placeholder",t(el.getAttribute("data-i18n-ph")));});
   document.querySelectorAll("[data-i18n-aria]").forEach(el=>{el.setAttribute("aria-label",t(el.getAttribute("data-i18n-aria")));});
   document.querySelectorAll("[data-i18n-alt]").forEach(el=>{el.setAttribute("alt",t(el.getAttribute("data-i18n-alt")));});
+};
+function applyI18n(){
+  try{document.documentElement.lang=lang;}catch(e){}
+  try{localStorage.setItem("souvs-lang",lang);}catch(e){}
+  window.__i18nAttrs();
   const lb=document.getElementById("langLabel");if(lb)lb.textContent=lang.toUpperCase();
   document.querySelectorAll(".lang-option").forEach(b=>b.classList.toggle("active",b.getAttribute("data-lang")===lang));
   if(typeof window.__retrans==="function")window.__retrans();
@@ -1883,7 +1885,7 @@ function refreshAll(){
     return refreshThreads();
   });
 }
-function syncCardFormMode(){var tt=$("#cardFormTitle"),b=$("#cardFormSubmit"),edit=!!(me&&me.name);if(tt)tt.textContent=edit?t("form_edit"):t("form_create");if(b)b.textContent=t("form_save");}
+function syncCardFormMode(){var tt=$("#cardFormTitle"),b=$("#cardFormSubmit"),edit=!!(me&&me.name);if(tt)tt.textContent=edit?t("form_edit"):t("form_create");if(b)b.textContent=t("form_save");var ts=$("#mcTag");if(ts){var cv=ts.value||(me&&me.tag)||TAGS[0];ts.innerHTML=TAGS.map(function(tag){return '<option value="'+esc(tag)+'"'+(tag===cv?" selected":"")+">"+esc(tagLabel(tag))+"</option>"}).join("");}}
 $("#mcName").value=me.name||"";
 $("#mcKind").value=me.kind||"traveler";
 $("#mcTag").value=me.tag||TAGS[0];
@@ -1913,7 +1915,7 @@ if(_avf)_avf.addEventListener("change",function(){
 if(_avr)_avr.addEventListener("click",function(){avatarPending=null;avatarRemove=true;if(_avf)_avf.value="";refreshAvatarPrev()});
 refreshAvatarPrev();
 renderProfile();
-window.__meetRetrans=function(){syncCardFormMode();refreshAvatarPrev();renderProfile();if(travelersLoaded&&lastTravelers){renderTravelers(lastTravelers);renderHomeTravelers();}refreshThreads();};
+window.__meetRetrans=function(){syncCardFormMode();refreshAvatarPrev();renderProfile();if(typeof window.__i18nAttrs==="function")window.__i18nAttrs();if(travelersLoaded&&lastTravelers){renderTravelers(lastTravelers);renderHomeTravelers();}refreshThreads();};
 applyI18n();
 refreshAll();
 })();
