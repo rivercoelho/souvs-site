@@ -366,7 +366,11 @@ function avatarHtml(t,big){
   if(t&&t.avatar&&t.userId)return '<img class="meet-avatar-img'+(big?" big":"")+'" src="'+esc(avatarSrc(t))+'" alt="">';
   return '<span class="meet-avatar'+(big?" big":"")+'" aria-hidden="true">'+esc(initials(t&&t.name))+'</span>';
 }
-var avatarPending=null,avatarRemove=false;
+var avatarPending=null,avatarRemove=false,avatarBusy=0,avatarSeq=0,avatarWaitTimer=null;
+function setAvatarBusy(){
+  var b=document.querySelector('#meetCardForm button[type="submit"]');
+  if(b)b.disabled=avatarBusy>0;
+}
 function resizeAvatar(file){
   return new Promise(function(res,rej){
     var img=new Image();
@@ -536,9 +540,7 @@ $("#chatReport").addEventListener("click",function(){
 });
 
 /* ---- register form ---- */
-$("#meetCardForm").addEventListener("submit",function(e){
-  e.preventDefault();
-  var form=this;
+function doCardSubmit(form){
   var name=$("#mcName").value.trim(),kind=$("#mcKind").value,tag=$("#mcTag").value,note=$("#mcNote").value.trim();
   if(!name){toast("Add a display name first.");return}
   var btn=form.querySelector('button[type="submit"]');
@@ -561,6 +563,24 @@ $("#meetCardForm").addEventListener("submit",function(e){
   }else if(avatarRemove){
     api("avatar",{data:""}).then(function(){finish(0)});
   }else finish(me.avatarAt||0);
+}
+$("#meetCardForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  var form=this;
+  if(avatarBusy>0){
+    if(avatarWaitTimer)return;
+    toast("Preparing your photo — one moment…");
+    setAvatarBusy();
+    var waited=0;
+    avatarWaitTimer=setInterval(function(){
+      waited+=150;
+      if(avatarBusy>0&&waited<10000)return;
+      clearInterval(avatarWaitTimer);avatarWaitTimer=null;
+      doCardSubmit(form);
+    },150);
+    return;
+  }
+  doCardSubmit(form);
 });
 
 
@@ -634,8 +654,11 @@ function refreshAvatarPrev(){
 if(_avf)_avf.addEventListener("change",function(){
   var f=_avf.files&&_avf.files[0];
   if(!f)return;
-  avatarRemove=false;
-  resizeAvatar(f).then(function(r){avatarPending=r;refreshAvatarPrev()}).catch(function(){toast("Could not use that photo — try another.");_avf.value=""});
+  avatarRemove=false;avatarPending=null;
+  var seq=++avatarSeq;avatarBusy++;setAvatarBusy();
+  resizeAvatar(f).then(function(r){if(seq===avatarSeq){avatarPending=r;refreshAvatarPrev()}},
+    function(){if(seq===avatarSeq){toast("Could not use that photo — try another.");_avf.value=""}})
+    .then(function(){avatarBusy--;setAvatarBusy()});
 });
 if(_avr)_avr.addEventListener("click",function(){avatarPending=null;avatarRemove=true;if(_avf)_avf.value="";refreshAvatarPrev()});
 refreshAvatarPrev();
