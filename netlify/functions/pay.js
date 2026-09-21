@@ -129,4 +129,4 @@ exports.handler = async (event) => {
 exports._findItem = findItem;
 exports._accessState = accessState;
 
-// deploy-trigger: 2026-09-21 paywall
+// deploy-trigger: 2026-09-21 STRIPE_SECRET_KEY added — rebuild to pick up env
