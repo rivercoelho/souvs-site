@@ -87,7 +87,11 @@ exports.handler = async (event) => {
     const store = getStore({ name: "souvs-signups" });
     await store.setJSON(key, record);
   } catch (err) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: "storage unavailable" }) };
+    const diag =
+      (err && err.name ? err.name : "Error") +
+      ": " +
+      (err && err.message ? err.message : String(err));
+    return { statusCode: 500, headers, body: JSON.stringify({ error: "storage unavailable", diag: diag.slice(0, 300) }) };
   }
 
   return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
