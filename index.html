@@ -1760,9 +1760,12 @@ window.__retrans=function(){renderChat(false);renderChoices();renderWallet();if(
 .profile-travelers .meet-card{padding:16px 14px}
 .profile-travelers .meet-card h3{margin:8px 0 4px;color:var(--ink);font-size:20px}
 .profile-travelers .meet-card p{margin:6px 0;color:var(--muted);font-size:14px}
-/* compact "around right now" photo tiles: name + distance overlaid on the pic */
-.profile-travelers{gap:6px}
-.profile-travelers .meet-card.meet-mini{display:block;position:relative;padding:0;overflow:hidden;border-radius:16px;aspect-ratio:4/5;background:var(--surface-faint)}
+/* photo tiles: 4 columns, edge-to-edge, name overlaid with no shade */
+.profile-travelers{grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-top:0}
+.profile-travelers .meet-card.meet-mini{display:block;position:relative;padding:0;overflow:hidden;border-radius:0;aspect-ratio:4/5;background:var(--surface-faint)}
+.meet-tile-label{background:none;padding:0 6px 6px;text-shadow:0 1px 4px rgba(0,0,0,.85)}
+.meet-tile-name{font-size:10px}
+.meet-dot{width:7px;height:7px;margin-top:2px}
 .meet-tile{display:block;position:relative;width:100%;height:100%;padding:0;border:0;background:none;cursor:pointer}
 .profile-travelers .meet-card .meet-tile{width:100%;max-width:none;margin:0}
 .meet-tile .meet-avatar-img{display:block;width:100%;height:100%;object-fit:cover;border-radius:0}
@@ -2129,13 +2132,10 @@ function renderAroundInto(wrapId,statusId){
   others.forEach(function(p){
     var el=document.createElement("article");
     el.className="meet-card meet-mini";
-    var dt=distText(p);
     el.innerHTML='<button type="button" class="meet-person-link meet-tile" aria-label="'+esc(p.name)+'">'
       +avatarHtml(p)
-      +'<span class="meet-tile-label">'+(p.online?'<span class="meet-dot"></span>':'')+'<span class="meet-tile-text">'
-      +'<span class="meet-tile-name">'+esc(p.name)+'</span>'
-      +(dt?'<span class="meet-tile-dist">'+esc(dt)+'</span>':'')
-      +'</span></span></button>';
+      +'<span class="meet-tile-label">'+(p.online?'<span class="meet-dot"></span>':'')
+      +'<span class="meet-tile-name">'+esc(p.name)+'</span></span></button>';
     Array.prototype.forEach.call(el.querySelectorAll(".meet-person-link"),function(b){
       (function(card){b.addEventListener("click",function(){openPerson(card)})})(p);
     });
