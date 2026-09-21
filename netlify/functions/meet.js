@@ -36,6 +36,7 @@ const UID_RE = /^[A-Za-z0-9_-]{8,64}$/;
 const NAME_RE = /^[A-Za-z0-9 _.'-]{1,40}$/;
 const HANDLE_RE = /^[A-Za-z0-9._-]{1,30}$/;
 const CARD_TTL_MS = 14 * 24 * 3600 * 1000;
+const ONLINE_WINDOW_MS = 4 * 60 * 1000; // green "online" dot: seen in the last 4 minutes
 
 // socials: only handles we can turn into real platform links (never raw user URLs)
 const SOCIALS = {
@@ -116,6 +117,7 @@ const publicCard = (c) =>
         socials: cleanSocials(c.socials),
         avatar: (c.avatarAt || 0) > 0,
         avatarAt: c.avatarAt || 0,
+        online: (c.seenAt || 0) > Date.now() - ONLINE_WINDOW_MS,
       }
     : null;
 
@@ -207,7 +209,7 @@ exports.handler = async (event) => {
       lng = Math.round(lo * 10000) / 10000;
     }
     const prev = await store.get(`traveler/${userId}.json`, { type: "json" }).catch(() => null);
-    const card = { userId, name, kind, tag, note, updatedAt: Date.now() };
+    const card = { userId, name, kind, tag, note, updatedAt: Date.now(), seenAt: Date.now() };
     card.openTo = openTo || (prev && prev.openTo) || { travelers: true, friends: true };
     card.socials = socials || (prev && prev.socials) || {};
     card.email = email !== null ? email : (prev && prev.email) || "";
@@ -260,6 +262,17 @@ exports.handler = async (event) => {
       await store.setJSON(`traveler/${userId}.json`, prev);
     }
     return ok({ ok: true, avatarAt: at });
+  }
+
+  // ---- presence heartbeat: marks this browser as recently active ----
+  if (action === "ping") {
+    if (throttle(`ping:${ip}`, 90, 60 * 1000)) return ok({ ok: true });
+    const c = await store.get(`traveler/${userId}.json`, { type: "json" }).catch(() => null);
+    if (c && Date.now() - (c.seenAt || 0) > 30000) {
+      c.seenAt = Date.now();
+      await store.setJSON(`traveler/${userId}.json`, c);
+    }
+    return ok({ ok: true });
   }
 
   // ---- list live profiles (nearest first when viewer shares location) ----

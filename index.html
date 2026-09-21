@@ -2132,7 +2132,7 @@ function renderAroundInto(wrapId,statusId){
     var dt=distText(p);
     el.innerHTML='<button type="button" class="meet-person-link meet-tile" aria-label="'+esc(p.name)+'">'
       +avatarHtml(p)
-      +'<span class="meet-tile-label"><span class="meet-dot"></span><span class="meet-tile-text">'
+      +'<span class="meet-tile-label">'+(p.online?'<span class="meet-dot"></span>':'')+'<span class="meet-tile-text">'
       +'<span class="meet-tile-name">'+esc(p.name)+'</span>'
       +(dt?'<span class="meet-tile-dist">'+esc(dt)+'</span>':'')
       +'</span></span></button>';
@@ -2453,6 +2453,28 @@ renderProfile();
 window.__meetRetrans=function(){syncCardFormMode();refreshAvatarPrev();renderProfile();if(typeof window.__i18nAttrs==="function")window.__i18nAttrs();if(travelersLoaded&&lastTravelers){renderTravelers(lastTravelers);renderAroundGrids();}if(personData&&currentView()==="person"){renderPersonCard();}refreshThreads();};
 applyI18n();
 refreshAll();
+/* presence heartbeat: green "online" dot = seen in the last few minutes */
+var _pingN=0;
+function presenceTick(){
+  if(!me.id||document.visibilityState!=="visible")return;
+  api("ping",{}).then(function(){});
+  _pingN++;
+  if(_pingN%3===0)softReloadTravelers();
+}
+function softReloadTravelers(){
+  getGeo().then(function(g){
+    var coords=g?{lat:g.lat,lng:g.lng}:{};
+    api("travelers",coords).then(function(r){
+      if(r&&!r.error&&r.travelers){
+        travelersLoaded=true;lastTravelers=r.travelers;
+        renderTravelers(r.travelers);renderAroundGrids();
+      }
+    });
+  });
+}
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")presenceTick();});
+setInterval(presenceTick,60000);
+presenceTick();
 })();
 </script>
 
