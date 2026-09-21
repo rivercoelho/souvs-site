@@ -84,14 +84,14 @@ exports.handler = async (event) => {
   };
 
   try {
-    const store = getStore({ name: "souvs-signups" });
+    const store = getStore({
+      name: "souvs-signups",
+      siteID: process.env.NETLIFY_SITE_ID,
+      token: process.env.NETLIFY_BLOBS_TOKEN,
+    });
     await store.setJSON(key, record);
   } catch (err) {
-    const diag =
-      (err && err.name ? err.name : "Error") +
-      ": " +
-      (err && err.message ? err.message : String(err));
-    return { statusCode: 500, headers, body: JSON.stringify({ error: "storage unavailable", diag: diag.slice(0, 300) }) };
+    return { statusCode: 500, headers, body: JSON.stringify({ error: "storage unavailable" }) };
   }
 
   return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };

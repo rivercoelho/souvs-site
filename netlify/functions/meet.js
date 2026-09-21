@@ -85,7 +85,11 @@ exports.handler = async (event) => {
 
   let store;
   try {
-    store = getStore({ name: "souvs-meet" });
+    store = getStore({
+      name: "souvs-meet",
+      siteID: process.env.NETLIFY_SITE_ID,
+      token: process.env.NETLIFY_BLOBS_TOKEN,
+    });
   } catch {
     return bad(500, "storage unavailable");
   }
