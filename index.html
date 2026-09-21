@@ -199,6 +199,15 @@
   <p data-i18n="pay_sub">Travelers chip in for access. Locals are always free.</p>
   <div class="pay-grid">
     <button class="pass-card free" id="freeWeekBtn" type="button" hidden><strong data-i18n="pay_free_title">First week free</strong><span class="pass-price">$0</span><small data-i18n="pay_free_sub">7 days of full access, on us — first-timers only</small></button>
+    <form class="pass-card free" id="freeWeekForm" hidden novalidate>
+      <strong data-i18n="pay_free_email_title">Claim your free week</strong>
+      <small data-i18n="pay_free_email_sub">Enter your email to activate — we'll send your welcome email there.</small>
+      <input type="email" id="freeWeekEmail" name="email" autocomplete="email" data-i18n-ph="pay_free_email_ph" placeholder="you@email.com">
+      <span class="free-row">
+        <button type="submit" id="freeWeekGo" class="free-go" data-i18n="pay_free_email_btn">Activate free week</button>
+        <button type="button" id="freeWeekBack" class="free-back" data-i18n="pay_free_email_back">Back</button>
+      </span>
+    </form>
     <button class="pass-card" type="button" data-item="daily"><strong data-i18n="pay_daily">Day pass</strong><span class="pass-price">$1.99</span><small data-i18n="pay_daily_sub">24 hours of full access</small></button>
     <button class="pass-card best" type="button" data-item="weekly"><strong data-i18n="pay_weekly">Week pass</strong><span class="pass-price">$9.99</span><small data-i18n="pay_weekly_sub">7 days of full access</small></button>
   </div>
@@ -397,6 +406,13 @@ en:{
   pay_free_sub: "7 days of full access, on us — first-timers only",
   pay_free_done: "Free week activated — enjoy the perks!",
   pay_free_denied: "The free week is for first-time users only.",
+  pay_free_email_title: "Claim your free week",
+  pay_free_email_sub: "Enter your email to activate — we'll send your welcome email there.",
+  pay_free_email_ph: "you@email.com",
+  pay_free_email_btn: "Activate free week",
+  pay_free_email_back: "Back",
+  pay_free_email_invalid: "Please enter a valid email address.",
+  pay_free_welcome: "Free week activated — check your inbox!",
   pay_souv_title: "Souvenirs",
   pay_souv_sub: "Take the crew home with you.",
   pay_note: "Secure checkout with Stripe.",
@@ -669,6 +685,13 @@ es:{
   pay_free_sub: "7 días de acceso total, por nuestra cuenta — solo nuevos usuarios",
   pay_free_done: "¡Semana gratis activada, disfruta de las ventajas!",
   pay_free_denied: "La semana gratis es solo para usuarios nuevos.",
+  pay_free_email_title: "Reclama tu semana gratis",
+  pay_free_email_sub: "Ingresa tu correo para activar — te enviaremos tu correo de bienvenida.",
+  pay_free_email_ph: "tu@correo.com",
+  pay_free_email_btn: "Activar semana gratis",
+  pay_free_email_back: "Atrás",
+  pay_free_email_invalid: "Por favor ingresa un correo válido.",
+  pay_free_welcome: "¡Semana gratis activada, revisa tu correo!",
   pay_souv_title: "Souvenirs",
   pay_souv_sub: "Llévate al equipo a casa.",
   pay_note: "Pago seguro con Stripe.",
@@ -940,6 +963,13 @@ pt:{
   pay_free_sub: "7 dias de acesso total, por nossa conta — só para novos usuários",
   pay_free_done: "Semana grátis ativada — aproveite as vantagens!",
   pay_free_denied: "A semana grátis é só para usuários de primeira vez.",
+  pay_free_email_title: "Resgate sua semana grátis",
+  pay_free_email_sub: "Digite seu e-mail para ativar — enviaremos seu e-mail de boas-vindas.",
+  pay_free_email_ph: "voce@email.com",
+  pay_free_email_btn: "Ativar semana grátis",
+  pay_free_email_back: "Voltar",
+  pay_free_email_invalid: "Por favor digite um e-mail válido.",
+  pay_free_welcome: "Semana grátis ativada — confira seu e-mail!",
   pay_souv_title: "Lembranças",
   pay_souv_sub: "Leve a turma com você.",
   pay_note: "Pagamento seguro com Stripe.",
@@ -1212,6 +1242,13 @@ fr:{
   pay_free_sub: "7 jours d'accès complet, c'est pour nous — nouveaux utilisateurs uniquement",
   pay_free_done: "Semaine offerte activée — profitez-en !",
   pay_free_denied: "La semaine offerte est réservée aux nouveaux utilisateurs.",
+  pay_free_email_title: "Profitez de votre semaine offerte",
+  pay_free_email_sub: "Entrez votre e-mail pour activer — nous y enverrons votre e-mail de bienvenue.",
+  pay_free_email_ph: "vous@email.com",
+  pay_free_email_btn: "Activer ma semaine",
+  pay_free_email_back: "Retour",
+  pay_free_email_invalid: "Veuillez entrer une adresse e-mail valide.",
+  pay_free_welcome: "Semaine offerte activée — vérifiez votre boîte mail !",
   pay_souv_title: "Souvenirs",
   pay_souv_sub: "Ramenez l'équipe chez vous.",
   pay_note: "Paiement sécurisé avec Stripe.",
@@ -1484,6 +1521,13 @@ de:{
   pay_free_sub: "7 Tage voller Zugang, geht auf uns — nur für neue Nutzer",
   pay_free_done: "Gratiswoche aktiviert — viel Spaß mit den Perks!",
   pay_free_denied: "Die Gratiswoche gilt nur für neue Nutzer.",
+  pay_free_email_title: "Hol dir deine Gratiswoche",
+  pay_free_email_sub: "Gib deine E-Mail ein, um zu aktivieren — wir senden dir dort deine Willkommens-Mail.",
+  pay_free_email_ph: "du@email.com",
+  pay_free_email_btn: "Gratiswoche aktivieren",
+  pay_free_email_back: "Zurück",
+  pay_free_email_invalid: "Bitte gib eine gültige E-Mail-Adresse ein.",
+  pay_free_welcome: "Gratiswoche aktiviert — schau in dein Postfach!",
   pay_souv_title: "Souvenirs",
   pay_souv_sub: "Nimm die Crew mit nach Hause.",
   pay_note: "Sichere Zahlung mit Stripe.",
@@ -1672,6 +1716,12 @@ window.__retrans=function(){renderChat(false);renderChoices();renderWallet();if(
 .pass-card.best{border-color:#f5a623;background:#fff8ea}
 .pass-card.free{grid-column:1/-1;border:2px dashed #2e9e6b;background:#f0faf4}
 .pass-card.free .pass-price{color:#1d7a4f}
+#freeWeekForm{gap:8px}
+#freeWeekForm input{font:inherit;padding:12px 14px;border:1.5px solid #bfe3d2;border-radius:12px;background:#fff;color:#000;width:100%;box-sizing:border-box}
+#freeWeekForm input:focus{outline:none;border-color:#2e9e6b}
+.free-row{display:flex;gap:8px}
+.free-go{flex:1;font:inherit;font-weight:800;padding:12px;border:0;border-radius:12px;background:#2e9e6b;color:#fff;cursor:pointer}
+.free-back{font:inherit;font-weight:700;padding:12px 16px;border:1.5px solid #cfd8cc;border-radius:12px;background:#fff;color:#333;cursor:pointer}
 .pass-card:active{transform:scale(.98)}
 .pay-sheet h3{margin:0 0 4px;font-size:17px}
 .souv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 16px}
@@ -1805,19 +1855,38 @@ function renderSouvenirs(){
 function openPaywall(){
   renderSouvenirs();
   var o=$("#payOverlay");if(o){o.hidden=false;applyI18n()}
-  var fb=$("#freeWeekBtn");if(fb)fb.hidden=true;
+  var fb=$("#freeWeekBtn"),ff=$("#freeWeekForm");
+  if(fb)fb.hidden=true;if(ff)ff.hidden=true;
   payApi("status",{}).then(function(r){
     if(r&&!r.error&&r.freeWeekEligible&&fb){fb.hidden=false}
   });
 }
-function claimFreeWeek(){
-  var fb=$("#freeWeekBtn");if(fb)fb.disabled=true;
-  payApi("freeweek",{}).then(function(r){
-    if(fb)fb.disabled=false;
-    if(r.error){if(fb)fb.hidden=true;toast(t("pay_free_denied"));return}
+function showFreeWeekForm(){
+  var fb=$("#freeWeekBtn"),ff=$("#freeWeekForm"),em=$("#freeWeekEmail");
+  if(fb)fb.hidden=true;if(ff)ff.hidden=false;
+  if(em)setTimeout(function(){try{em.focus()}catch(e){}},50);
+}
+function hideFreeWeekForm(){
+  var fb=$("#freeWeekBtn"),ff=$("#freeWeekForm");
+  if(ff)ff.hidden=true;if(fb)fb.hidden=false;
+}
+function validEmail(s){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(s||"").trim())}
+function claimFreeWeek(e){
+  if(e&&e.preventDefault)e.preventDefault();
+  var em=$("#freeWeekEmail"),go=$("#freeWeekGo");
+  var email=em?em.value.trim():"";
+  if(!validEmail(email)){toast(t("pay_free_email_invalid"));if(em)em.focus();return}
+  if(go)go.disabled=true;
+  payApi("freeweek",{email:email}).then(function(r){
+    if(go)go.disabled=false;
+    if(r.error){
+      if(r.error==="bad_email"){toast(t("pay_free_email_invalid"));return}
+      var ff=$("#freeWeekForm");if(ff)ff.hidden=true;
+      toast(t("pay_free_denied"));return;
+    }
     accessCache=null;
     closePaywall();
-    toast(t("pay_free_done"));
+    toast(t("pay_free_welcome"));
   });
 }
 function closePaywall(){var o=$("#payOverlay");if(o)o.hidden=true}
@@ -1847,7 +1916,9 @@ function refreshAfterPaid(n){
   var ov=$("#payOverlay");if(ov)ov.addEventListener("click",function(e){if(e.target===ov)closePaywall()});
   var grid=document.querySelectorAll("#payOverlay .pass-card");
   grid.forEach(function(b){if(b.id==="freeWeekBtn")return;b.addEventListener("click",function(){buyItem(b.getAttribute("data-item"))})});
-  var fw=$("#freeWeekBtn");if(fw)fw.addEventListener("click",claimFreeWeek);
+  var fw=$("#freeWeekBtn");if(fw)fw.addEventListener("click",showFreeWeekForm);
+  var ff=$("#freeWeekForm");if(ff)ff.addEventListener("submit",claimFreeWeek);
+  var fbk=$("#freeWeekBack");if(fbk)fbk.addEventListener("click",hideFreeWeekForm);
   try{
     var q=new URLSearchParams(location.search);
     if(q.get("paid")==="1"){
