@@ -2198,15 +2198,6 @@ function renderThreads(list){
     wrap.appendChild(b);
   });
 }
-function startThread(p){
-  if(!me.name){toast(t("toast_need_profile"));revealCardForm();var f=$("#meetCardForm");if(f)f.scrollIntoView({behavior:"smooth",block:"center"});return}
-  api("thread",{otherId:p.userId}).then(function(r){
-    if(r.error){toast(r.error==="unavailable"?t("toast_unavailable"):t("toast_no_chat"));return}
-    openChat(r.threadId,r.other);
-    refreshThreads();
-  });
-}
-
 /* ---- chat overlay ---- */
 var chatTid=null,chatOther=null,pollTimer=null,lastAt=0;
 function openChat(tid,other){
