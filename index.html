@@ -127,7 +127,7 @@
       <div class="profile-shell">
         <div class="profile-card" id="profileCard"></div>
         <section class="meetup-section" id="meetSection" aria-labelledby="meetupTitle">
-          <div class="meetup-head"><div><p class="eyebrow">Explore together</p><h2 id="meetupTitle">Meet someone for the next stop.</h2><span class="meetup-live">Live · real traveler cards</span></div><p class="meetup-intro">Post your traveler card, browse who's around, and say hi. Messages arrive every few seconds — no account needed.</p></div>
+          <div class="meetup-head"><div><p class="eyebrow">Explore together</p><h2 id="meetupTitle">Meet someone for the next stop.</h2><span class="meetup-live">Live · real traveler cards</span></div><p class="meetup-intro">Browse who's around, and say hi. Messages arrive every few seconds — no account needed.</p></div>
           <div class="meet-choice" aria-label="Who are you open to meeting?"><button class="active" type="button" data-meet-filter="traveler" aria-pressed="true">Another traveler</button><button type="button" data-meet-filter="local" aria-pressed="false">A local person</button></div>
           <p class="meet-status" id="meetStatus">Finding travelers nearby…</p>
           <div class="meet-grid" id="meetGrid">
@@ -302,9 +302,8 @@ var lastTravelers=null;
 var live=document.createElement("div");
 live.id="meetLive";
 var tagOpts=TAGS.map(function(t){return '<option value="'+esc(t)+'">'+esc(t)+'</option>'}).join("");
-live.innerHTML=
- '<div class="meet-live-grid">'
- +'<form id="meetCardForm" class="meet-card-form">'
+var cardFormHtml=
+ '<form id="meetCardForm" class="meet-card-form">'
  +'<h3>Your traveler card</h3>'
  +'<p class="meet-card-sub">Post a card so fellow travelers can find you. No account needed.</p>'
  +'<label>Display name<input id="mcName" maxlength="40" placeholder="Alex" autocomplete="nickname"></label>'
@@ -321,7 +320,9 @@ live.innerHTML=
  +'<label class="avatar-btn">Upload photo<input type="file" id="mcAvatarFile" accept="image/*"></label>'
  +'<button type="button" class="avatar-rm" id="mcAvatarRemove" hidden>Remove</button></div></div>'
  +'<button class="primary" type="submit">Post my card</button>'
- +'</form>'
+ +'</form>';
+live.innerHTML=
+ '<div class="meet-live-grid">'
  +'<div class="meet-chats"><h3>My chats</h3><div id="threadList"><p class="muted">No chats yet — say hi to someone.</p></div></div>'
  +'</div>'
  +'<div id="chatOverlay" hidden><div class="chat-sheet" role="dialog" aria-modal="true" aria-label="Chat">'
@@ -331,6 +332,11 @@ live.innerHTML=
  +'<form id="tchatForm" class="chat-input"><input id="chatText" maxlength="500" placeholder="Say hi…" autocomplete="off"><button class="primary" type="submit">Send</button></form>'
  +'</div></div>';
 grid.parentNode.insertBefore(live,grid.nextSibling);
+var cardSlot=document.createElement("div");
+cardSlot.id="cardFormSlot";
+cardSlot.innerHTML=cardFormHtml;
+var _pc=$("#profileCard");
+if(_pc&&_pc.parentNode)_pc.parentNode.insertBefore(cardSlot,_pc.nextSibling);
 
 /* ---- traveler cards ---- */
 function currentFilter(){var b=document.querySelector('[data-meet-filter].active');return b?b.getAttribute("data-meet-filter"):"traveler"}
