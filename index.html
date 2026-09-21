@@ -133,12 +133,6 @@
           <div class="meet-grid" id="meetGrid">
           </section>
         <div class="profile-prefs">
-          <h3>Who can find you</h3>
-          <label class="pref-row"><span class="pref-text"><strong>New travelers</strong><span>Travelers visiting the city can see your card and say hi.</span></span><span class="pref-ctl"><input type="checkbox" id="prefTravelers"><span class="pref-switch" aria-hidden="true"></span></span></label>
-          <label class="pref-row"><span class="pref-text"><strong>New friends</strong><span>Open to making friends, not just trip buddies.</span></span><span class="pref-ctl"><input type="checkbox" id="prefFriends"><span class="pref-switch" aria-hidden="true"></span></span></label>
-          <p class="pref-note" id="prefNote" role="status"></p>
-        </div>
-        <div class="profile-prefs">
           <h3>Around right now</h3>
           <p class="pref-note" id="profileMeetStatus" role="status">Looking for travelers…</p>
           <div class="profile-travelers" id="profileTravelers"></div>
@@ -319,6 +313,10 @@ var cardFormHtml=
  +'<div class="avatar-row"><span class="avatar-prev" id="mcAvatarPrev">none</span>'
  +'<label class="avatar-btn">Upload photo<input type="file" id="mcAvatarFile" accept="image/*"></label>'
  +'<button type="button" class="avatar-rm" id="mcAvatarRemove" hidden>Remove</button></div></div>'
+ +'<div class="profile-prefs"><h3>Who can find you</h3>'
+ +'<label class="pref-row"><span class="pref-text"><strong>New travelers</strong><span>Travelers visiting the city can see your card and say hi.</span></span><span class="pref-ctl"><input type="checkbox" id="prefTravelers"><span class="pref-switch" aria-hidden="true"></span></span></label>'
+ +'<label class="pref-row"><span class="pref-text"><strong>New friends</strong><span>Open to making friends, not just trip buddies.</span></span><span class="pref-ctl"><input type="checkbox" id="prefFriends"><span class="pref-switch" aria-hidden="true"></span></span></label>'
+ +'<p class="pref-note" id="prefNote" role="status"></p></div>'
  +'<button class="primary" type="submit">Post my card</button>'
  +'</form>';
 live.innerHTML=
