@@ -9,6 +9,7 @@
 //             JPEG; client resizes to <=256px). Empty data removes the photo.
 //   GET ?action=avatar&userId=... -> serves the profile photo (image/jpeg)
 //   travelers { userId, lat?, lng? }                   -> list live profiles, nearest first
+//   remove    { userId }                                -> delete profile + photo
 //   thread    { userId, otherId }                    -> get-or-create thread
 //   threads   { userId }                             -> my threads w/ preview
 //   messages  { userId, threadId, since }            -> messages after `since`
@@ -220,6 +221,14 @@ exports.handler = async (event) => {
     card.avatarAt = avatarAt !== null ? avatarAt : (prev && prev.avatarAt) || 0;
     await store.setJSON(`traveler/${userId}.json`, card);
     return ok({ ok: true, card: publicCard(card) });
+  }
+
+  // ---- delete profile ----
+  if (action === "remove") {
+    if (throttle(`rm:${ip}`, 5, 10 * 60 * 1000)) return bad(429, "slow down");
+    await store.delete(`traveler/${userId}.json`).catch(() => {});
+    await store.delete(`avatar/${userId}.bin`).catch(() => {});
+    return ok({ ok: true });
   }
 
   // ---- upload / remove profile photo ----

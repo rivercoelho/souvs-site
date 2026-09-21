@@ -332,6 +332,9 @@ en:{
   form_create: "Your profile",
   form_edit: "Your profile",
   form_save: "Post my profile",
+  profile_remove: "Remove profile",
+  profile_remove_confirm: "Tap again to confirm",
+  profile_removed: "Your profile was removed.",
   form_sub: "Tell fellow travelers who you are. No account needed.",
   form_loc_note: "Your location is only used to sort nearby profiles — it’s never shown publicly.",
   form_name: "Display name",
@@ -574,6 +577,9 @@ es:{
   form_create: "Tu perfil",
   form_edit: "Tu perfil",
   form_save: "Publicar mi perfil",
+  profile_remove: "Eliminar perfil",
+  profile_remove_confirm: "Toca de nuevo para confirmar",
+  profile_removed: "Tu perfil fue eliminado.",
   form_sub: "Cuéntales a otros viajeros quién eres. Sin necesidad de cuenta.",
   form_loc_note: "Tu ubicación solo se usa para ordenar perfiles cercanos — nunca se muestra públicamente.",
   form_name: "Nombre visible",
@@ -815,6 +821,9 @@ pt:{
   form_create: "Seu perfil",
   form_edit: "Seu perfil",
   form_save: "Publicar meu perfil",
+  profile_remove: "Remover perfil",
+  profile_remove_confirm: "Toque novamente para confirmar",
+  profile_removed: "Seu perfil foi removido.",
   form_sub: "Conte a outros viajantes quem você é. Sem necessidade de conta.",
   form_loc_note: "Sua localização é usada apenas para ordenar perfis próximos — nunca é exibida publicamente.",
   form_name: "Nome de exibição",
@@ -1057,6 +1066,9 @@ fr:{
   form_create: "Votre profil",
   form_edit: "Votre profil",
   form_save: "Publier mon profil",
+  profile_remove: "Supprimer le profil",
+  profile_remove_confirm: "Touchez à nouveau pour confirmer",
+  profile_removed: "Votre profil a été supprimé.",
   form_sub: "Dites aux autres voyageurs qui vous êtes. Aucun compte nécessaire.",
   form_loc_note: "Votre position sert uniquement à trier les profils proches — elle n’est jamais affichée publiquement.",
   form_name: "Nom affiché",
@@ -1299,6 +1311,9 @@ de:{
   form_create: "Dein Profil",
   form_edit: "Dein Profil",
   form_save: "Mein Profil posten",
+  profile_remove: "Profil entfernen",
+  profile_remove_confirm: "Tippe erneut zur Bestätigung",
+  profile_removed: "Dein Profil wurde entfernt.",
   form_sub: "Sag anderen Reisenden, wer du bist. Kein Konto nötig.",
   form_loc_note: "Dein Standort wird nur zum Sortieren naher Profile verwendet — er wird niemals öffentlich angezeigt.",
   form_name: "Anzeigename",
@@ -1497,7 +1512,7 @@ window.__retrans=function(){renderChat(false);renderChoices();renderWallet();if(
 .avatar-row{display:flex;align-items:center;gap:10px;margin-top:6px}
 .avatar-prev{width:156px;height:156px;border-radius:50%;background:rgba(0,0,0,.06);display:grid;place-items:center;overflow:hidden;color:var(--muted);font-size:11px;flex:none}
 .avatar-prev img{width:100%;height:100%;object-fit:cover}
-.meet-card-form .avatar-btn{display:inline-block;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:800;cursor:pointer;color:var(--navy)}
+.meet-card-form .avatar-btn{display:inline-block;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:800;cursor:pointer;color:var(--navy)}.meet-card-form .danger-link{display:block;margin:14px auto 0;padding:6px 10px;border:0;background:none;color:var(--pink-dark);font-size:13px;font-weight:700;text-decoration:underline;text-underline-offset:2px;cursor:pointer}.meet-card-form .danger-link[hidden]{display:none}
 .avatar-btn input{position:absolute;opacity:0;width:1px;height:1px}
 .avatar-rm{background:none;border:0;padding:0;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .pref-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #e6e6ee;border-radius:16px;background:#fff;cursor:pointer}
@@ -1574,6 +1589,7 @@ var cardFormHtml=
  +'<p class="pref-note" id="prefNote" role="status"></p></div>'
  +'<p class="muted" data-i18n="form_loc_note">Your location is only used to sort nearby profiles \u2014 it\u2019s never shown publicly.</p>'
  +'<button class="primary" type="submit" id="cardFormSubmit"></button>'
+ +'<button class="danger-link" type="button" id="cardRemove" data-i18n="profile_remove">Remove profile</button>'
  +'</form>';
 live.innerHTML=
  '<div class="meet-live-grid">'
@@ -1876,6 +1892,27 @@ $("#meetCardForm").addEventListener("submit",function(e){
   doCardSubmit(form);
 });
 
+/* ---- remove profile (two-tap confirm) ---- */
+var removeArmed=false;
+document.addEventListener("click",function(e){
+  var b=e.target&&e.target.closest?e.target.closest("#cardRemove"):null;
+  if(!b||b.hidden)return;
+  if(!removeArmed){removeArmed=true;b.textContent=t("profile_remove_confirm");return}
+  removeArmed=false;b.disabled=true;
+  api("remove",{}).then(function(r){
+    b.disabled=false;
+    if(r.error){toast(t("toast_no_save"));b.textContent=t("profile_remove");return}
+    me.name="";me.kind="traveler";me.tag=TAGS[0];me.note="";me.email="";me.socials={};me.avatarAt=0;saveMe();
+    var ids=["mcName","mcNote","mcEmail","mcIg","mcTiktok","mcX"];
+    ids.forEach(function(id){var el=$("#"+id);if(el)el.value=""});
+    b.textContent=t("profile_remove");
+    var slot=$("#cardFormSlot");if(slot)slot.classList.remove("open");
+    syncCardFormMode();
+    toast(t("profile_removed"));
+    refreshAll();
+  });
+});
+
 
 /* ---- profile ---- */
 function getOpenTo(){if(!me.openTo||typeof me.openTo!=="object")me.openTo={travelers:true,friends:true};return me.openTo}
@@ -1934,7 +1971,7 @@ function refreshAll(){
   });
   });
 }
-function syncCardFormMode(){var tt=$("#cardFormTitle"),b=$("#cardFormSubmit"),edit=!!(me&&me.name);if(tt)tt.textContent=edit?t("form_edit"):t("form_create");if(b)b.textContent=t("form_save");var ts=$("#mcTag");if(ts){var cv=ts.value||(me&&me.tag)||TAGS[0];ts.innerHTML=TAGS.map(function(tag){return '<option value="'+esc(tag)+'"'+(tag===cv?" selected":"")+">"+esc(tagLabel(tag))+"</option>"}).join("");}}
+function syncCardFormMode(){var tt=$("#cardFormTitle"),b=$("#cardFormSubmit"),edit=!!(me&&me.name);if(tt)tt.textContent=edit?t("form_edit"):t("form_create");if(b)b.textContent=t("form_save");var rm=$("#cardRemove");if(rm){rm.hidden=!edit;removeArmed=false;rm.disabled=false;rm.textContent=t("profile_remove");}var ts=$("#mcTag");if(ts){var cv=ts.value||(me&&me.tag)||TAGS[0];ts.innerHTML=TAGS.map(function(tag){return '<option value="'+esc(tag)+'"'+(tag===cv?" selected":"")+">"+esc(tagLabel(tag))+"</option>"}).join("");}}
 $("#mcName").value=me.name||"";
 $("#mcKind").value=me.kind||"traveler";
 $("#mcTag").value=me.tag||TAGS[0];
