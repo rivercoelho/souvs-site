@@ -66,7 +66,18 @@ async function getCard(store, userId) {
   return store.get(`traveler/${userId}.json`, { type: "json" }).catch(() => null);
 }
 const publicCard = (c) =>
-  c ? { userId: c.userId, name: c.name, kind: c.kind, tag: c.tag, note: c.note } : null;
+  c
+    ? {
+        userId: c.userId,
+        name: c.name,
+        kind: c.kind,
+        tag: c.tag,
+        note: c.note,
+        openTo: c.openTo && typeof c.openTo === "object"
+          ? { travelers: !!c.openTo.travelers, friends: !!c.openTo.friends }
+          : { travelers: true, friends: true },
+      }
+    : null;
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return { statusCode: 204, headers, body: "" };
@@ -104,7 +115,13 @@ exports.handler = async (event) => {
     if (!NAME_RE.test(name)) return bad(400, "bad name");
     if (!KINDS.includes(kind)) return bad(400, "bad kind");
     if (!TAGS.includes(tag)) return bad(400, "bad tag");
+    let openTo = null;
+    if (body.openTo && typeof body.openTo === "object") {
+      openTo = { travelers: !!body.openTo.travelers, friends: !!body.openTo.friends };
+    }
+    const prev = await store.get(`traveler/${userId}.json`, { type: "json" }).catch(() => null);
     const card = { userId, name, kind, tag, note, updatedAt: Date.now() };
+    card.openTo = openTo || (prev && prev.openTo) || { travelers: true, friends: true };
     await store.setJSON(`traveler/${userId}.json`, card);
     return ok({ ok: true, card: publicCard(card) });
   }
@@ -120,6 +137,7 @@ exports.handler = async (event) => {
       if (!c || c.userId === userId) continue;
       if (now - (c.updatedAt || 0) > CARD_TTL_MS) continue;
       if (mine.includes(c.userId)) continue;
+      if (c.openTo && !c.openTo.travelers && !c.openTo.friends) continue;
       cards.push(publicCard(c));
     }
     return ok({ ok: true, travelers: cards.slice(0, 50) });
