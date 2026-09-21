@@ -168,7 +168,7 @@
           <div class="meetup-head"><div><p class="eyebrow" data-i18n="explore_eyebrow">Explore together</p><h2 id="meetupTitle" data-i18n="explore_title">Meet someone for the next stop.</h2></div><p class="meetup-intro" data-i18n="explore_sub">Browse who's around, and say hi. Messages arrive every few seconds — no account needed.</p></div>
           <div class="meet-choice" data-i18n-aria="meet_choice_label" aria-label="Who are you open to meeting?"><button class="active" type="button" data-meet-filter="traveler" aria-pressed="true" data-i18n="filter_traveler">Another traveler</button><button type="button" data-meet-filter="local" aria-pressed="false" data-i18n="filter_local">A local person</button></div>
           <p class="meet-status" id="meetStatus">Finding travelers nearby…</p>
-          <div class="meet-grid" id="meetGrid">
+          <div class="profile-travelers" id="meetGrid">
           </section>
       </div>
     </section>
@@ -2092,16 +2092,12 @@ function renderTravelers(list){
   var f=currentFilter(),shown=0;
   list.forEach(function(p){
     var el=document.createElement("article");
-    el.className="meet-card";el.setAttribute("data-meet-kind",p.kind);
+    el.className="meet-card meet-mini";el.setAttribute("data-meet-kind",p.kind);
     if(p.kind!==f){el.hidden=true}else{shown++}
-    el.innerHTML=avatarHtml(p)+'<div>'
-      +'<div class="meet-kind"><span>'+esc(t("badge_live"))+'</span><span>'+esc(t(p.kind==="local"?"kind_local":"kind_traveler"))+'</span></div>'
-      +'<h3>'+esc(p.name)+'</h3><p class="meet-meta">'+esc(tagLabel(p.tag))+'</p>'+distLine(p)
-      +(p.note?'<p class="meet-note">'+esc(p.note)+'</p>':'')+(p.openTo?'<p class="muted">'+esc(openToLine(p.openTo))+'</p>':'')+socialsHtml(p.socials)+'</div>';
-    var btn=document.createElement("button");btn.type="button";btn.textContent=t("say_hi");
-    (function(card){btn.addEventListener("click",function(){startThread(card)})})(p);
-    el.appendChild(btn);
-    wireSocials(el);
+    el.innerHTML='<button type="button" class="meet-person-link meet-tile" aria-label="'+esc(p.name)+'">'
+      +'<span class="meet-tile-photo">'+avatarHtml(p)+'</span>'
+      +'<span class="meet-name-badge'+(p.online?' on':'')+'">'+esc(p.name)+'</span></button>';
+    (function(card){el.querySelector(".meet-person-link").addEventListener("click",function(){openPerson(card)})})(p);
     grid.appendChild(el);
   });
   var st=$("#meetStatus");
