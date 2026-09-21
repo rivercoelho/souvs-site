@@ -1704,7 +1704,8 @@ window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();_de
 function _isStandalone(){return (window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||window.navigator.standalone===true;}
 function updateInstallBanner(){
   var b=$("#installBanner");if(!b)return;
-  var show=currentView()==="home"&&!_isStandalone();
+  var v=document.querySelector(".view.active");
+  var show=!!(v&&v.dataset.view==="home")&&!_isStandalone();
   try{if(localStorage.getItem("souvs-install-dismissed"))show=false;}catch(e){}
   b.hidden=!show;
 }
