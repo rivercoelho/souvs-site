@@ -56,7 +56,7 @@
     .signup-shell{min-height:610px;display:grid;grid-template-columns:1fr;overflow:hidden;border-radius:31px;background:var(--surface);box-shadow:var(--shadow)}#signupView{margin:0 -16px}#signupView .signup-shell{border-radius:0}.signup-form{display:grid;align-content:center;gap:8px;padding:34px clamp(24px,5vw,70px)}.back-button{width:max-content;margin-bottom:8px;padding:7px 0;border:0;background:transparent;color:var(--pink-dark);font-weight:900;cursor:pointer}.signup-form label{font-size:13px;font-weight:900}.signup-form input,.signup-form select{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:13px;background:var(--surface-faint);color:var(--ink)}.signup-form fieldset{min-width:0;margin:8px 0 10px;padding:0;border:0}.signup-form legend{margin-bottom:8px;font-size:13px;font-weight:900}.guide-choice{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.guide-choice label{min-width:0;display:grid;justify-items:center;gap:2px;padding:7px 4px;border:1px solid var(--line);border-radius:14px;cursor:pointer}.guide-choice label.selected{border-color:var(--pink);background:rgba(166,120,198,.09);box-shadow:0 0 0 2px rgba(166,120,198,.18)}.guide-choice input{position:absolute;opacity:0;pointer-events:none}.guide-choice img{width:46px;height:46px;object-fit:contain;object-position:bottom}.guide-choice span{max-width:100%;overflow:hidden;text-overflow:ellipsis;font-size:11px}.form-honesty{margin:2px 0 9px;color:var(--muted);font-size:11px}.signup-confirm{min-height:610px;display:grid;place-items:center;align-content:center;padding:35px;text-align:center}.signup-confirm img{width:220px;height:220px;object-fit:contain}.signup-confirm h2{max-width:620px;margin:6px 0 12px;font-size:clamp(40px,6vw,68px)}.signup-confirm p{max-width:520px;margin:0 0 22px;color:var(--muted);font-size:17px}
     .bottom-nav{position:fixed;z-index:40;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(480px,calc(100% - 24px));display:grid;grid-template-columns:repeat(4,1fr);gap:3px;padding:6px;border:1px solid rgba(255,255,255,.45);border-radius:23px;background:var(--blue);color:#fff;box-shadow:var(--nav-shadow);backdrop-filter:blur(14px)}.bottom-nav button{min-width:0;min-height:52px;display:flex;align-items:center;justify-content:center;gap:6px;padding:4px;border:0;border-radius:17px;background:transparent;color:#000;font-size:11px;font-weight:900;cursor:pointer}.bottom-nav button.active{background:#fff;color:#000}.bottom-nav svg{width:30px;height:30px;flex:0 0 auto}
     .toast{position:fixed;z-index:100;left:50%;bottom:90px;transform:translate(-50%,12px);max-width:calc(100% - 28px);padding:12px 16px;border-radius:14px;background:#f5a623;color:#000;box-shadow:var(--shadow);font-size:13px;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
-    @media(max-width:880px){.hero{padding:34px 30px 24px}.hero-copy{max-width:540px}.guide-card{grid-template-columns:39% 61%}.meetup-head{grid-template-columns:1fr;gap:14px}.chat-shell{grid-template-columns:1fr}.perk-stage{grid-template-columns:1fr}.unbox-panel,.reveal-panel{min-height:420px}.wallet-grid{grid-template-columns:repeat(2,1fr)}.signup-shell{grid-template-columns:1fr}}
+    @media(max-width:880px){.hero{padding:34px 30px 24px}.hero-copy{max-width:540px}.guide-card{grid-template-columns:39% 61%}.meetup-head{grid-template-columns:1fr;gap:14px}.chat-shell{grid-template-columns:1fr}.perk-stage{grid-template-columns:1fr}.unbox-panel,.reveal-panel{min-height:420px}.wallet-grid{grid-template-columns:repeat(2,1fr)}.signup-shell{grid-template-columns:1fr}.person-card{padding:18px;gap:14px}.meet-avatar.big,.meet-avatar-img.big{width:120px;height:120px}.meet-avatar.big{font-size:42px}.person-chatbox{padding:14px}}
     @media(max-width:640px){
       .app{padding:max(12px,env(safe-area-inset-top)) 12px 104px}.header{min-height:112px;padding:0 2px 10px}.logo{width:auto;height:92px;max-width:64vw;flex-shrink:1}.city-button{min-height:40px;padding:8px 10px;font-size:13px}.city-menu{position:fixed;top:max(72px,calc(env(safe-area-inset-top) + 58px));right:12px}
       .lang-menu{position:fixed;top:max(72px,calc(env(safe-area-inset-top) + 58px));right:12px}
@@ -78,9 +78,14 @@
 /* person profile page */
 .back-link{background:none;border:0;padding:8px 0;margin:0 0 4px;font:inherit;font-weight:800;color:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .person-card{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;padding:22px;border-radius:22px;background:var(--surface-faint);margin-bottom:14px}
-.person-chatbox{background:var(--surface-faint);border-radius:22px;padding:4px}
-.person-chatbox .muted{padding:12px 16px 0}
-.person-chatbox .chat-input{border-top:0}
+.person-info{flex:1;min-width:230px}
+.person-card .socials{margin-top:8px}
+.person-card .socials-toggle{background:none;border:0;padding:0;color:var(--navy);font-size:13px;font-weight:800;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.person-chatbox{background:var(--surface-faint);border-radius:22px;padding:16px}
+.person-chatbox .muted{margin:0 0 10px;padding:0}
+.person-chatbox .chat-input{border-top:0;padding:0}
+.sent-badge{display:inline-flex;align-items:center;gap:6px;margin:0 0 10px;padding:7px 14px;border-radius:999px;background:#dcf3e5;color:#14663a;font-size:12.5px;font-weight:900}
+.sent-badge[hidden]{display:none}
 /* around-right-now profile links */
 .meet-person-link{background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;text-align:left;display:inline-block;border-radius:8px}
 .meet-card h3 .meet-person-link{font-size:inherit;font-weight:inherit}
@@ -171,6 +176,7 @@
       <div class="person-card" id="personCard"></div>
       <form class="person-chatbox" id="personChatForm">
         <p class="muted" data-i18n="person_chat_hint">Send a message to start the chat.</p>
+        <div class="sent-badge" id="personSentBadge" hidden><span aria-hidden="true">✓</span><span data-i18n="person_sent">Message sent</span></div>
         <div class="chat-input"><input id="personChatText" maxlength="500" data-i18n-ph="person_chat_ph" placeholder="Write a message…" autocomplete="off"><button class="primary" type="submit" data-i18n="person_send">Send</button></div>
       </form>
     </section>
@@ -465,6 +471,7 @@ en:{
   person_chat_hint: "Send a message to start the chat.",
   person_chat_ph: "Write a message…",
   person_send: "Send",
+  person_sent: "Message sent",
   alt_scurry: "Scurry, the street-smart grey-brown rat",
   alt_rico: "Monsieur Rico, the dramatic grey-brown raccoon",
   alt_pip: "Pip, the caffeinated grey pigeon holding a paper takeaway coffee cup",
@@ -731,6 +738,7 @@ es:{
   person_chat_hint: "Envía un mensaje para iniciar el chat.",
   person_chat_ph: "Escribe un mensaje…",
   person_send: "Enviar",
+  person_sent: "Mensaje enviado",
   alt_scurry: "Scurry, la rata gris callejera astuta",
   alt_rico: "Monsieur Rico, el mapache gris-marrón dramático",
   alt_pip: "Pip, la paloma gris cafeinada con un vaso de café para llevar",
@@ -998,6 +1006,7 @@ pt:{
   person_chat_hint: "Envie uma mensagem para iniciar a conversa.",
   person_chat_ph: "Escreva uma mensagem…",
   person_send: "Enviar",
+  person_sent: "Mensagem enviada",
   alt_scurry: "Scurry, o rato cinza esperto das ruas",
   alt_rico: "Monsieur Rico, o guaxinim marrom-acinzentado dramático",
   alt_pip: "Pip, o pombo cinza cafeinado segurando um copo de café para viagem",
@@ -1265,6 +1274,7 @@ fr:{
   person_chat_hint: "Envoyez un message pour démarrer la discussion.",
   person_chat_ph: "Écrivez un message…",
   person_send: "Envoyer",
+  person_sent: "Message envoyé",
   alt_scurry: "Scurry, le rat gris malin des rues",
   alt_rico: "Monsieur Rico, le raton laveur gris-brun théâtral",
   alt_pip: "Pip, le pigeon gris caféiné tenant un gobelet de café à emporter",
@@ -1532,6 +1542,7 @@ de:{
   person_chat_hint: "Sende eine Nachricht, um den Chat zu starten.",
   person_chat_ph: "Schreibe eine Nachricht…",
   person_send: "Senden",
+  person_sent: "Nachricht gesendet",
   alt_scurry: "Scurry, die clevere graue Straßenratte",
   alt_rico: "Monsieur Rico, der dramatische graubraune Waschbär",
   alt_pip: "Pip, die koffeinierte graue Taube mit einem Kaffee zum Mitnehmen",
@@ -2021,7 +2032,7 @@ function renderPersonCard(){
   var p=personData;if(!p||!$("#personCard"))return;
   $("#personName").textContent=p.name||"";
   var el=$("#personCard");
-  el.innerHTML=avatarHtml(p,true)+'<div>'
+  el.innerHTML=avatarHtml(p,true)+'<div class="person-info">'
     +'<div class="meet-kind"><span>'+esc(t("badge_live"))+'</span><span>'+esc(t(p.kind==="local"?"kind_local":"kind_traveler"))+'</span></div>'
     +'<p class="meet-meta">'+esc(tagLabel(p.tag))+'</p>'+distLine(p)
     +(p.note?'<p>'+esc(p.note)+'</p>':'')+(p.openTo?'<p class="muted">'+esc(openToLine(p.openTo))+'</p>':'')+socialsHtml(p.socials)+'</div>';
@@ -2039,7 +2050,9 @@ $("#personChatForm").addEventListener("submit",function(e){
     if(r.error){toast(r.error==="unavailable"?t("toast_unavailable"):t("toast_no_chat"));inp.value=txt;return}
     api("send",{threadId:r.threadId,text:txt}).then(function(s2){
       if(s2.error){toast(t("toast_no_send"));inp.value=txt;return}
-      openChat(r.threadId,r.other||p);refreshThreads();
+      var badge=document.getElementById("personSentBadge");
+      if(badge)badge.hidden=false;
+      setTimeout(function(){if(badge)badge.hidden=true;openChat(r.threadId,r.other||p);refreshThreads();},1400);
     });
   });
 });
