@@ -1527,7 +1527,7 @@ applyI18n();
   ];}
   let currentGuide='scurry',currentDeal=null,wallet=[],favorite='';
   const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-  function go(view){$$('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===view));$$('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===view));window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});if(view==='chat')renderChat();if(view==='profile'&&window.renderProfile)window.renderProfile();if(view==='perks')setTimeout(paywallOnPerks,600);}
+  function go(view){$$('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===view));$$('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===view));window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});if(view==='chat')renderChat();if(view==='profile'&&window.renderProfile)window.renderProfile();if(view==='perks')setTimeout(function(){if(window.paywallOnPerks)window.paywallOnPerks()},600);}
   $$('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
   $$('[data-open-guide]').forEach(b=>b.addEventListener('click',()=>{currentGuide=b.dataset.openGuide;go('chat')}));
   const cityButton=$('#cityButton'),cityMenu=$('#cityMenu'),teaser=$('#cityTeaser');
@@ -1724,6 +1724,7 @@ function paywallOnPerks(){
     hasAccess().then(function(ok){if(!ok)openPaywall()});
   }
 }
+window.paywallOnPerks=paywallOnPerks;
 function buyItem(item){
   payApi("checkout",{item:item}).then(function(r){
     if(r.error||!r.url){toast(t("pay_failed"));return}
