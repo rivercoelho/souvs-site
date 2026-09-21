@@ -27,7 +27,7 @@
     }
     *{box-sizing:border-box}
     [hidden]{display:none!important}
-    html{scroll-behavior:smooth;background:var(--sky-1)}
+    html{scroll-behavior:smooth;background:var(--sky-1);overflow-x:clip}
     body{margin:0;min-width:320px;min-height:100vh;overflow-x:hidden;color:var(--ink);font:600 16px/1.48 "Nunito","Trebuchet MS",sans-serif;background:linear-gradient(158deg,var(--sky-1) 0%,#dceef0 36%,var(--sky-3) 66%,var(--sky-4) 100%);background-attachment:fixed}
     body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 12% 4%,rgba(255,255,255,.42),transparent 29%),radial-gradient(circle at 91% 26%,rgba(205,231,199,.55),transparent 25%),radial-gradient(circle at 17% 78%,rgba(247,228,159,.42),transparent 25%)}
     button,input,select{font:inherit} button{color:inherit} button,input,select{touch-action:manipulation}
@@ -1772,7 +1772,7 @@ window.__retrans=function(){renderChat(false);renderChoices();renderWallet();if(
 .meet-tile-photo{display:block;width:100%;aspect-ratio:1/1;border-radius:50%;overflow:hidden;background:var(--surface-faint)}
 .meet-tile-photo .meet-avatar-img{display:block;width:100%;height:100%;object-fit:cover}
 .meet-tile-photo .meet-avatar{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;font-size:44px}
-.meet-name-badge{display:block;max-width:100%;padding:2px 9px;border-radius:999px;background:#9aa0a6;color:#fff;font-size:8px;font-weight:700;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meet-name-badge{display:block;min-width:0;max-width:100%;padding:2px 9px;border-radius:999px;background:#9aa0a6;color:#fff;font-size:8px;font-weight:700;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .meet-name-badge.on{background:#22c55e}
 .socials-edit{display:grid;gap:6px;margin-top:4px}
 .socials-edit>p{margin:2px 0 0;font-weight:700;font-size:14px}
