@@ -156,6 +156,20 @@
   </nav>
 </div>
 <div class="toast" id="toast" role="status"></div>
+<div id="payOverlay" hidden><div class="pay-sheet" role="dialog" aria-modal="true" aria-labelledby="payTitle">
+  <button class="pay-close" id="payClose" type="button" aria-label="Close">×</button>
+  <p class="eyebrow" data-i18n="pay_eyebrow">Souvs access</p>
+  <h2 id="payTitle" data-i18n="pay_title">Keep exploring with the crew</h2>
+  <p data-i18n="pay_sub">Travelers chip in for access. Locals are always free.</p>
+  <div class="pay-grid">
+    <button class="pass-card" type="button" data-item="daily"><strong data-i18n="pay_daily">Day pass</strong><span class="pass-price">$1.99</span><small data-i18n="pay_daily_sub">24 hours of full access</small></button>
+    <button class="pass-card best" type="button" data-item="weekly"><strong data-i18n="pay_weekly">Week pass</strong><span class="pass-price">$9.99</span><small data-i18n="pay_weekly_sub">7 days of full access</small></button>
+  </div>
+  <h3 data-i18n="pay_souv_title">Souvenirs</h3>
+  <p data-i18n="pay_souv_sub">Take the crew home with you.</p>
+  <div class="souv-grid" id="souvGrid"></div>
+  <p class="pay-note" data-i18n="pay_note">Secure checkout with Stripe.</p>
+</div></div>
 
 <script>
 /* Souvs language selection — English, Spanish, Portuguese, French, German */
@@ -335,6 +349,23 @@ en:{
   profile_remove: "Remove profile",
   profile_remove_confirm: "Tap again to confirm",
   profile_removed: "Your profile was removed.",
+  pay_eyebrow: "Souvs access",
+  pay_title: "Keep exploring with the crew",
+  pay_sub: "Travelers chip in for access. Locals are always free.",
+  pay_daily: "Day pass",
+  pay_daily_sub: "24 hours of full access",
+  pay_weekly: "Week pass",
+  pay_weekly_sub: "7 days of full access",
+  pay_souv_title: "Souvenirs",
+  pay_souv_sub: "Take the crew home with you.",
+  pay_note: "Secure checkout with Stripe.",
+  pay_open: "Get access",
+  pay_success: "Payment confirmed — you're in!",
+  pay_pending: "Payment received — unlocking your access…",
+  pay_failed: "Checkout isn't available right now.",
+  pay_local_free: "Locals get free access.",
+  pay_active: "Access active",
+  pay_no_access: "No active pass",
   form_sub: "Tell fellow travelers who you are. No account needed.",
   form_loc_note: "Your location is only used to sort nearby profiles — it’s never shown publicly.",
   form_name: "Display name",
@@ -580,6 +611,23 @@ es:{
   profile_remove: "Eliminar perfil",
   profile_remove_confirm: "Toca de nuevo para confirmar",
   profile_removed: "Tu perfil fue eliminado.",
+  pay_eyebrow: "Acceso Souvs",
+  pay_title: "Sigue explorando con el equipo",
+  pay_sub: "Los viajeros colaboran con el acceso. Los locales siempre gratis.",
+  pay_daily: "Pase diario",
+  pay_daily_sub: "24 horas de acceso total",
+  pay_weekly: "Pase semanal",
+  pay_weekly_sub: "7 días de acceso total",
+  pay_souv_title: "Souvenirs",
+  pay_souv_sub: "Llévate al equipo a casa.",
+  pay_note: "Pago seguro con Stripe.",
+  pay_open: "Obtener acceso",
+  pay_success: "¡Pago confirmado, ya estás dentro!",
+  pay_pending: "Pago recibido — activando tu acceso…",
+  pay_failed: "El pago no está disponible ahora mismo.",
+  pay_local_free: "Los locales tienen acceso gratis.",
+  pay_active: "Acceso activo",
+  pay_no_access: "Sin pase activo",
   form_sub: "Cuéntales a otros viajeros quién eres. Sin necesidad de cuenta.",
   form_loc_note: "Tu ubicación solo se usa para ordenar perfiles cercanos — nunca se muestra públicamente.",
   form_name: "Nombre visible",
@@ -824,6 +872,23 @@ pt:{
   profile_remove: "Remover perfil",
   profile_remove_confirm: "Toque novamente para confirmar",
   profile_removed: "Seu perfil foi removido.",
+  pay_eyebrow: "Acesso Souvs",
+  pay_title: "Continue explorando com a turma",
+  pay_sub: "Viajantes contribuem pelo acesso. Moradores locais sempre grátis.",
+  pay_daily: "Passe diário",
+  pay_daily_sub: "24 horas de acesso total",
+  pay_weekly: "Passe semanal",
+  pay_weekly_sub: "7 dias de acesso total",
+  pay_souv_title: "Lembranças",
+  pay_souv_sub: "Leve a turma com você.",
+  pay_note: "Pagamento seguro com Stripe.",
+  pay_open: "Obter acesso",
+  pay_success: "Pagamento confirmado — você está dentro!",
+  pay_pending: "Pagamento recebido — ativando seu acesso…",
+  pay_failed: "O pagamento não está disponível agora.",
+  pay_local_free: "Moradores locais têm acesso grátis.",
+  pay_active: "Acesso ativo",
+  pay_no_access: "Sem passe ativo",
   form_sub: "Conte a outros viajantes quem você é. Sem necessidade de conta.",
   form_loc_note: "Sua localização é usada apenas para ordenar perfis próximos — nunca é exibida publicamente.",
   form_name: "Nome de exibição",
@@ -1069,6 +1134,23 @@ fr:{
   profile_remove: "Supprimer le profil",
   profile_remove_confirm: "Touchez à nouveau pour confirmer",
   profile_removed: "Votre profil a été supprimé.",
+  pay_eyebrow: "Accès Souvs",
+  pay_title: "Continuez d'explorer avec l'équipe",
+  pay_sub: "Les voyageurs participent pour l'accès. Les locaux sont toujours gratuits.",
+  pay_daily: "Pass jour",
+  pay_daily_sub: "24 heures d'accès complet",
+  pay_weekly: "Pass semaine",
+  pay_weekly_sub: "7 jours d'accès complet",
+  pay_souv_title: "Souvenirs",
+  pay_souv_sub: "Ramenez l'équipe chez vous.",
+  pay_note: "Paiement sécurisé avec Stripe.",
+  pay_open: "Obtenir l'accès",
+  pay_success: "Paiement confirmé — c'est parti !",
+  pay_pending: "Paiement reçu — activation de votre accès…",
+  pay_failed: "Le paiement n'est pas disponible pour le moment.",
+  pay_local_free: "Les locaux ont un accès gratuit.",
+  pay_active: "Accès actif",
+  pay_no_access: "Aucun pass actif",
   form_sub: "Dites aux autres voyageurs qui vous êtes. Aucun compte nécessaire.",
   form_loc_note: "Votre position sert uniquement à trier les profils proches — elle n’est jamais affichée publiquement.",
   form_name: "Nom affiché",
@@ -1314,6 +1396,23 @@ de:{
   profile_remove: "Profil entfernen",
   profile_remove_confirm: "Tippe erneut zur Bestätigung",
   profile_removed: "Dein Profil wurde entfernt.",
+  pay_eyebrow: "Souvs-Zugang",
+  pay_title: "Weiter mit der Crew entdecken",
+  pay_sub: "Reisende zahlen für den Zugang. Locals sind immer gratis dabei.",
+  pay_daily: "Tagespass",
+  pay_daily_sub: "24 Stunden voller Zugang",
+  pay_weekly: "Wochenpass",
+  pay_weekly_sub: "7 Tage voller Zugang",
+  pay_souv_title: "Souvenirs",
+  pay_souv_sub: "Nimm die Crew mit nach Hause.",
+  pay_note: "Sichere Zahlung mit Stripe.",
+  pay_open: "Zugang holen",
+  pay_success: "Zahlung bestätigt — du bist dabei!",
+  pay_pending: "Zahlung erhalten — Zugang wird aktiviert…",
+  pay_failed: "Checkout ist gerade nicht verfügbar.",
+  pay_local_free: "Locals haben gratis Zugang.",
+  pay_active: "Zugang aktiv",
+  pay_no_access: "Kein aktiver Pass",
   form_sub: "Sag anderen Reisenden, wer du bist. Kein Konto nötig.",
   form_loc_note: "Dein Standort wird nur zum Sortieren naher Profile verwendet — er wird niemals öffentlich angezeigt.",
   form_name: "Anzeigename",
@@ -1437,9 +1536,9 @@ applyI18n();
   $('#notifyButton').addEventListener('click',e=>{$('#signupCity').value=e.currentTarget.dataset.city;cityMenu.hidden=true;cityButton.setAttribute('aria-expanded','false');go('signup')});
   document.addEventListener('click',e=>{if(!e.target.closest('.city-switcher')){cityMenu.hidden=true;cityButton.setAttribute('aria-expanded','false')}});
   function renderTabs(){const wrap=$('#guideTabs');wrap.innerHTML=Object.entries(guides).map(([k,g])=>`<button data-guide="${k}" class="${k===currentGuide?'active':''}"><img src="${g.face||g.image}" alt=""><span>${g.name}</span></button>`).join('');wrap.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{currentGuide=b.dataset.guide;renderChat()}));var _act=wrap.querySelector('button.active');if(_act)_act.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});}
-  function renderChat(reset=true){const g=guides[currentGuide];$('#typing').hidden=true;renderTabs();const profile=$('#chatProfile');profile.className=`chat-profile ${g.color}`;$('#chatImage').src=g.face||g.image;$('#chatImage').alt=g.name;$('#chatName').textContent=g.name;$('#chatRole').textContent=t(g.roleKey);$('#statusName').textContent=g.name;$('#chatInput').placeholder=t('chat_ask',{name:g.name});const sug=$('#suggestions');sug.innerHTML='';[0,1,2].forEach(i=>{const b=document.createElement('button');b.type='button';b.textContent=t('sug_'+currentGuide+'_'+i);b.addEventListener('click',()=>sendChat(b.textContent));sug.appendChild(b)});if(reset){const m=$('#messages');m.innerHTML='';const wb=document.createElement('div');wb.className='bubble guide';wb.textContent=t('welcome_'+currentGuide);m.appendChild(wb);}}
+  function renderChat(reset=true){const g=guides[currentGuide];$('#typing').hidden=true;renderTabs();const profile=$('#chatProfile');profile.className=`chat-profile ${g.color}`;$('#chatImage').src=g.face||g.image;$('#chatImage').alt=g.name;$('#chatName').textContent=g.name;$('#chatRole').textContent=t(g.roleKey);$('#statusName').textContent=g.name;$('#chatInput').placeholder=t('chat_ask',{name:g.name});const sug=$('#suggestions');sug.innerHTML='';[0,1,2].forEach(i=>{const b=document.createElement('button');b.type='button';b.textContent=t('sug_'+currentGuide+'_'+i);b.addEventListener('click',()=>{requireAccess().then(ok=>{if(ok)sendChat(b.textContent)})});sug.appendChild(b)});if(reset){const m=$('#messages');m.innerHTML='';const wb=document.createElement('div');wb.className='bubble guide';wb.textContent=t('welcome_'+currentGuide);m.appendChild(wb);}}
   async function sendChat(text){text=text.trim();if(!text)return;const critter=currentGuide,g=guides[critter],m=$('#messages');const history=[...m.querySelectorAll('.bubble')].slice(-8).map(b=>({role:b.classList.contains('user')?'user':'assistant',content:b.textContent}));m.insertAdjacentHTML('beforeend',`<div class="bubble user"></div>`);m.lastElementChild.textContent=text;$('#chatInput').value='';$('#typing').hidden=false;m.scrollTop=m.scrollHeight;let reply;const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),10000);try{const response=await fetch('/.netlify/functions/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({critter,message:text,history,lang}),signal:controller.signal});if(!response.ok)throw new Error(`Chat request failed: ${response.status}`);const data=await response.json();if(typeof data.reply!=='string'||!data.reply.trim())throw new Error('Chat response was empty');reply=data.reply.trim()}catch(error){reply=g.reply(text)}finally{clearTimeout(timeout)}if(currentGuide!==critter)return;$('#typing').hidden=true;const d=document.createElement('div');d.className='bubble guide';d.textContent=reply;m.appendChild(d);m.scrollTop=m.scrollHeight}
-  $('#chatForm').addEventListener('submit',e=>{e.preventDefault();sendChat($('#chatInput').value)});
+  $('#chatForm').addEventListener('submit',e=>{e.preventDefault();const v=$('#chatInput').value;requireAccess().then(ok=>{if(ok)sendChat(v)})});
   function giftMarkup(){return '<span class="gift-lid"></span><span class="gift-bow left"></span><span class="gift-bow right"></span><span class="gift-body"></span>'}
   $('#unboxButton').addEventListener('click',()=>{const panel=$('#unboxPanel');panel.classList.add('opening');$('#unboxTitle').textContent=t('unbox_opening');$('#unboxText').textContent=t('unbox_rummaging');$('#unboxButton').disabled=true;setTimeout(()=>{panel.classList.remove('opening');$('#unboxButton').disabled=false;currentDeal=getDeals()[Math.floor(Math.random()*3)];$('#unboxTitle').textContent=t('unbox_nice');$('#unboxText').textContent=t('unbox_surprise');$('#revealPanel').innerHTML=`<article class="claim-card"><span>${t('perk_label')}</span><h2>${currentDeal.title}</h2><h3>${currentDeal.business}</h3><p>${currentDeal.desc}</p><button class="primary" id="claimDeal">${t('claim')}</button></article>`;$('#claimDeal').addEventListener('click',claimDeal)},820)});
   function claimDeal(){if(!currentDeal)return;wallet.push({...currentDeal,id:Date.now()});currentDeal=null;renderWallet();$('#claimDeal').textContent=t('claimed');$('#claimDeal').disabled=true;showToast(t('claimed'))}
@@ -1471,6 +1570,28 @@ window.__retrans=function(){renderChat(false);renderChoices();renderWallet();if(
 .thread-row .unread{margin-left:auto;background:#2f6fed;color:#fff;font-size:11px;border-radius:10px;padding:2px 8px}
 #chatOverlay{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center;background:rgba(10,10,30,.45)}
 #chatOverlay[hidden]{display:none}
+#payOverlay{position:fixed;inset:0;z-index:70;display:flex;align-items:flex-end;justify-content:center;background:rgba(10,10,30,.55)}
+#payOverlay[hidden]{display:none}
+.pay-sheet{width:100%;max-width:560px;max-height:88vh;overflow-y:auto;background:#fff;border-radius:22px 22px 0 0;padding:26px 22px 30px;position:relative;color:#000}
+.pay-close{position:absolute;top:10px;right:12px;width:34px;height:34px;border:0;border-radius:50%;background:rgba(0,0,0,.06);font-size:20px;line-height:1;cursor:pointer;color:#000}
+.pay-sheet .eyebrow{margin:0 0 4px}
+.pay-sheet h2{margin:0 0 6px;font-size:26px}
+.pay-sheet>p{margin:0 0 16px;color:#555;font-size:14px}
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.pass-card{border:2px solid #e8e4da;border-radius:16px;padding:16px 12px;background:#fffdf8;cursor:pointer;text-align:center;display:flex;flex-direction:column;gap:4px;color:#000;font:inherit}
+.pass-card strong{font-size:15px}
+.pass-price{font-size:26px;font-weight:900}
+.pass-card small{color:#777;font-size:12px}
+.pass-card.best{border-color:#f5a623;background:#fff8ea}
+.pass-card:active{transform:scale(.98)}
+.pay-sheet h3{margin:0 0 4px;font-size:17px}
+.souv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 16px}
+.souv-card{border:1px solid #e8e4da;border-radius:14px;padding:12px 8px;background:#fff;text-align:center;display:flex;flex-direction:column;gap:4px;color:#000;font:inherit;cursor:pointer}
+.souv-card strong{font-size:13px}
+.souv-card small{color:#777;font-size:11px}
+.souv-price{font-weight:900;font-size:15px}
+.souv-card:active{transform:scale(.98)}
+.pay-note{font-size:12px;color:#888;margin:0;text-align:center}
 .chat-sheet{width:100%;max-width:520px;height:78vh;background:#fff;border-radius:18px 18px 0 0;display:flex;flex-direction:column;overflow:hidden}
 .chat-head{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid #eee}
 .chat-head h3{margin:0;font-size:16px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1552,6 +1673,82 @@ function api(action,data){
     .then(function(r){return r.json().catch(function(){return null}).then(function(j){if(!r.ok)return{error:(j&&j.error)||"request failed"};return j||{}})})
     .catch(function(){return{error:"offline"}});
 }
+
+/* paywall: Stripe Checkout for day/week passes + souvenirs. Locals are free. */
+var PAY_API="/.netlify/functions/pay";
+var SOUVENIRS=[
+  {id:"pip-plush",name:"Pip plush",price:"$24.99",sub:"12-inch Pip, coffee cup included"},
+  {id:"sticker-pack",name:"Critter sticker pack",price:"$6.99",sub:"All four guides, vinyl"},
+  {id:"souvs-tee",name:"Souvs NYC tee",price:"$29.99",sub:"Heavyweight cotton, black"}
+];
+var accessCache=null;
+function payApi(action,data){
+  var payload={action:action,userId:me.id};
+  for(var k in (data||{}))payload[k]=data[k];
+  return fetch(PAY_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+    .then(function(r){return r.json().catch(function(){return null}).then(function(j){if(!r.ok)return{error:(j&&j.error)||"request failed"};return j||{}})})
+    .catch(function(){return{error:"offline"}});
+}
+function hasAccess(){
+  if(me.kind==="local")return Promise.resolve(true);
+  if(!me.name)return Promise.resolve(false);
+  if(accessCache&&accessCache.until>Date.now())return Promise.resolve(accessCache.ok);
+  return payApi("status",{}).then(function(r){
+    var ok=!r.error&&!!r.hasAccess;
+    accessCache={ok:ok,until:Date.now()+30000,pass:r.pass||null,expires:r.expires||0};
+    return ok;
+  });
+}
+function requireAccess(){
+  return hasAccess().then(function(ok){if(ok)return true;openPaywall();return false});
+}
+function renderSouvenirs(){
+  var g=$("#souvGrid");if(!g)return;
+  g.innerHTML="";
+  SOUVENIRS.forEach(function(s){
+    var b=document.createElement("button");b.type="button";b.className="souv-card";
+    b.innerHTML="<strong>"+esc(s.name)+"</strong><span class=\"souv-price\">"+esc(s.price)+"</span><small>"+esc(s.sub)+"</small>";
+    b.addEventListener("click",function(){buyItem(s.id)});
+    g.appendChild(b);
+  });
+}
+function openPaywall(){
+  if(!me.name){toast(t("toast_need_profile"));return}
+  renderSouvenirs();
+  var o=$("#payOverlay");if(o){o.hidden=false;applyI18n()}
+}
+function closePaywall(){var o=$("#payOverlay");if(o)o.hidden=true}
+function buyItem(item){
+  payApi("checkout",{item:item}).then(function(r){
+    if(r.error||!r.url){toast(t("pay_failed"));return}
+    window.location.href=r.url;
+  });
+}
+function refreshAfterPaid(n){
+  accessCache=null;
+  hasAccess().then(function(ok){
+    if(ok){toast(t("pay_success"));if(window.renderProfile)renderProfile()}
+    else if(n>0){setTimeout(function(){refreshAfterPaid(n-1)},3000)}
+    else{toast(t("pay_pending"))}
+  });
+}
+(function initPay(){
+  var pc=$("#payClose");if(pc)pc.addEventListener("click",closePaywall);
+  var ov=$("#payOverlay");if(ov)ov.addEventListener("click",function(e){if(e.target===ov)closePaywall()});
+  var grid=document.querySelectorAll("#payOverlay .pass-card");
+  grid.forEach(function(b){b.addEventListener("click",function(){buyItem(b.getAttribute("data-item"))})});
+  try{
+    var q=new URLSearchParams(location.search);
+    if(q.get("paid")==="1"){
+      history.replaceState(null,"",location.pathname);
+      refreshAfterPaid(3);
+      return;
+    }
+  }catch(e){}
+  if(me.name&&me.kind!=="local"){
+    setTimeout(function(){hasAccess().then(function(ok){if(!ok)openPaywall()})},1500);
+  }
+})();
 
 var grid=$("#meetGrid");
 if(!grid)return;
@@ -1704,7 +1901,7 @@ function renderTravelers(list){
       +'<h3>'+esc(p.name)+'</h3><p class="meet-meta">'+esc(tagLabel(p.tag))+'</p>'+distLine(p)
       +(p.note?'<p>'+esc(p.note)+'</p>':'')+(p.openTo?'<p class="muted">'+esc(openToLine(p.openTo))+'</p>':'')+socialsHtml(p.socials)+'</div>';
     var btn=document.createElement("button");btn.type="button";btn.textContent=t("say_hi");
-    (function(card){btn.addEventListener("click",function(){startThread(card)})})(p);
+    (function(card){btn.addEventListener("click",function(){requireAccess().then(function(ok){if(ok)startThread(card)})})})(p);
     el.appendChild(btn);
     wireSocials(el);
     grid.appendChild(el);
@@ -1741,7 +1938,7 @@ function renderAroundInto(wrapId,statusId){
       +'<h3>'+esc(p.name)+'</h3><p class="meet-meta">'+esc(tagLabel(p.tag))+'</p>'+distLine(p)
       +(p.note?'<p>'+esc(p.note)+'</p>':'')+(p.openTo?'<p class="muted">'+esc(openToLine(p.openTo))+'</p>':'')+socialsHtml(p.socials)+'</div>';
     var btn=document.createElement("button");btn.type="button";btn.textContent=t("say_hi");
-    (function(card){btn.addEventListener("click",function(){startThread(card)})})(p);
+    (function(card){btn.addEventListener("click",function(){requireAccess().then(function(ok){if(ok)startThread(card)})})})(p);
     el.appendChild(btn);
     wireSocials(el);
     wrap.appendChild(el);
@@ -1930,9 +2127,23 @@ function renderProfile(){
       +(me.note?'<p>'+esc(me.note)+'</p>':'')
       +'<p class="pref-badges">'+esc(ph.length?t("open_to",{list:ph.join(" \u00b7 ")}):t("profile_open_none"))+'</p>'
       +socialsHtml(me.socials)
-      +'<button class="secondary" id="profileEdit" type="button" data-i18n="profile_edit">Edit your profile</button></div>';
+      +'<p class="pref-badges" id="accessLine"></p>'
+      +'<button class="secondary" id="profileEdit" type="button" data-i18n="profile_edit">Edit your profile</button>'
+      +'<button class="secondary" id="payOpenBtn" type="button" style="margin-top:8px">'+esc(t("pay_open"))+'</button></div>';
     wireSocials(wrap);
     $("#profileEdit").addEventListener("click",editCard);
+    $("#payOpenBtn").addEventListener("click",openPaywall);
+    (function(){
+      var line=$("#accessLine");if(!line)return;
+      if(me.kind==="local"){line.textContent=t("pay_local_free");return}
+      hasAccess().then(function(ok2){
+        var el=$("#accessLine");if(!el)return;
+        if(ok2&&accessCache&&accessCache.expires){
+          var d=new Date(accessCache.expires);
+          el.textContent=t("pay_active")+" · "+d.toLocaleDateString()+(d.toLocaleTimeString?(" "+d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})):"");
+        }else{el.textContent=t("pay_no_access")}
+      });
+    })();
   }else{
     wrap.innerHTML='<div><h3 data-i18n="profile_no_title">No profile yet</h3><p class="muted" data-i18n="profile_no_sub">Post your profile to meet travelers and make friends around the city.</p><button class="primary" id="profileCreate" type="button" data-i18n="profile_create">Create your profile</button></div>';
     $("#profileCreate").addEventListener("click",editCard);
