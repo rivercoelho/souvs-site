@@ -139,11 +139,6 @@
           <p class="meet-status" id="meetStatus">Finding travelers nearby…</p>
           <div class="meet-grid" id="meetGrid">
           </section>
-        <div class="profile-prefs">
-          <h3>Around right now</h3>
-          <p class="pref-note" id="profileMeetStatus" role="status">Looking for travelers…</p>
-          <div class="profile-travelers" id="profileTravelers"></div>
-        </div>
       </div>
     </section>
 </main>
@@ -457,7 +452,6 @@ function renderAroundInto(wrapId,statusId){
     wrap.appendChild(el);
   });
 }
-function renderProfileTravelers(){renderAroundInto("profileTravelers","profileMeetStatus")}
 function renderHomeTravelers(){renderAroundInto("homeAroundGrid","homeAroundStatus")}
 
 /* ---- threads ---- */
@@ -640,12 +634,11 @@ function refreshAll(){
     if(r.error||!r.travelers){
       var st=$("#meetStatus");
       if(st)st.textContent="Traveler chat is coming online — check back soon.";
-      travelersLoaded=false;renderProfileTravelers();renderHomeTravelers();return;
+      travelersLoaded=false;renderHomeTravelers();return;
     }
     travelersLoaded=true;
     lastTravelers=r.travelers;
     renderTravelers(r.travelers);
-    renderProfileTravelers();
     renderHomeTravelers();
     return refreshThreads();
   });
