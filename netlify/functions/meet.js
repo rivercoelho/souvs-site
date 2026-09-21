@@ -4,8 +4,10 @@
 // stored in the visitor's own browser. Storage: Netlify Blobs ("souvs-meet").
 //
 // Actions:
-//   register  { userId, name, kind, tag, note, socials } -> upsert traveler card
-//             socials: { instagram, tiktok, x } (handles or profile links; sanitized)
+//   register  { userId, name, kind, tag, note, socials, avatarAt } -> upsert card
+//   avatar    { userId, data }  -> upload profile photo (raw base64 of a small
+//             JPEG; client resizes to <=256px). Empty data removes the photo.
+//   GET ?action=avatar&userId=... -> serves the profile photo (image/jpeg)
 //   travelers { userId }                             -> list live cards
 //   thread    { userId, otherId }                    -> get-or-create thread
 //   threads   { userId }                             -> my threads w/ preview
@@ -111,11 +113,45 @@ const publicCard = (c) =>
           ? { travelers: !!c.openTo.travelers, friends: !!c.openTo.friends }
           : { travelers: true, friends: true },
         socials: cleanSocials(c.socials),
+        avatar: (c.avatarAt || 0) > 0,
+        avatarAt: c.avatarAt || 0,
       }
     : null;
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return { statusCode: 204, headers, body: "" };
+
+  let store;
+  try {
+    store = getStore({
+      name: "souvs-meet",
+      siteID: process.env.NETLIFY_SITE_ID,
+      token: process.env.NETLIFY_BLOBS_TOKEN,
+    });
+  } catch {
+    return bad(500, "storage unavailable");
+  }
+
+  // ---- public avatar image (GET ?action=avatar&userId=...) ----
+  if (event.httpMethod === "GET") {
+    const qs = event.queryStringParameters || {};
+    if (qs.action !== "avatar") return bad(400, "unknown action");
+    const userId = String(qs.userId || "");
+    if (!UID_RE.test(userId)) return bad(400, "bad user");
+    const buf = await store.get(`avatar/${userId}.bin`, { type: "arrayBuffer" }).catch(() => null);
+    if (!buf) return bad(404, "no avatar");
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "image/jpeg",
+        "Cache-Control": "public, max-age=3600",
+      },
+      body: Buffer.from(buf).toString("base64"),
+      isBase64Encoded: true,
+    };
+  }
+
   if (event.httpMethod !== "POST") return bad(405, "POST only");
 
   let body;
@@ -128,17 +164,6 @@ exports.handler = async (event) => {
   const userId = String(body.userId || "");
   if (!UID_RE.test(userId)) return bad(400, "bad user");
   const ip = ipOf(event);
-
-  let store;
-  try {
-    store = getStore({
-      name: "souvs-meet",
-      siteID: process.env.NETLIFY_SITE_ID,
-      token: process.env.NETLIFY_BLOBS_TOKEN,
-    });
-  } catch {
-    return bad(500, "storage unavailable");
-  }
 
   // ---- register / update traveler card ----
   if (action === "register") {
@@ -160,8 +185,45 @@ exports.handler = async (event) => {
     const card = { userId, name, kind, tag, note, updatedAt: Date.now() };
     card.openTo = openTo || (prev && prev.openTo) || { travelers: true, friends: true };
     card.socials = socials || (prev && prev.socials) || {};
+    let avatarAt = null;
+    if (body.avatarAt !== undefined) {
+      const n = Number(body.avatarAt);
+      avatarAt = Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
+    }
+    card.avatarAt = avatarAt !== null ? avatarAt : (prev && prev.avatarAt) || 0;
     await store.setJSON(`traveler/${userId}.json`, card);
     return ok({ ok: true, card: publicCard(card) });
+  }
+
+  // ---- upload / remove profile photo ----
+  // POST { action:"avatar", userId, data } — data is raw base64 of a small JPEG
+  // (client resizes to <=256px). Empty data removes the photo.
+  if (action === "avatar") {
+    if (throttle(`av:${ip}`, 10, 10 * 60 * 1000)) return bad(429, "slow down");
+    const data = String(body.data || "");
+    const prev = await getCard(store, userId);
+    if (!data) {
+      await store.delete(`avatar/${userId}.bin`).catch(() => {});
+      if (prev) {
+        prev.avatarAt = 0;
+        await store.setJSON(`traveler/${userId}.json`, prev);
+      }
+      return ok({ ok: true, avatarAt: 0 });
+    }
+    if (!/^[A-Za-z0-9+/=]+$/.test(data) || data.length % 4 !== 0) return bad(400, "bad image");
+    const buf = Buffer.from(data, "base64");
+    if (buf.length > 200 * 1024 || buf.length < 100) return bad(400, "bad image");
+    if (!(buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff)) return bad(400, "jpeg only");
+    await store.set(
+      `avatar/${userId}.bin`,
+      buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength)
+    );
+    const at = Date.now();
+    if (prev) {
+      prev.avatarAt = at;
+      await store.setJSON(`traveler/${userId}.json`, prev);
+    }
+    return ok({ ok: true, avatarAt: at });
   }
 
   // ---- list live traveler cards ----
