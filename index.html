@@ -239,6 +239,13 @@
 .profile-travelers .meet-card{padding:16px 14px}
 .profile-travelers .meet-card h3{margin:8px 0 4px;color:var(--ink);font-size:20px}
 .profile-travelers .meet-card p{margin:6px 0;color:var(--muted);font-size:14px}
+.socials-edit{display:grid;gap:6px;margin-top:4px}
+.socials-edit>p{margin:2px 0 0;font-weight:700;font-size:14px}
+.socials{margin-top:8px}
+.meet-card .socials-toggle{grid-column:auto;width:auto;margin:2px 0 0;padding:0;border:0;background:none;color:var(--navy);font-size:13px;font-weight:800;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.socials-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.socials-links[hidden]{display:none}
+.socials-links a{padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.75);border:1px solid var(--line);font-size:12px;font-weight:800;color:var(--navy);text-decoration:none}
 .pref-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #e6e6ee;border-radius:16px;background:#fff;cursor:pointer}
 .pref-text{flex:1;display:grid;gap:2px}
 .pref-text strong{font-size:15px;color:var(--ink)}
@@ -295,6 +302,11 @@ live.innerHTML=
  +'<label>I am a<select id="mcKind"><option value="traveler">Traveler</option><option value="local">Local person</option></select></label>'
  +'<label>Into<select id="mcTag">'+tagOpts+'</select></label>'
  +'<label>Note <span class="opt">optional</span><textarea id="mcNote" maxlength="140" placeholder="In town till Sunday, up for a gallery crawl"></textarea></label>'
+ +'<div class="socials-edit"><p>Socials <span class="opt">optional</span></p>'
+ +'<label>Instagram<input id="mcIg" maxlength="60" placeholder="@handle or profile link" autocomplete="off"></label>'
+ +'<label>TikTok<input id="mcTiktok" maxlength="60" placeholder="@handle or profile link" autocomplete="off"></label>'
+ +'<label>X<input id="mcX" maxlength="60" placeholder="@handle or profile link" autocomplete="off"></label>'
+ +'<p class="muted">Others can check them before chatting.</p></div>'
  +'<button class="primary" type="submit">Post my card</button>'
  +'</form>'
  +'<div class="meet-chats"><h3>My chats</h3><div id="threadList"><p class="muted">No chats yet — say hi to someone.</p></div></div>'
@@ -311,6 +323,30 @@ grid.parentNode.insertBefore(live,grid.nextSibling);
 function currentFilter(){var b=document.querySelector('[data-meet-filter].active');return b?b.getAttribute("data-meet-filter"):"traveler"}
 function initials(n){return String(n||"?").trim().split(/\s+/).map(function(w){return w[0]}).join("").slice(0,2).toUpperCase()}
 function openToLine(o){var a=[];if(o.travelers)a.push("new travelers");if(o.friends)a.push("new friends");return a.length?("Open to: "+a.join(" \u00b7 ")):"Not looking to meet right now."}
+/* ---- socials: handles only, links built to the real platforms ---- */
+var SOCIALS_UI=[["instagram","Instagram"],["tiktok","TikTok"],["x","X"]];
+function socialUrl(p,h){return p==="instagram"?"https://www.instagram.com/"+h+"/":p==="tiktok"?"https://www.tiktok.com/@"+h:"https://x.com/"+h}
+function socialsHtml(s){
+  var keys=SOCIALS_UI.filter(function(x){return s&&s[x[0]]});
+  if(!keys.length)return "";
+  var links=keys.map(function(x){var p=x[0];return '<a href="'+esc(socialUrl(p,s[p]))+'" target="_blank" rel="noopener noreferrer">'+x[1]+'</a>'}).join("");
+  return '<div class="socials"><button type="button" class="socials-toggle">check my socials</button><span class="socials-links" hidden>'+links+'</span></div>';
+}
+function wireSocials(scope){
+  if(!scope||!scope.querySelectorAll)return;
+  Array.prototype.forEach.call(scope.querySelectorAll(".socials-toggle"),function(b){
+    b.addEventListener("click",function(){
+      var l=b.parentNode.querySelector(".socials-links");
+      var open=l.hidden;
+      l.hidden=!open;
+      b.textContent=open?"hide socials":"check my socials";
+    });
+  });
+}
+function getSocials(){
+  var g=function(id){var el=$("#"+id);return el?el.value:""};
+  return {instagram:g("mcIg"),tiktok:g("mcTiktok"),x:g("mcX")};
+}
 function renderTravelers(list){
   grid.innerHTML="";
   var f=currentFilter(),shown=0;
@@ -321,10 +357,11 @@ function renderTravelers(list){
     el.innerHTML='<span class="meet-avatar" aria-hidden="true">'+esc(initials(t.name))+'</span><div>'
       +'<div class="meet-kind"><span>Live</span><span>'+esc(t.kind==="local"?"Local":"Traveler")+'</span></div>'
       +'<h3>'+esc(t.name)+'</h3><p class="meet-meta">'+esc(t.tag)+'</p>'
-      +(t.note?'<p>'+esc(t.note)+'</p>':'')+(t.openTo?'<p class="muted">'+esc(openToLine(t.openTo))+'</p>':'')+'</div>';
+      +(t.note?'<p>'+esc(t.note)+'</p>':'')+(t.openTo?'<p class="muted">'+esc(openToLine(t.openTo))+'</p>':'')+socialsHtml(t.socials)+'</div>';
     var btn=document.createElement("button");btn.type="button";btn.textContent="Say hi";
     (function(card){btn.addEventListener("click",function(){startThread(card)})})(t);
     el.appendChild(btn);
+    wireSocials(el);
     grid.appendChild(el);
   });
   var st=$("#meetStatus");
@@ -357,10 +394,11 @@ function renderProfileTravelers(){
     el.innerHTML='<span class="meet-avatar" aria-hidden="true">'+esc(initials(t.name))+'</span><div>'
       +'<div class="meet-kind"><span>Live</span><span>'+esc(t.kind==="local"?"Local":"Traveler")+'</span></div>'
       +'<h3>'+esc(t.name)+'</h3><p class="meet-meta">'+esc(t.tag)+'</p>'
-      +(t.note?'<p>'+esc(t.note)+'</p>':'')+(t.openTo?'<p class="muted">'+esc(openToLine(t.openTo))+'</p>':'')+'</div>';
+      +(t.note?'<p>'+esc(t.note)+'</p>':'')+(t.openTo?'<p class="muted">'+esc(openToLine(t.openTo))+'</p>':'')+socialsHtml(t.socials)+'</div>';
     var btn=document.createElement("button");btn.type="button";btn.textContent="Say hi";
     (function(card){btn.addEventListener("click",function(){startThread(card)})})(t);
     el.appendChild(btn);
+    wireSocials(el);
     wrap.appendChild(el);
   });
 }
@@ -462,9 +500,9 @@ $("#meetCardForm").addEventListener("submit",function(e){
   e.preventDefault();
   var name=$("#mcName").value.trim(),kind=$("#mcKind").value,tag=$("#mcTag").value,note=$("#mcNote").value.trim();
   if(!name){toast("Add a display name first.");return}
-  api("register",{name:name,kind:kind,tag:tag,note:note,openTo:getOpenTo()}).then(function(r){
+  api("register",{name:name,kind:kind,tag:tag,note:note,openTo:getOpenTo(),socials:getSocials()}).then(function(r){
     if(r.error){toast("Could not post card — try again.");return}
-    me.name=name;me.kind=kind;me.tag=tag;me.note=note;saveMe();
+    me.name=name;me.kind=kind;me.tag=tag;me.note=note;me.socials=(r.card&&r.card.socials)||{};saveMe();
     toast("Your card is live.");
     refreshAll();
   });
@@ -485,7 +523,9 @@ function renderProfile(){
       +'<h3>'+esc(me.name)+'</h3>'
       +(me.note?'<p>'+esc(me.note)+'</p>':'')
       +'<p class="pref-badges">'+esc(ph.length?("Open to: "+ph.join(" \u00b7 ")):"Not open to meeting anyone right now.")+'</p>'
+      +socialsHtml(me.socials)
       +'<button class="secondary" id="profileEdit" type="button">Edit your card</button></div>';
+    wireSocials(wrap);
     $("#profileEdit").addEventListener("click",editCard);
   }else{
     wrap.innerHTML='<div><h3>No traveler card yet</h3><p class="muted">Post your card to meet travelers and make friends around the city.</p><button class="primary" id="profileCreate" type="button">Create your card</button></div>';
@@ -497,7 +537,7 @@ function renderProfile(){
   var n=$("#prefNote"),ph2=openToPhrases();
   if(n)n.textContent=ph2.length?("Your card is visible to "+ph2.join(" and ")+"."):"Your card is hidden from everyone for now.";
 }
-function syncOpenTo(){if(!me.name)return;var o=getOpenTo();api("register",{name:me.name,kind:me.kind,tag:me.tag,note:me.note,openTo:o}).then(function(){})}
+function syncOpenTo(){if(!me.name)return;var o=getOpenTo();api("register",{name:me.name,kind:me.kind,tag:me.tag,note:me.note,openTo:o,socials:getSocials()}).then(function(){})}
 var _pt=$("#prefTravelers"),_pf=$("#prefFriends");
 if(_pt)_pt.addEventListener("change",function(){getOpenTo().travelers=this.checked;saveMe();syncOpenTo();renderProfile()});
 if(_pf)_pf.addEventListener("change",function(){getOpenTo().friends=this.checked;saveMe();syncOpenTo();renderProfile()});
@@ -507,7 +547,7 @@ window.renderProfile=renderProfile;
 
 function refreshThreads(){return api("threads",{}).then(function(r){if(r&&r.threads)renderThreads(r.threads)})}
 function refreshAll(){
-  var reg=me.name?api("register",{name:me.name,kind:me.kind,tag:me.tag,note:me.note,openTo:getOpenTo()}):Promise.resolve({});
+  var reg=me.name?api("register",{name:me.name,kind:me.kind,tag:me.tag,note:me.note,openTo:getOpenTo(),socials:getSocials()}):Promise.resolve({});
   return reg.then(function(){return api("travelers",{})}).then(function(r){
     if(r.error||!r.travelers){
       var st=$("#meetStatus");
@@ -525,6 +565,9 @@ $("#mcName").value=me.name||"";
 $("#mcKind").value=me.kind||"traveler";
 $("#mcTag").value=me.tag||TAGS[0];
 $("#mcNote").value=me.note||"";
+$("#mcIg").value=(me.socials&&me.socials.instagram)||"";
+$("#mcTiktok").value=(me.socials&&me.socials.tiktok)||"";
+$("#mcX").value=(me.socials&&me.socials.x)||"";
 renderProfile();
 refreshAll();
 })();

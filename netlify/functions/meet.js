@@ -4,7 +4,8 @@
 // stored in the visitor's own browser. Storage: Netlify Blobs ("souvs-meet").
 //
 // Actions:
-//   register  { userId, name, kind, tag, note }      -> upsert traveler card
+//   register  { userId, name, kind, tag, note, socials } -> upsert traveler card
+//             socials: { instagram, tiktok, x } (handles or profile links; sanitized)
 //   travelers { userId }                             -> list live cards
 //   thread    { userId, otherId }                    -> get-or-create thread
 //   threads   { userId }                             -> my threads w/ preview
@@ -30,7 +31,40 @@ const TAGS = [
 const REASONS = ["spam", "harassment", "inappropriate", "scam", "other"];
 const UID_RE = /^[A-Za-z0-9_-]{8,64}$/;
 const NAME_RE = /^[A-Za-z0-9 _.'-]{1,40}$/;
+const HANDLE_RE = /^[A-Za-z0-9._-]{1,30}$/;
 const CARD_TTL_MS = 14 * 24 * 3600 * 1000;
+
+// socials: only handles we can turn into real platform links (never raw user URLs)
+const SOCIALS = {
+  instagram: "instagram.com",
+  tiktok: "tiktok.com",
+  x: "x.com",
+};
+function cleanHandle(platform, raw) {
+  var v = String(raw == null ? "" : raw).trim().replace(/^@+/, "");
+  if (!v || /\s/.test(v)) return ""; // handles never contain whitespace
+  var domain = SOCIALS[platform];
+  var m = v.match(/^(?:https?:\/\/)?((?:[a-z0-9-]+\.)?(?:instagram\.com|tiktok\.com|x\.com))([\/\?#]|$)/i);
+  if (m) {
+    var host = m[1].toLowerCase();
+    if (host !== domain && host.slice(-domain.length - 1) !== "." + domain) return "";
+    var rest = v.slice(m[0].length);
+    var segs = rest.split("?")[0].split("#")[0].split("/").filter(function (p) { return p; });
+    v = (segs.length ? segs[segs.length - 1] : "").replace(/^@+/, "");
+    if (!v) return "";
+  }
+  return HANDLE_RE.test(v) ? v : "";
+}
+function cleanSocials(obj) {
+  var out = {};
+  if (obj && typeof obj === "object") {
+    for (var p in SOCIALS) {
+      var h = cleanHandle(p, obj[p]);
+      if (h) out[p] = h;
+    }
+  }
+  return out;
+}
 
 const headers = {
   "Access-Control-Allow-Origin": "*",
@@ -76,6 +110,7 @@ const publicCard = (c) =>
         openTo: c.openTo && typeof c.openTo === "object"
           ? { travelers: !!c.openTo.travelers, friends: !!c.openTo.friends }
           : { travelers: true, friends: true },
+        socials: cleanSocials(c.socials),
       }
     : null;
 
@@ -119,9 +154,12 @@ exports.handler = async (event) => {
     if (body.openTo && typeof body.openTo === "object") {
       openTo = { travelers: !!body.openTo.travelers, friends: !!body.openTo.friends };
     }
+    let socials = null;
+    if (body.socials && typeof body.socials === "object") socials = cleanSocials(body.socials);
     const prev = await store.get(`traveler/${userId}.json`, { type: "json" }).catch(() => null);
     const card = { userId, name, kind, tag, note, updatedAt: Date.now() };
     card.openTo = openTo || (prev && prev.openTo) || { travelers: true, friends: true };
+    card.socials = socials || (prev && prev.socials) || {};
     await store.setJSON(`traveler/${userId}.json`, card);
     return ok({ ok: true, card: publicCard(card) });
   }
