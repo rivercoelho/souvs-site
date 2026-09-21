@@ -4,11 +4,11 @@
 // stored in the visitor's own browser. Storage: Netlify Blobs ("souvs-meet").
 //
 // Actions:
-//   register  { userId, name, kind, tag, note, socials, avatarAt } -> upsert card
+//   register  { userId, name, kind, tag, note, socials, avatarAt } -> upsert profile
 //   avatar    { userId, data }  -> upload profile photo (raw base64 of a small
 //             JPEG; client resizes to <=256px). Empty data removes the photo.
 //   GET ?action=avatar&userId=... -> serves the profile photo (image/jpeg)
-//   travelers { userId }                             -> list live cards
+//   travelers { userId }                             -> list live profiles
 //   thread    { userId, otherId }                    -> get-or-create thread
 //   threads   { userId }                             -> my threads w/ preview
 //   messages  { userId, threadId, since }            -> messages after `since`
@@ -165,7 +165,7 @@ exports.handler = async (event) => {
   if (!UID_RE.test(userId)) return bad(400, "bad user");
   const ip = ipOf(event);
 
-  // ---- register / update traveler card ----
+  // ---- register / update profile ----
   if (action === "register") {
     if (throttle(`reg:${ip}`, 5, 10 * 60 * 1000)) return bad(429, "slow down");
     const name = String(body.name || "").trim();
@@ -233,7 +233,7 @@ exports.handler = async (event) => {
     return ok({ ok: true, avatarAt: at });
   }
 
-  // ---- list live traveler cards ----
+  // ---- list live profiles ----
   if (action === "travelers") {
     const now = Date.now();
     const mine = await getBlocks(store, userId);
