@@ -2090,6 +2090,15 @@ function distLine(p){
 function renderTravelers(list){
   grid.innerHTML="";
   var f=currentFilter(),shown=0;
+  if(me.name){
+    var you=document.createElement("article");
+    you.className="meet-card meet-mini";you.setAttribute("data-you","1");
+    you.innerHTML='<button type="button" class="meet-person-link meet-tile" aria-label="'+esc(t("you"))+'">'
+      +'<span class="meet-tile-photo">'+avatarHtml({userId:me.id,name:me.name,avatar:(me.avatarAt||0)>0,avatarAt:me.avatarAt||0})+'</span>'
+      +'<span class="meet-name-badge on">'+esc(t("you"))+'</span></button>';
+    you.querySelector(".meet-person-link").addEventListener("click",function(){go("profile")});
+    grid.appendChild(you);
+  }
   list.forEach(function(p){
     var el=document.createElement("article");
     el.className="meet-card meet-mini";el.setAttribute("data-meet-kind",p.kind);
@@ -2107,7 +2116,7 @@ $all("[data-meet-filter]").forEach(function(b){b.addEventListener("click",functi
   setTimeout(function(){
     if(!travelersLoaded)return;
     var f=b.getAttribute("data-meet-filter");
-    var n=$all("#meetGrid .meet-card").filter(function(c){return !c.hidden}).length;
+    var n=$all("#meetGrid .meet-card").filter(function(c){return !c.hidden&&!c.hasAttribute("data-you")}).length;
     var st=$("#meetStatus");
     if(st)st.textContent=n?t(f==="local"?"meet_live_locals":"meet_live_travelers",{n:n}):t("meet_none");
   },0);
