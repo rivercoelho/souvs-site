@@ -3,7 +3,7 @@
 // POST { action, ... } -> JSON. Identity is a client-generated userId
 // stored in the visitor's own browser. Storage: Netlify Blobs ("souvs-meet").
 //
-// Actions: (deploy retrigger)
+// Actions:
 //   register  { userId, name, kind, tag, note, socials, avatarAt } -> upsert card
 //   avatar    { userId, data }  -> upload profile photo (raw base64 of a small
 //             JPEG; client resizes to <=256px). Empty data removes the photo.
