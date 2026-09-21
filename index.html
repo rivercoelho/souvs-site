@@ -2052,7 +2052,13 @@ $("#personChatForm").addEventListener("submit",function(e){
       if(s2.error){toast(t("toast_no_send"));inp.value=txt;return}
       var badge=document.getElementById("personSentBadge");
       if(badge)badge.hidden=false;
-      setTimeout(function(){if(badge)badge.hidden=true;openChat(r.threadId,r.other||p);refreshThreads();},1400);
+      setTimeout(function(){
+        try{
+          if(badge)badge.hidden=true;
+          openChat(r.threadId,r.other||p);
+          refreshThreads();
+        }catch(err){toast("sendflow: "+((err&&err.message)||String(err)));}
+      },1400);
     });
   });
 });
