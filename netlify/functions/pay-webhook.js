@@ -16,7 +16,11 @@ const SOUVENIR_IDS = ["pip-plush", "sticker-pack", "souvs-tee"];
 const UID_RE = /^[A-Za-z0-9_-]{1,64}$/;
 
 async function fulfill(userId, item, session) {
-  const store = getStore("souvs-access");
+  const store = getStore({
+    name: "souvs-access",
+    siteID: process.env.NETLIFY_SITE_ID,
+    token: process.env.NETLIFY_BLOBS_TOKEN,
+  });
   if (PASSES[item]) {
     await store.setJSON(`access/${userId}.json`, {
       pass: item,

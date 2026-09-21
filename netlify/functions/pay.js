@@ -56,8 +56,16 @@ function findItem(item) {
   return null;
 }
 
+function getAccessStore() {
+  return getStore({
+    name: "souvs-access",
+    siteID: process.env.NETLIFY_SITE_ID,
+    token: process.env.NETLIFY_BLOBS_TOKEN,
+  });
+}
+
 async function accessState(userId) {
-  const store = getStore("souvs-access");
+  const store = getAccessStore();
   const rec = await store.get(`access/${userId}.json`, { type: "json" }).catch(() => null);
   const now = Date.now();
   if (rec && rec.expires > now) return { hasAccess: true, pass: rec.pass, expires: rec.expires };
