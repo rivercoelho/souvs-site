@@ -305,6 +305,8 @@ en:{
   filter_local: "A local person",
   meet_finding: "Finding travelers nearby…",
   meet_none: "No live profiles here yet — post yours above.",
+  dist_km: "{n} km away",
+  dist_m: "{n} m away",
   meet_live_travelers: "Live · {n} travelers around right now.",
   meet_live_locals: "Live · {n} locals around right now.",
   meet_offline: "Traveler chat is coming online — check back soon.",
@@ -331,6 +333,7 @@ en:{
   form_edit: "Your profile",
   form_save: "Post my profile",
   form_sub: "Tell fellow travelers who you are. No account needed.",
+  form_loc_note: "Your location is only used to sort nearby profiles — it’s never shown publicly.",
   form_name: "Display name",
   form_name_ph: "Alex",
   form_kind: "I am a",
@@ -544,6 +547,8 @@ es:{
   filter_local: "Una persona local",
   meet_finding: "Buscando viajeros cerca…",
   meet_none: "Aún no hay perfiles activos — publica el tuyo arriba.",
+  dist_km: "a {n} km",
+  dist_m: "a {n} m",
   meet_live_travelers: "En vivo · {n} viajeros por aquí ahora mismo.",
   meet_live_locals: "En vivo · {n} locales por aquí ahora mismo.",
   meet_offline: "El chat de viajeros está por activarse — vuelve pronto.",
@@ -570,6 +575,7 @@ es:{
   form_edit: "Tu perfil",
   form_save: "Publicar mi perfil",
   form_sub: "Cuéntales a otros viajeros quién eres. Sin necesidad de cuenta.",
+  form_loc_note: "Tu ubicación solo se usa para ordenar perfiles cercanos — nunca se muestra públicamente.",
   form_name: "Nombre visible",
   form_name_ph: "Alex",
   form_kind: "Soy",
@@ -782,6 +788,8 @@ pt:{
   filter_local: "Uma pessoa local",
   meet_finding: "Procurando viajantes por perto…",
   meet_none: "Nenhum perfil ativo por aqui ainda — publique o seu acima.",
+  dist_km: "a {n} km",
+  dist_m: "a {n} m",
   meet_live_travelers: "Ao vivo · {n} viajantes por aqui agora.",
   meet_live_locals: "Ao vivo · {n} locais por aqui agora.",
   meet_offline: "O chat de viajantes está ficando online — volte em breve.",
@@ -808,6 +816,7 @@ pt:{
   form_edit: "Seu perfil",
   form_save: "Publicar meu perfil",
   form_sub: "Conte a outros viajantes quem você é. Sem necessidade de conta.",
+  form_loc_note: "Sua localização é usada apenas para ordenar perfis próximos — nunca é exibida publicamente.",
   form_name: "Nome de exibição",
   form_name_ph: "Alex",
   form_kind: "Eu sou",
@@ -1021,6 +1030,8 @@ fr:{
   filter_local: "Un local",
   meet_finding: "Recherche de voyageurs à proximité…",
   meet_none: "Pas encore de profils actifs ici — publiez le vôtre ci-dessus.",
+  dist_km: "à {n} km",
+  dist_m: "à {n} m",
   meet_live_travelers: "En direct · {n} voyageurs dans le coin.",
   meet_live_locals: "En direct · {n} locaux dans le coin.",
   meet_offline: "Le chat voyageurs arrive en ligne — revenez bientôt.",
@@ -1047,6 +1058,7 @@ fr:{
   form_edit: "Votre profil",
   form_save: "Publier mon profil",
   form_sub: "Dites aux autres voyageurs qui vous êtes. Aucun compte nécessaire.",
+  form_loc_note: "Votre position sert uniquement à trier les profils proches — elle n’est jamais affichée publiquement.",
   form_name: "Nom affiché",
   form_name_ph: "Alex",
   form_kind: "Je suis",
@@ -1260,6 +1272,8 @@ de:{
   filter_local: "Eine Person vor Ort",
   meet_finding: "Suche Reisende in der Nähe…",
   meet_none: "Noch keine aktiven Profile hier — poste deins oben.",
+  dist_km: "{n} km entfernt",
+  dist_m: "{n} m entfernt",
   meet_live_travelers: "Live · {n} Reisende gerade in der Nähe.",
   meet_live_locals: "Live · {n} Locals gerade in der Nähe.",
   meet_offline: "Der Reisenden-Chat geht bald online — schau später wieder vorbei.",
@@ -1286,6 +1300,7 @@ de:{
   form_edit: "Dein Profil",
   form_save: "Mein Profil posten",
   form_sub: "Sag anderen Reisenden, wer du bist. Kein Konto nötig.",
+  form_loc_note: "Dein Standort wird nur zum Sortieren naher Profile verwendet — er wird niemals öffentlich angezeigt.",
   form_name: "Anzeigename",
   form_name_ph: "Alex",
   form_kind: "Ich bin",
@@ -1557,6 +1572,7 @@ var cardFormHtml=
  +'<label class="pref-row"><span class="pref-text"><strong data-i18n="pref_travelers">New travelers</strong><span data-i18n="pref_travelers_sub">Travelers visiting the city can see your profile and say hi.</span></span><span class="pref-ctl"><input type="checkbox" id="prefTravelers"><span class="pref-switch" aria-hidden="true"></span></span></label>'
  +'<label class="pref-row"><span class="pref-text"><strong data-i18n="pref_friends">New friends</strong><span data-i18n="pref_friends_sub">Open to making friends, not just trip buddies.</span></span><span class="pref-ctl"><input type="checkbox" id="prefFriends"><span class="pref-switch" aria-hidden="true"></span></span></label>'
  +'<p class="pref-note" id="prefNote" role="status"></p></div>'
+ +'<p class="muted" data-i18n="form_loc_note">Your location is only used to sort nearby profiles \u2014 it\u2019s never shown publicly.</p>'
  +'<button class="primary" type="submit" id="cardFormSubmit"></button>'
  +'</form>';
 live.innerHTML=
@@ -1635,6 +1651,31 @@ function resizeAvatar(file){
     img.src=url;
   });
 }
+/* ---- geolocation: nearest-first sorting ---- */
+var geoCache=null,geoAsked=false;
+function getGeo(){
+  return new Promise(function(res){
+    if(geoAsked){res(geoCache);return}
+    geoAsked=true;
+    if(!navigator.geolocation){res(null);return}
+    var done=false;
+    function fin(v){if(!done){done=true;geoCache=v;res(v)}}
+    try{
+      navigator.geolocation.getCurrentPosition(
+        function(p){fin({lat:+p.coords.latitude.toFixed(4),lng:+p.coords.longitude.toFixed(4)})},
+        function(){fin(null)},
+        {timeout:8000,maximumAge:600000}
+      );
+      setTimeout(function(){fin(null)},9000);
+    }catch(e){fin(null)}
+  });
+}
+function distLine(p){
+  if(p==null||p.distanceKm==null||!isFinite(p.distanceKm))return "";
+  var km=p.distanceKm;
+  var s=km<1?t("dist_m",{n:Math.max(1,Math.round(km*1000))}):t("dist_km",{n:Math.round(km*10)/10});
+  return '<p class="meet-meta">'+esc(s)+'</p>';
+}
 function renderTravelers(list){
   grid.innerHTML="";
   var f=currentFilter(),shown=0;
@@ -1644,7 +1685,7 @@ function renderTravelers(list){
     if(p.kind!==f){el.hidden=true}else{shown++}
     el.innerHTML=avatarHtml(p)+'<div>'
       +'<div class="meet-kind"><span>'+esc(t("badge_live"))+'</span><span>'+esc(t(p.kind==="local"?"kind_local":"kind_traveler"))+'</span></div>'
-      +'<h3>'+esc(p.name)+'</h3><p class="meet-meta">'+esc(tagLabel(p.tag))+'</p>'
+      +'<h3>'+esc(p.name)+'</h3><p class="meet-meta">'+esc(tagLabel(p.tag))+'</p>'+distLine(p)
       +(p.note?'<p>'+esc(p.note)+'</p>':'')+(p.openTo?'<p class="muted">'+esc(openToLine(p.openTo))+'</p>':'')+socialsHtml(p.socials)+'</div>';
     var btn=document.createElement("button");btn.type="button";btn.textContent=t("say_hi");
     (function(card){btn.addEventListener("click",function(){startThread(card)})})(p);
@@ -1681,7 +1722,7 @@ function renderAroundInto(wrapId,statusId){
     el.className="meet-card";
     el.innerHTML=avatarHtml(p)+'<div>'
       +'<div class="meet-kind"><span>'+esc(t("badge_live"))+'</span><span>'+esc(t(p.kind==="local"?"kind_local":"kind_traveler"))+'</span></div>'
-      +'<h3>'+esc(p.name)+'</h3><p class="meet-meta">'+esc(tagLabel(p.tag))+'</p>'
+      +'<h3>'+esc(p.name)+'</h3><p class="meet-meta">'+esc(tagLabel(p.tag))+'</p>'+distLine(p)
       +(p.note?'<p>'+esc(p.note)+'</p>':'')+(p.openTo?'<p class="muted">'+esc(openToLine(p.openTo))+'</p>':'')+socialsHtml(p.socials)+'</div>';
     var btn=document.createElement("button");btn.type="button";btn.textContent=t("say_hi");
     (function(card){btn.addEventListener("click",function(){startThread(card)})})(p);
@@ -1791,7 +1832,10 @@ function doCardSubmit(form){
   if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast(t("toast_bad_email"));return}
   var btn=form.querySelector('button[type="submit"]');
   var finish=function(avatarAt){
-    api("register",{name:name,kind:kind,tag:tag,note:note,email:email,openTo:getOpenTo(),socials:getSocials(),avatarAt:avatarAt}).then(function(r){
+    getGeo().then(function(g){
+    var payload={name:name,kind:kind,tag:tag,note:note,email:email,openTo:getOpenTo(),socials:getSocials(),avatarAt:avatarAt};
+    if(g){payload.lat=g.lat;payload.lng=g.lng}
+    api("register",payload).then(function(r){
       if(btn)btn.disabled=false;
       if(r.error){toast(t("toast_no_save"));return}
       me.name=name;me.kind=kind;me.tag=tag;me.note=note;me.email=email;me.socials=(r.card&&r.card.socials)||{};me.avatarAt=(r.card&&r.card.avatarAt)||0;saveMe();
@@ -1800,6 +1844,7 @@ function doCardSubmit(form){
       toast(t("toast_live"));
       refreshAll();
       var _cfs=$("#cardFormSlot");if(_cfs)_cfs.classList.remove("open");
+    });
     });
   };
   if(btn)btn.disabled=true;
@@ -1871,8 +1916,11 @@ window.renderProfile=renderProfile;
 
 function refreshThreads(){return api("threads",{}).then(function(r){if(r&&r.threads)renderThreads(r.threads)})}
 function refreshAll(){
-  var reg=me.name?api("register",{name:me.name,kind:me.kind,tag:me.tag,note:me.note,email:me.email||"",openTo:getOpenTo(),socials:getSocials(),avatarAt:me.avatarAt||0}):Promise.resolve({});
-  return reg.then(function(){return api("travelers",{})}).then(function(r){
+  return getGeo().then(function(g){
+  var coords=g?{lat:g.lat,lng:g.lng}:{};
+  var base={name:me.name,kind:me.kind,tag:me.tag,note:me.note,email:me.email||"",openTo:getOpenTo(),socials:getSocials(),avatarAt:me.avatarAt||0};
+  var reg=me.name?api("register",Object.assign({},base,coords)):Promise.resolve({});
+  return reg.then(function(){return api("travelers",coords)}).then(function(r){
     if(r.error||!r.travelers){
       var st=$("#meetStatus");
       if(st)st.textContent=t("meet_offline");
@@ -1883,6 +1931,7 @@ function refreshAll(){
     renderTravelers(r.travelers);
     renderHomeTravelers();
     return refreshThreads();
+  });
   });
 }
 function syncCardFormMode(){var tt=$("#cardFormTitle"),b=$("#cardFormSubmit"),edit=!!(me&&me.name);if(tt)tt.textContent=edit?t("form_edit"):t("form_create");if(b)b.textContent=t("form_save");var ts=$("#mcTag");if(ts){var cv=ts.value||(me&&me.tag)||TAGS[0];ts.innerHTML=TAGS.map(function(tag){return '<option value="'+esc(tag)+'"'+(tag===cv?" selected":"")+">"+esc(tagLabel(tag))+"</option>"}).join("");}}

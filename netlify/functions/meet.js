@@ -4,11 +4,11 @@
 // stored in the visitor's own browser. Storage: Netlify Blobs ("souvs-meet").
 //
 // Actions:
-//   register  { userId, name, kind, tag, note, socials, avatarAt } -> upsert profile
+//   register  { userId, name, kind, tag, note, socials, avatarAt, lat?, lng? } -> upsert profile
 //   avatar    { userId, data }  -> upload profile photo (raw base64 of a small
 //             JPEG; client resizes to <=256px). Empty data removes the photo.
 //   GET ?action=avatar&userId=... -> serves the profile photo (image/jpeg)
-//   travelers { userId }                             -> list live profiles
+//   travelers { userId, lat?, lng? }                   -> list live profiles, nearest first
 //   thread    { userId, otherId }                    -> get-or-create thread
 //   threads   { userId }                             -> my threads w/ preview
 //   messages  { userId, threadId, since }            -> messages after `since`
@@ -118,6 +118,17 @@ const publicCard = (c) =>
       }
     : null;
 
+// great-circle distance in km; viewer coords validated at call sites
+function haversineKm(lat1, lng1, lat2, lng2) {
+  const R = 6371, rad = Math.PI / 180;
+  const s1 = Math.sin(((lat2 - lat1) / 2) * rad);
+  const s2 = Math.sin(((lng2 - lng1) / 2) * rad);
+  return 2 * R * Math.asin(Math.sqrt(s1 * s1 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * s2 * s2));
+}
+function validCoords(lat, lng) {
+  return Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return { statusCode: 204, headers, body: "" };
 
@@ -187,11 +198,20 @@ exports.handler = async (event) => {
     }
     let socials = null;
     if (body.socials && typeof body.socials === "object") socials = cleanSocials(body.socials);
+    let lat = null, lng = null;
+    if (body.lat !== undefined || body.lng !== undefined) {
+      const la = Number(body.lat), lo = Number(body.lng);
+      if (!validCoords(la, lo)) return bad(400, "bad location");
+      lat = Math.round(la * 10000) / 10000;
+      lng = Math.round(lo * 10000) / 10000;
+    }
     const prev = await store.get(`traveler/${userId}.json`, { type: "json" }).catch(() => null);
     const card = { userId, name, kind, tag, note, updatedAt: Date.now() };
     card.openTo = openTo || (prev && prev.openTo) || { travelers: true, friends: true };
     card.socials = socials || (prev && prev.socials) || {};
     card.email = email !== null ? email : (prev && prev.email) || "";
+    if (lat !== null) { card.lat = lat; card.lng = lng; }
+    else if (prev && validCoords(prev.lat, prev.lng)) { card.lat = prev.lat; card.lng = prev.lng; }
     let avatarAt = null;
     if (body.avatarAt !== undefined) {
       const n = Number(body.avatarAt);
@@ -233,9 +253,11 @@ exports.handler = async (event) => {
     return ok({ ok: true, avatarAt: at });
   }
 
-  // ---- list live profiles ----
+  // ---- list live profiles (nearest first when viewer shares location) ----
   if (action === "travelers") {
     const now = Date.now();
+    const vLat = Number(body.lat), vLng = Number(body.lng);
+    const hasViewer = validCoords(vLat, vLng);
     const mine = await getBlocks(store, userId);
     const listed = await store.list({ prefix: "traveler/" }).catch(() => ({ blobs: [] }));
     const cards = [];
@@ -245,7 +267,14 @@ exports.handler = async (event) => {
       if (now - (c.updatedAt || 0) > CARD_TTL_MS) continue;
       if (mine.includes(c.userId)) continue;
       if (c.openTo && !c.openTo.travelers && !c.openTo.friends) continue;
-      cards.push(publicCard(c));
+      const pub = publicCard(c);
+      if (hasViewer && validCoords(c.lat, c.lng)) {
+        pub.distanceKm = Math.round(haversineKm(vLat, vLng, c.lat, c.lng) * 10) / 10;
+      }
+      cards.push(pub);
+    }
+    if (hasViewer) {
+      cards.sort((a, b) => (a.distanceKm == null ? 1e9 : a.distanceKm) - (b.distanceKm == null ? 1e9 : b.distanceKm));
     }
     return ok({ ok: true, travelers: cards.slice(0, 50) });
   }
