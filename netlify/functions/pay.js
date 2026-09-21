@@ -129,4 +129,4 @@ exports.handler = async (event) => {
 exports._findItem = findItem;
 exports._accessState = accessState;
 
-// deploy-trigger: 2026-09-21 rebuild with STRIPE_SECRET_KEY in Production env
+// deploy-trigger: 2026-09-21 rebuild with STRIPE_WEBHOOK_SECRET in Production env
