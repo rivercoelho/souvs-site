@@ -1,5 +1,6 @@
 // netlify/functions/chat.js
-// Souvs real-AI guide backend. POST { critter, message, history } -> { reply }.
+// Souvs real-AI guide backend. POST { critter, message, history, lang } -> { reply }.
+// lang: en | es | pt | fr | de (defaults to en).
 // Requires OPENAI_API_KEY as a Netlify environment variable.
 
 const CRITTERS = {
@@ -85,6 +86,9 @@ exports.handler = async (event) => {
   }
 
   const critter = CRITTERS[body.critter] || CRITTERS.scurry;
+  const LANG_NAMES = { en: "English", es: "Spanish", pt: "Portuguese", fr: "French", de: "German" };
+  const lang = LANG_NAMES[body.lang] ? body.lang : "en";
+  const langRule = lang === "en" ? "" : " Respond ONLY in " + LANG_NAMES[lang] + ". Keep the same personality, voice, and catchphrases (translated where natural).";
   const message = String(body.message || "").slice(0, 600).trim();
   if (!message) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "empty message" }) };
@@ -117,7 +121,7 @@ exports.handler = async (event) => {
       max_tokens: 280,
       temperature: 0.8,
       messages: [
-        { role: "system", content: critter.system },
+        { role: "system", content: critter.system + langRule },
         ...history,
         { role: "user", content: message },
       ],
