@@ -120,3 +120,5 @@ exports.handler = async (event) => {
 // exported for tests
 exports._findItem = findItem;
 exports._accessState = accessState;
+
+// deploy-trigger: 2026-09-21 paywall
