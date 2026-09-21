@@ -141,6 +141,11 @@
           <label class="pref-row"><span class="pref-text"><strong>New friends</strong><span>Open to making friends, not just trip buddies.</span></span><span class="pref-ctl"><input type="checkbox" id="prefFriends"><span class="pref-switch" aria-hidden="true"></span></span></label>
           <p class="pref-note" id="prefNote" role="status"></p>
         </div>
+        <div class="profile-prefs">
+          <h3>Around right now</h3>
+          <p class="pref-note" id="profileMeetStatus" role="status">Looking for travelers…</p>
+          <div class="profile-travelers" id="profileTravelers"></div>
+        </div>
       </div>
     </section>
 </main>
@@ -242,6 +247,10 @@
 .profile-card .secondary{margin-top:10px}
 .profile-prefs{display:grid;gap:10px;padding:20px;border-radius:22px;background:var(--surface-faint)}
 .profile-prefs h3{margin:0;color:var(--ink);font-size:18px}
+.profile-travelers{display:grid;gap:10px;margin-top:2px}
+.profile-travelers .meet-card{padding:16px 14px}
+.profile-travelers .meet-card h3{margin:8px 0 4px;color:var(--ink);font-size:20px}
+.profile-travelers .meet-card p{margin:6px 0;color:var(--muted);font-size:14px}
 .pref-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #e6e6ee;border-radius:16px;background:#fff;cursor:pointer}
 .pref-text{flex:1;display:grid;gap:2px}
 .pref-text strong{font-size:15px;color:var(--ink)}
@@ -283,6 +292,7 @@ function api(action,data){
 var grid=$("#meetGrid");
 if(!grid)return;
 var travelersLoaded=false;
+var lastTravelers=null;
 
 /* ---- inject live UI ---- */
 var live=document.createElement("div");
@@ -341,6 +351,31 @@ $all("[data-meet-filter]").forEach(function(b){b.addEventListener("click",functi
     if(st)st.textContent=n?("Live · "+n+" "+(f==="local"?"locals":"travelers")+" around right now."):"No live cards here yet — post yours above.";
   },0);
 })});
+
+/* ---- profile: people around right now ---- */
+function renderProfileTravelers(){
+  var wrap=$("#profileTravelers"),st=$("#profileMeetStatus");
+  if(!wrap)return;
+  if(!travelersLoaded||!lastTravelers){
+    if(st)st.textContent="Traveler chat is coming online — check back soon.";
+    wrap.innerHTML="";return;
+  }
+  var others=lastTravelers.filter(function(t){return t.userId&&t.userId!==me.id});
+  if(st)st.textContent=others.length?("Live · "+others.length+" "+(others.length===1?"person":"people")+" around right now."):"No one else is around right now — check back soon.";
+  wrap.innerHTML="";
+  others.forEach(function(t){
+    var el=document.createElement("article");
+    el.className="meet-card";
+    el.innerHTML='<span class="meet-avatar" aria-hidden="true">'+esc(initials(t.name))+'</span><div>'
+      +'<div class="meet-kind"><span>Live</span><span>'+esc(t.kind==="local"?"Local":"Traveler")+'</span></div>'
+      +'<h3>'+esc(t.name)+'</h3><p class="meet-meta">'+esc(t.tag)+'</p>'
+      +(t.note?'<p>'+esc(t.note)+'</p>':'')+(t.openTo?'<p class="muted">'+esc(openToLine(t.openTo))+'</p>':'')+'</div>';
+    var btn=document.createElement("button");btn.type="button";btn.textContent="Say hi";
+    (function(card){btn.addEventListener("click",function(){startThread(card)})})(t);
+    el.appendChild(btn);
+    wrap.appendChild(el);
+  });
+}
 
 /* ---- threads ---- */
 function renderThreads(list){
@@ -489,10 +524,12 @@ function refreshAll(){
     if(r.error||!r.travelers){
       var st=$("#meetStatus");
       if(st)st.textContent="Traveler chat is coming online — check back soon.";
-      travelersLoaded=false;return;
+      travelersLoaded=false;renderProfileTravelers();return;
     }
     travelersLoaded=true;
+    lastTravelers=r.travelers;
     renderTravelers(r.travelers);
+    renderProfileTravelers();
     return refreshThreads();
   });
 }
