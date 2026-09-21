@@ -71,7 +71,47 @@
     .primary,.section-title,.section-title .eyebrow,.screen-head,.screen-head .eyebrow,.guide-copy strong,.pill-note,.bubble.user,.composer button,.tour-progress,.stop-number,.toast{color:#000}
     .city-button>span:not(.city-dot),.bottom-nav button span{color:#000}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
-  </style>
+  
+/* Souvs guide characters: idle sway + wave + point gestures */
+@keyframes souvs-guide-r{
+  0%,100%{translate:0 0;rotate:0deg;scale:1}
+  7%{translate:0 -9px;rotate:-2deg}
+  14%{translate:0 0;rotate:0deg}
+  21%{translate:0 -9px;rotate:2deg}
+  28%{translate:0 0;rotate:0deg}
+  36%{translate:-7px -7px;rotate:-11deg;scale:1.04}
+  40%{translate:7px -7px;rotate:11deg;scale:1.04}
+  44%{translate:-7px -7px;rotate:-11deg;scale:1.04}
+  48%{translate:0 0;rotate:0deg;scale:1}
+  58%{translate:24px -8px;rotate:13deg}
+  68%{translate:24px -8px;rotate:13deg}
+  76%{translate:0 0;rotate:0deg}
+}
+@keyframes souvs-guide-l{
+  0%,100%{translate:0 0;rotate:0deg;scale:1}
+  7%{translate:0 -9px;rotate:2deg}
+  14%{translate:0 0;rotate:0deg}
+  21%{translate:0 -9px;rotate:-2deg}
+  28%{translate:0 0;rotate:0deg}
+  36%{translate:7px -7px;rotate:11deg;scale:1.04}
+  40%{translate:-7px -7px;rotate:-11deg;scale:1.04}
+  44%{translate:7px -7px;rotate:11deg;scale:1.04}
+  48%{translate:0 0;rotate:0deg;scale:1}
+  58%{translate:-24px -8px;rotate:-13deg}
+  68%{translate:-24px -8px;rotate:-13deg}
+  76%{translate:0 0;rotate:0deg}
+}
+.guide-art img,.guide-tabs img,.chat-profile img,.signup-confirm img{transform-origin:50% 92%;animation:souvs-guide-r 12s ease-in-out infinite}
+.guide-card:nth-child(2) .guide-art img{animation-name:souvs-guide-l;animation-delay:-3s}
+.guide-card:nth-child(3) .guide-art img{animation-delay:-6s}
+.guide-card:nth-child(4) .guide-art img{animation-name:souvs-guide-l;animation-delay:-9s}
+.guide-tabs button:nth-child(2) img{animation-name:souvs-guide-l;animation-delay:-4s}
+.guide-tabs button:nth-child(3) img{animation-delay:-8s}
+.guide-tabs button:nth-child(4) img{animation-name:souvs-guide-l;animation-delay:-2s}
+.chat-profile img{animation-delay:-5s}
+.signup-confirm img{animation-delay:-7s}
+
+</style>
 </head>
 <body>
 <div class="app">
