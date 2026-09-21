@@ -193,6 +193,7 @@
 #meetLive{margin-top:16px}
 .meet-live-grid{display:grid;gap:12px}
 @media(min-width:720px){.meet-live-grid{grid-template-columns:1fr 1fr}}
+#cardFormSlot{display:none}#cardFormSlot.open{display:block}
 .meet-card-form{display:grid;gap:8px;padding:16px;border-radius:14px;background:rgba(255,255,255,.65)}
 .meet-card-form h3{margin:0}
 .meet-card-sub{margin:0;opacity:.7;font-size:14px}
@@ -472,7 +473,7 @@ function renderThreads(list){
   });
 }
 function startThread(t){
-  if(!me.name){toast("Create your profile first.");var f=$("#meetCardForm");if(f)f.scrollIntoView({behavior:"smooth",block:"center"});return}
+  if(!me.name){toast("Create your profile first.");revealCardForm();var f=$("#meetCardForm");if(f)f.scrollIntoView({behavior:"smooth",block:"center"});return}
   api("thread",{otherId:t.userId}).then(function(r){
     if(r.error){toast(r.error==="unavailable"?"Not available right now.":"Could not start chat.");return}
     openChat(r.threadId,r.other);
@@ -563,6 +564,7 @@ function doCardSubmit(form){
       syncCardFormMode();
       toast("Your profile is live.");
       refreshAll();
+      var _cfs=$("#cardFormSlot");if(_cfs)_cfs.classList.remove("open");
     });
   };
   if(btn)btn.disabled=true;
@@ -598,7 +600,8 @@ $("#meetCardForm").addEventListener("submit",function(e){
 /* ---- profile ---- */
 function getOpenTo(){if(!me.openTo||typeof me.openTo!=="object")me.openTo={travelers:true,friends:true};return me.openTo}
 function openToPhrases(){var o=getOpenTo(),a=[];if(o.travelers)a.push("new travelers");if(o.friends)a.push("new friends");return a}
-function editCard(){go("profile");setTimeout(function(){var f=$("#meetCardForm");if(f)f.scrollIntoView({behavior:"smooth",block:"center"})},90)}
+function revealCardForm(){var s=$("#cardFormSlot");if(s)s.classList.add("open")}
+function editCard(){go("profile");revealCardForm();setTimeout(function(){var f=$("#meetCardForm");if(f)f.scrollIntoView({behavior:"smooth",block:"center"})},90)}
 function renderProfile(){
   var wrap=$("#profileCard");if(!wrap)return;
   var o=getOpenTo();
