@@ -103,6 +103,14 @@
         </div>
       </section>
       <section class="deal-banner"><div class="deal-copy"><p class="eyebrow">Perks</p><h2>Unbox a surprise local deal!</h2><p>Unbox a surprise perk from the Souvs crew.</p><button class="primary" data-go="perks">See what’s inside →</button></div><button class="gift" data-go="perks" aria-label="Open the mystery box"><span class="gift-lid"></span><span class="gift-bow left"></span><span class="gift-bow right"></span><span class="gift-body"></span></button></section>
+      <section class="meetup-section">
+        <div class="meetup-head"><div><p class="eyebrow">Make more friends</p><h2>Make more friends</h2></div><p>Connect with another traveler or a local person.</p></div>
+        <button class="primary" data-go="profile">Post your traveler card →</button>
+      </section>
+      <section class="meetup-section">
+        <div class="meetup-head"><div><p class="eyebrow">Around right now</p><h2>Around right now</h2></div><p class="pref-note" id="homeAroundStatus" role="status">Looking for travelers…</p></div>
+        <div class="profile-travelers" id="homeAroundGrid"></div>
+      </section>
     </section>
 
     <section class="view screen" id="chatView" data-view="chat">
@@ -425,9 +433,9 @@ $all("[data-meet-filter]").forEach(function(b){b.addEventListener("click",functi
   },0);
 })});
 
-/* ---- profile: people around right now ---- */
-function renderProfileTravelers(){
-  var wrap=$("#profileTravelers"),st=$("#profileMeetStatus");
+/* ---- people around right now (profile + home) ---- */
+function renderAroundInto(wrapId,statusId){
+  var wrap=$("#"+wrapId),st=$("#"+statusId);
   if(!wrap)return;
   if(!travelersLoaded||!lastTravelers){
     if(st)st.textContent="Traveler chat is coming online — check back soon.";
@@ -450,6 +458,8 @@ function renderProfileTravelers(){
     wrap.appendChild(el);
   });
 }
+function renderProfileTravelers(){renderAroundInto("profileTravelers","profileMeetStatus")}
+function renderHomeTravelers(){renderAroundInto("homeAroundGrid","homeAroundStatus")}
 
 /* ---- threads ---- */
 function renderThreads(list){
@@ -631,12 +641,13 @@ function refreshAll(){
     if(r.error||!r.travelers){
       var st=$("#meetStatus");
       if(st)st.textContent="Traveler chat is coming online — check back soon.";
-      travelersLoaded=false;renderProfileTravelers();return;
+      travelersLoaded=false;renderProfileTravelers();renderHomeTravelers();return;
     }
     travelersLoaded=true;
     lastTravelers=r.travelers;
     renderTravelers(r.travelers);
     renderProfileTravelers();
+    renderHomeTravelers();
     return refreshThreads();
   });
 }
