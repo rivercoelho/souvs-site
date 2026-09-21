@@ -372,6 +372,7 @@ en:{
   meet_offline: "Traveler chat is coming online — check back soon.",
   around_live: "Live · {n} {people} around right now.",
   person_1: "person",
+  you: "you",
   person_n: "people",
   around_none: "No one else is around right now — check back soon.",
   badge_live: "Live",
@@ -651,6 +652,7 @@ es:{
   meet_offline: "El chat de viajeros está por activarse — vuelve pronto.",
   around_live: "En vivo · {n} {people} por aquí ahora mismo.",
   person_1: "persona",
+  you: "tú",
   person_n: "personas",
   around_none: "No hay nadie más por aquí ahora — vuelve pronto.",
   badge_live: "En vivo",
@@ -929,6 +931,7 @@ pt:{
   meet_offline: "O chat de viajantes está ficando online — volte em breve.",
   around_live: "Ao vivo · {n} {people} por aqui agora.",
   person_1: "pessoa",
+  you: "você",
   person_n: "pessoas",
   around_none: "Não há mais ninguém por aqui agora — volte em breve.",
   badge_live: "Ao vivo",
@@ -1208,6 +1211,7 @@ fr:{
   meet_offline: "Le chat voyageurs arrive en ligne — revenez bientôt.",
   around_live: "En direct · {n} {people} dans le coin.",
   person_1: "personne",
+  you: "toi",
   person_n: "personnes",
   around_none: "Personne d’autre dans le coin pour l’instant — revenez bientôt.",
   badge_live: "En direct",
@@ -1487,6 +1491,7 @@ de:{
   meet_offline: "Der Reisenden-Chat geht bald online — schau später wieder vorbei.",
   around_live: "Live · {n} {people} gerade in der Nähe.",
   person_1: "Person",
+  you: "du",
   person_n: "Personen",
   around_none: "Gerade ist sonst niemand in der Nähe — schau später wieder vorbei.",
   badge_live: "Live",
@@ -2123,16 +2128,20 @@ function renderAroundInto(wrapId,statusId){
   var others=lastTravelers.filter(function(t){return t.userId&&t.userId!==me.id});
   if(st)st.textContent=others.length?t("around_live",{n:others.length,people:others.length===1?t("person_1"):t("person_n")}):t("around_none");
   wrap.innerHTML="";
-  others.forEach(function(p){
+  function addTile(p,onTap){
     var el=document.createElement("article");
     el.className="meet-card meet-mini";
     el.innerHTML='<button type="button" class="meet-person-link meet-tile" aria-label="'+esc(p.name)+'">'
       +'<span class="meet-tile-photo">'+avatarHtml(p)+'</span>'
       +'<span class="meet-name-badge'+(p.online?' on':'')+'">'+esc(p.name)+'</span></button>';
-    Array.prototype.forEach.call(el.querySelectorAll(".meet-person-link"),function(b){
-      (function(card){b.addEventListener("click",function(){openPerson(card)})})(p);
-    });
+    el.querySelector(".meet-person-link").addEventListener("click",onTap);
     wrap.appendChild(el);
+  }
+  if(me.name){
+    addTile({userId:me.id,name:t("you"),avatar:(me.avatarAt||0)>0,avatarAt:me.avatarAt||0,online:true},function(){go("profile")});
+  }
+  others.forEach(function(p){
+    (function(card){addTile(card,function(){openPerson(card)})})(p);
   });
 }
 var AROUND_SECTIONS=[["homeAroundGrid","homeAroundStatus"],["chatAroundGrid","chatAroundStatus"],["perksAroundGrid","perksAroundStatus"]];
