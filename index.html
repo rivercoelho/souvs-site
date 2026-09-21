@@ -162,7 +162,6 @@
       <div class="screen-head"><p class="eyebrow" data-i18n="perks_eyebrow">Mystery box</p><h1 data-i18n="perks_title">Unbox a surprise local deal!</h1><p data-i18n="perks_sub">New surprise perks drop regularly.</p></div>
       <div class="perk-stage"><div class="unbox-panel" id="unboxPanel"><div class="burst"></div><button class="gift openable" id="unboxButton" data-i18n-aria="unbox_open_label" aria-label="Open a deal"><span class="gift-lid"></span><span class="gift-bow left"></span><span class="gift-bow right"></span><span class="gift-body"></span></button><h2 id="unboxTitle" data-i18n="unbox_tap">Tap the box.</h2><p id="unboxText" data-i18n="unbox_pull">Pull a surprise perk from the box.</p></div><div class="reveal-panel" id="revealPanel"><div class="reveal-empty"><strong data-i18n="unbox_lands">Your surprise lands here.</strong><p data-i18n="unbox_reveal">Open the box to reveal it.</p></div></div></div>
       <section class="wallet"><div class="wallet-head"><div><p class="eyebrow" data-i18n="wallet_eyebrow">Wallet</p><h2 data-i18n="wallet_title">Your perks</h2></div><span id="walletCount">0 claimed</span></div><p class="wallet-note" data-i18n="wallet_note">Perks stay in your wallet on this device.</p><div id="walletContents" class="empty-wallet">Claim a perk to add it to your wallet.</div></section>
-      <section class="around-section"><p class="eyebrow" data-i18n="around_title">Around right now</p><p class="pref-note" id="perksAroundStatus" role="status" data-i18n="around_looking">Looking for people available to meet…</p><div class="profile-travelers" id="perksAroundGrid"></div></section>
     </section>
 
     <section class="view screen" id="signupView" data-view="signup">
@@ -1698,7 +1697,7 @@ applyI18n();
   ];}
   let currentGuide='scurry',currentDeal=null,wallet=[],favorite='';
   const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-  function go(view){$$('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===view));$$('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===view));window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});if(view==='chat')renderChat();if(view==='chat'||view==='perks'){if(window.renderAroundGrids)window.renderAroundGrids()}if(view==='profile'&&window.renderProfile)window.renderProfile();if(view==='perks')setTimeout(function(){if(window.paywallOnPerks)window.paywallOnPerks()},600);updateInstallBanner();}
+  function go(view){$$('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===view));$$('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===view));window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});if(view==='chat'){renderChat();if(window.renderAroundGrids)window.renderAroundGrids()}if(view==='profile'&&window.renderProfile)window.renderProfile();if(view==='perks')setTimeout(function(){if(window.paywallOnPerks)window.paywallOnPerks()},600);updateInstallBanner();}
 /* ---- install banner: add Souvs to the phone home screen ---- */
 var _deferredInstallPrompt=null;
 window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();_deferredInstallPrompt=e;});
@@ -2210,7 +2209,7 @@ function renderAroundInto(wrapId,statusId){
     (function(card){addTile(card,function(){openPerson(card)})})(p);
   });
 }
-var AROUND_SECTIONS=[["homeAroundGrid","homeAroundStatus"],["chatAroundGrid","chatAroundStatus"],["perksAroundGrid","perksAroundStatus"]];
+var AROUND_SECTIONS=[["homeAroundGrid","homeAroundStatus"],["chatAroundGrid","chatAroundStatus"]];
 function renderAroundGrids(){AROUND_SECTIONS.forEach(function(p){renderAroundInto(p[0],p[1])})}
 window.renderAroundGrids=renderAroundGrids;
 /* ---- person profile page (from Around right now) ---- */
