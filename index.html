@@ -306,6 +306,8 @@ var cardFormHtml=
  +'<label>I am a<select id="mcKind"><option value="traveler">Traveler</option><option value="local">Local person</option></select></label>'
  +'<label>Into<select id="mcTag">'+tagOpts+'</select></label>'
  +'<label>Note <span class="opt">optional</span><textarea id="mcNote" maxlength="140" placeholder="In town till Sunday, up for a gallery crawl"></textarea></label>'
+ +'<label>Email <span class="opt">optional</span><input id="mcEmail" type="email" maxlength="120" placeholder="you@example.com" autocomplete="email"></label>'
+ +'<p class="muted">Get notified about new chats and Souvs news. Never shown publicly.</p>'
  +'<div class="socials-edit"><p>Socials <span class="opt">optional</span></p>'
  +'<label>Instagram<input id="mcIg" maxlength="60" placeholder="@handle or profile link" autocomplete="off"></label>'
  +'<label>TikTok<input id="mcTiktok" maxlength="60" placeholder="@handle or profile link" autocomplete="off"></label>'
@@ -548,14 +550,15 @@ $("#chatReport").addEventListener("click",function(){
 
 /* ---- register form ---- */
 function doCardSubmit(form){
-  var name=$("#mcName").value.trim(),kind=$("#mcKind").value,tag=$("#mcTag").value,note=$("#mcNote").value.trim();
+  var name=$("#mcName").value.trim(),kind=$("#mcKind").value,tag=$("#mcTag").value,note=$("#mcNote").value.trim(),email=$("#mcEmail").value.trim();
   if(!name){toast("Add a display name first.");return}
+  if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast("That email doesn't look right.");return}
   var btn=form.querySelector('button[type="submit"]');
   var finish=function(avatarAt){
-    api("register",{name:name,kind:kind,tag:tag,note:note,openTo:getOpenTo(),socials:getSocials(),avatarAt:avatarAt}).then(function(r){
+    api("register",{name:name,kind:kind,tag:tag,note:note,email:email,openTo:getOpenTo(),socials:getSocials(),avatarAt:avatarAt}).then(function(r){
       if(btn)btn.disabled=false;
       if(r.error){toast("Could not post card — try again.");return}
-      me.name=name;me.kind=kind;me.tag=tag;me.note=note;me.socials=(r.card&&r.card.socials)||{};me.avatarAt=(r.card&&r.card.avatarAt)||0;saveMe();
+      me.name=name;me.kind=kind;me.tag=tag;me.note=note;me.email=email;me.socials=(r.card&&r.card.socials)||{};me.avatarAt=(r.card&&r.card.avatarAt)||0;saveMe();
       avatarPending=null;avatarRemove=false;refreshAvatarPrev();
       toast("Your card is live.");
       refreshAll();
@@ -629,7 +632,7 @@ window.renderProfile=renderProfile;
 
 function refreshThreads(){return api("threads",{}).then(function(r){if(r&&r.threads)renderThreads(r.threads)})}
 function refreshAll(){
-  var reg=me.name?api("register",{name:me.name,kind:me.kind,tag:me.tag,note:me.note,openTo:getOpenTo(),socials:getSocials(),avatarAt:me.avatarAt||0}):Promise.resolve({});
+  var reg=me.name?api("register",{name:me.name,kind:me.kind,tag:me.tag,note:me.note,email:me.email||"",openTo:getOpenTo(),socials:getSocials(),avatarAt:me.avatarAt||0}):Promise.resolve({});
   return reg.then(function(){return api("travelers",{})}).then(function(r){
     if(r.error||!r.travelers){
       var st=$("#meetStatus");
@@ -647,6 +650,7 @@ $("#mcName").value=me.name||"";
 $("#mcKind").value=me.kind||"traveler";
 $("#mcTag").value=me.tag||TAGS[0];
 $("#mcNote").value=me.note||"";
+$("#mcEmail").value=me.email||"";
 $("#mcIg").value=(me.socials&&me.socials.instagram)||"";
 $("#mcTiktok").value=(me.socials&&me.socials.tiktok)||"";
 $("#mcX").value=(me.socials&&me.socials.x)||"";

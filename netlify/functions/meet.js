@@ -175,6 +175,12 @@ exports.handler = async (event) => {
     if (!NAME_RE.test(name)) return bad(400, "bad name");
     if (!KINDS.includes(kind)) return bad(400, "bad kind");
     if (!TAGS.includes(tag)) return bad(400, "bad tag");
+    let email = null;
+    if (body.email !== undefined) {
+      const e = String(body.email || "").trim().toLowerCase().slice(0, 120);
+      if (e && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)) return bad(400, "bad email");
+      email = e;
+    }
     let openTo = null;
     if (body.openTo && typeof body.openTo === "object") {
       openTo = { travelers: !!body.openTo.travelers, friends: !!body.openTo.friends };
@@ -185,6 +191,7 @@ exports.handler = async (event) => {
     const card = { userId, name, kind, tag, note, updatedAt: Date.now() };
     card.openTo = openTo || (prev && prev.openTo) || { travelers: true, friends: true };
     card.socials = socials || (prev && prev.socials) || {};
+    card.email = email !== null ? email : (prev && prev.email) || "";
     let avatarAt = null;
     if (body.avatarAt !== undefined) {
       const n = Number(body.avatarAt);
