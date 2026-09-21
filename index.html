@@ -198,6 +198,7 @@
   <h2 id="payTitle" data-i18n="pay_title">Keep exploring with the crew</h2>
   <p data-i18n="pay_sub">Travelers chip in for access. Locals are always free.</p>
   <div class="pay-grid">
+    <button class="pass-card free" id="freeWeekBtn" type="button" hidden><strong data-i18n="pay_free_title">First week free</strong><span class="pass-price">$0</span><small data-i18n="pay_free_sub">7 days of full access, on us — first-timers only</small></button>
     <button class="pass-card" type="button" data-item="daily"><strong data-i18n="pay_daily">Day pass</strong><span class="pass-price">$1.99</span><small data-i18n="pay_daily_sub">24 hours of full access</small></button>
     <button class="pass-card best" type="button" data-item="weekly"><strong data-i18n="pay_weekly">Week pass</strong><span class="pass-price">$9.99</span><small data-i18n="pay_weekly_sub">7 days of full access</small></button>
   </div>
@@ -392,6 +393,10 @@ en:{
   pay_daily_sub: "24 hours of full access",
   pay_weekly: "Week pass",
   pay_weekly_sub: "7 days of full access",
+  pay_free_title: "First week free",
+  pay_free_sub: "7 days of full access, on us — first-timers only",
+  pay_free_done: "Free week activated — enjoy the perks!",
+  pay_free_denied: "The free week is for first-time users only.",
   pay_souv_title: "Souvenirs",
   pay_souv_sub: "Take the crew home with you.",
   pay_note: "Secure checkout with Stripe.",
@@ -660,6 +665,10 @@ es:{
   pay_daily_sub: "24 horas de acceso total",
   pay_weekly: "Pase semanal",
   pay_weekly_sub: "7 días de acceso total",
+  pay_free_title: "Primera semana gratis",
+  pay_free_sub: "7 días de acceso total, por nuestra cuenta — solo nuevos usuarios",
+  pay_free_done: "¡Semana gratis activada, disfruta de las ventajas!",
+  pay_free_denied: "La semana gratis es solo para usuarios nuevos.",
   pay_souv_title: "Souvenirs",
   pay_souv_sub: "Llévate al equipo a casa.",
   pay_note: "Pago seguro con Stripe.",
@@ -927,6 +936,10 @@ pt:{
   pay_daily_sub: "24 horas de acesso total",
   pay_weekly: "Passe semanal",
   pay_weekly_sub: "7 dias de acesso total",
+  pay_free_title: "Primeira semana grátis",
+  pay_free_sub: "7 dias de acesso total, por nossa conta — só para novos usuários",
+  pay_free_done: "Semana grátis ativada — aproveite as vantagens!",
+  pay_free_denied: "A semana grátis é só para usuários de primeira vez.",
   pay_souv_title: "Lembranças",
   pay_souv_sub: "Leve a turma com você.",
   pay_note: "Pagamento seguro com Stripe.",
@@ -1195,6 +1208,10 @@ fr:{
   pay_daily_sub: "24 heures d'accès complet",
   pay_weekly: "Pass semaine",
   pay_weekly_sub: "7 jours d'accès complet",
+  pay_free_title: "Première semaine offerte",
+  pay_free_sub: "7 jours d'accès complet, c'est pour nous — nouveaux utilisateurs uniquement",
+  pay_free_done: "Semaine offerte activée — profitez-en !",
+  pay_free_denied: "La semaine offerte est réservée aux nouveaux utilisateurs.",
   pay_souv_title: "Souvenirs",
   pay_souv_sub: "Ramenez l'équipe chez vous.",
   pay_note: "Paiement sécurisé avec Stripe.",
@@ -1463,6 +1480,10 @@ de:{
   pay_daily_sub: "24 Stunden voller Zugang",
   pay_weekly: "Wochenpass",
   pay_weekly_sub: "7 Tage voller Zugang",
+  pay_free_title: "Erste Woche gratis",
+  pay_free_sub: "7 Tage voller Zugang, geht auf uns — nur für neue Nutzer",
+  pay_free_done: "Gratiswoche aktiviert — viel Spaß mit den Perks!",
+  pay_free_denied: "Die Gratiswoche gilt nur für neue Nutzer.",
   pay_souv_title: "Souvenirs",
   pay_souv_sub: "Nimm die Crew mit nach Hause.",
   pay_note: "Sichere Zahlung mit Stripe.",
@@ -1649,6 +1670,8 @@ window.__retrans=function(){renderChat(false);renderChoices();renderWallet();if(
 .pass-price{font-size:26px;font-weight:900}
 .pass-card small{color:#777;font-size:12px}
 .pass-card.best{border-color:#f5a623;background:#fff8ea}
+.pass-card.free{grid-column:1/-1;border:2px dashed #2e9e6b;background:#f0faf4}
+.pass-card.free .pass-price{color:#1d7a4f}
 .pass-card:active{transform:scale(.98)}
 .pay-sheet h3{margin:0 0 4px;font-size:17px}
 .souv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 16px}
@@ -1783,6 +1806,20 @@ function openPaywall(){
   if(!me.name){toast(t("toast_need_profile"));return}
   renderSouvenirs();
   var o=$("#payOverlay");if(o){o.hidden=false;applyI18n()}
+  var fb=$("#freeWeekBtn");if(fb)fb.hidden=true;
+  payApi("status",{}).then(function(r){
+    if(r&&!r.error&&r.freeWeekEligible&&fb){fb.hidden=false}
+  });
+}
+function claimFreeWeek(){
+  var fb=$("#freeWeekBtn");if(fb)fb.disabled=true;
+  payApi("freeweek",{}).then(function(r){
+    if(fb)fb.disabled=false;
+    if(r.error){if(fb)fb.hidden=true;toast(t("pay_free_denied"));return}
+    accessCache=null;
+    closePaywall();
+    toast(t("pay_free_done"));
+  });
 }
 function closePaywall(){var o=$("#payOverlay");if(o)o.hidden=true}
 /* paywall lives only on the Perks (mystery box) page */
@@ -1810,7 +1847,8 @@ function refreshAfterPaid(n){
   var pc=$("#payClose");if(pc)pc.addEventListener("click",closePaywall);
   var ov=$("#payOverlay");if(ov)ov.addEventListener("click",function(e){if(e.target===ov)closePaywall()});
   var grid=document.querySelectorAll("#payOverlay .pass-card");
-  grid.forEach(function(b){b.addEventListener("click",function(){buyItem(b.getAttribute("data-item"))})});
+  grid.forEach(function(b){if(b.id==="freeWeekBtn")return;b.addEventListener("click",function(){buyItem(b.getAttribute("data-item"))})});
+  var fw=$("#freeWeekBtn");if(fw)fw.addEventListener("click",claimFreeWeek);
   try{
     var q=new URLSearchParams(location.search);
     if(q.get("paid")==="1"){

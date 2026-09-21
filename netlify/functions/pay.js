@@ -4,8 +4,9 @@
 // stored in the visitor's own browser. Storage: Netlify Blobs ("souvs-access").
 //
 // Actions:
-//   status   { userId }          -> { hasAccess, pass, expires }
+//   status   { userId }          -> { hasAccess, pass, expires, freeWeekEligible }
 //   checkout { userId, item }     -> { url }  (Stripe Checkout URL)
+//   freeweek { userId }           -> { hasAccess, pass, expires } (first-time users only)
 //
 // Env: STRIPE_SECRET_KEY (required for checkout). Passes are fulfilled by
 // pay-webhook.js on checkout.session.completed.
@@ -68,8 +69,9 @@ async function accessState(userId) {
   const store = getAccessStore();
   const rec = await store.get(`access/${userId}.json`, { type: "json" }).catch(() => null);
   const now = Date.now();
-  if (rec && rec.expires > now) return { hasAccess: true, pass: rec.pass, expires: rec.expires };
-  return { hasAccess: false, pass: null, expires: 0 };
+  const eligible = !rec; // first-time users only: any prior pass (paid or free) disqualifies
+  if (rec && rec.expires > now) return { hasAccess: true, pass: rec.pass, expires: rec.expires, freeWeekEligible: false };
+  return { hasAccess: false, pass: null, expires: 0, freeWeekEligible: eligible };
 }
 
 exports.handler = async (event) => {
@@ -120,6 +122,19 @@ exports.handler = async (event) => {
     } catch (e) {
       return bad(502, "checkout_failed");
     }
+  }
+
+  if (action === "freeweek") {
+    // First-time users only: one free 7-day pass per user, tracked server-side.
+    // (Identity is client-generated, so this is a friendly promo, not hardened DRM.)
+    if (throttle(`fw:${ip}`, 20, 24 * 60 * 60 * 1000)) return bad(429, "slow down");
+    const store = getAccessStore();
+    const rec = await store.get(`access/${userId}.json`, { type: "json" }).catch(() => null);
+    if (rec) return bad(409, "not_first_time");
+    const now = Date.now();
+    const pass = { pass: "freeweek", expires: now + 7 * 86400 * 1000, free: true, claimedAt: now };
+    await store.setJSON(`access/${userId}.json`, pass);
+    return ok({ hasAccess: true, pass: pass.pass, expires: pass.expires, freeWeekEligible: false });
   }
 
   return bad(400, "unknown action");
