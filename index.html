@@ -111,6 +111,20 @@
 .chat-profile img{animation-delay:-5s}
 .signup-confirm img{animation-delay:-7s}
 
+
+/* person profile page */
+.back-link{background:none;border:0;padding:8px 0;margin:0 0 4px;font:inherit;font-weight:800;color:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.person-card{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;padding:22px;border-radius:22px;background:var(--surface-faint);margin-bottom:14px}
+.person-chatbox{background:var(--surface-faint);border-radius:22px;padding:4px}
+.person-chatbox .muted{padding:12px 16px 0}
+.person-chatbox .chat-input{border-top:0}
+/* around-right-now profile links */
+.meet-person-link{background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;text-align:left;display:inline-block;border-radius:8px}
+.meet-card h3 .meet-person-link{font-size:inherit;font-weight:inherit}
+.meet-person-link:hover{opacity:.88}
+.meet-card h3 .meet-person-link:hover{text-decoration:underline}
+.meet-person-link:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+
 </style>
 </head>
 <body>
@@ -187,6 +201,15 @@
           <div class="meet-grid" id="meetGrid">
           </section>
       </div>
+    </section>
+    <section class="view" id="personView" data-view="person">
+      <button class="back-link" id="personBack" type="button"><span aria-hidden="true">←</span> <span data-i18n="person_back">Back</span></button>
+      <div class="screen-head"><p class="eyebrow" data-i18n="person_eyebrow">Around right now</p><h1 id="personName"></h1></div>
+      <div class="person-card" id="personCard"></div>
+      <form class="person-chatbox" id="personChatForm">
+        <p class="muted" data-i18n="person_chat_hint">Send a message to start the chat.</p>
+        <div class="chat-input"><input id="personChatText" maxlength="500" data-i18n-ph="person_chat_ph" placeholder="Write a message…" autocomplete="off"><button class="primary" type="submit" data-i18n="person_send">Send</button></div>
+      </form>
     </section>
 </main>
 
@@ -474,6 +497,11 @@ en:{
   toast_photo_prep: "Preparing your photo — one moment…",
   toast_photo_bad: "Could not use that photo — try another."
 ,
+  person_eyebrow: "Around right now",
+  person_back: "Back",
+  person_chat_hint: "Send a message to start the chat.",
+  person_chat_ph: "Write a message…",
+  person_send: "Send",
   alt_scurry: "Scurry, the street-smart grey-brown rat",
   alt_rico: "Monsieur Rico, the dramatic grey-brown raccoon",
   alt_pip: "Pip, the caffeinated grey pigeon holding a paper takeaway coffee cup",
@@ -735,6 +763,11 @@ es:{
   toast_photo_fail: "Falló la subida de la foto — inténtalo de nuevo.",
   toast_photo_prep: "Preparando tu foto — un momento…",
   toast_photo_bad: "No pudimos usar esa foto — prueba otra.",
+  person_eyebrow: "Disponibles ahora",
+  person_back: "Atrás",
+  person_chat_hint: "Envía un mensaje para iniciar el chat.",
+  person_chat_ph: "Escribe un mensaje…",
+  person_send: "Enviar",
   alt_scurry: "Scurry, la rata gris callejera astuta",
   alt_rico: "Monsieur Rico, el mapache gris-marrón dramático",
   alt_pip: "Pip, la paloma gris cafeinada con un vaso de café para llevar",
@@ -997,6 +1030,11 @@ pt:{
   toast_photo_prep: "Preparando sua foto — um momento…",
   toast_photo_bad: "Não deu pra usar essa foto — tente outra."
 ,
+  person_eyebrow: "Disponíveis agora",
+  person_back: "Voltar",
+  person_chat_hint: "Envie uma mensagem para iniciar a conversa.",
+  person_chat_ph: "Escreva uma mensagem…",
+  person_send: "Enviar",
   alt_scurry: "Scurry, o rato cinza esperto das ruas",
   alt_rico: "Monsieur Rico, o guaxinim marrom-acinzentado dramático",
   alt_pip: "Pip, o pombo cinza cafeinado segurando um copo de café para viagem",
@@ -1259,6 +1297,11 @@ fr:{
   toast_photo_prep: "Préparation de votre photo — un instant…",
   toast_photo_bad: "Impossible d’utiliser cette photo — essayez-en une autre."
 ,
+  person_eyebrow: "Disponibles maintenant",
+  person_back: "Retour",
+  person_chat_hint: "Envoyez un message pour démarrer la discussion.",
+  person_chat_ph: "Écrivez un message…",
+  person_send: "Envoyer",
   alt_scurry: "Scurry, le rat gris malin des rues",
   alt_rico: "Monsieur Rico, le raton laveur gris-brun théâtral",
   alt_pip: "Pip, le pigeon gris caféiné tenant un gobelet de café à emporter",
@@ -1521,6 +1564,11 @@ de:{
   toast_photo_prep: "Bereite dein Foto vor — einen Moment…",
   toast_photo_bad: "Dieses Foto ging nicht — nimm ein anderes."
 ,
+  person_eyebrow: "Gerade verfügbar",
+  person_back: "Zurück",
+  person_chat_hint: "Sende eine Nachricht, um den Chat zu starten.",
+  person_chat_ph: "Schreibe eine Nachricht…",
+  person_send: "Senden",
   alt_scurry: "Scurry, die clevere graue Straßenratte",
   alt_rico: "Monsieur Rico, der dramatische graubraune Waschbär",
   alt_pip: "Pip, die koffeinierte graue Taube mit einem Kaffee zum Mitnehmen",
@@ -1980,13 +2028,16 @@ function renderAroundInto(wrapId,statusId){
   others.forEach(function(p){
     var el=document.createElement("article");
     el.className="meet-card";
-    el.innerHTML=avatarHtml(p)+'<div>'
+    el.innerHTML='<button type="button" class="meet-person-link" aria-label="'+esc(p.name)+'">'+avatarHtml(p)+'</button><div>'
       +'<div class="meet-kind"><span>'+esc(t("badge_live"))+'</span><span>'+esc(t(p.kind==="local"?"kind_local":"kind_traveler"))+'</span></div>'
-      +'<h3>'+esc(p.name)+'</h3><p class="meet-meta">'+esc(tagLabel(p.tag))+'</p>'+distLine(p)
+      +'<h3><button type="button" class="meet-person-link">'+esc(p.name)+'</button></h3><p class="meet-meta">'+esc(tagLabel(p.tag))+'</p>'+distLine(p)
       +(p.note?'<p>'+esc(p.note)+'</p>':'')+(p.openTo?'<p class="muted">'+esc(openToLine(p.openTo))+'</p>':'')+socialsHtml(p.socials)+'</div>';
     var btn=document.createElement("button");btn.type="button";btn.textContent=t("say_hi");
     (function(card){btn.addEventListener("click",function(){startThread(card)})})(p);
     el.appendChild(btn);
+    Array.prototype.forEach.call(el.querySelectorAll(".meet-person-link"),function(b){
+      (function(card){b.addEventListener("click",function(){openPerson(card)})})(p);
+    });
     wireSocials(el);
     wrap.appendChild(el);
   });
@@ -1994,6 +2045,43 @@ function renderAroundInto(wrapId,statusId){
 var AROUND_SECTIONS=[["homeAroundGrid","homeAroundStatus"],["chatAroundGrid","chatAroundStatus"],["perksAroundGrid","perksAroundStatus"]];
 function renderAroundGrids(){AROUND_SECTIONS.forEach(function(p){renderAroundInto(p[0],p[1])})}
 window.renderAroundGrids=renderAroundGrids;
+/* ---- person profile page (from Around right now) ---- */
+var personData=null,personReturnView="home";
+function currentView(){var v=document.querySelector(".view.active");return v&&v.dataset.view?v.dataset.view:"home"}
+function openPerson(p){
+  if(!p||!p.userId)return;
+  personData=p;personReturnView=currentView();
+  renderPersonCard();
+  go("person");
+}
+function renderPersonCard(){
+  var p=personData;if(!p||!$("#personCard"))return;
+  $("#personName").textContent=p.name||"";
+  var el=$("#personCard");
+  el.innerHTML=avatarHtml(p,true)+'<div>'
+    +'<div class="meet-kind"><span>'+esc(t("badge_live"))+'</span><span>'+esc(t(p.kind==="local"?"kind_local":"kind_traveler"))+'</span></div>'
+    +'<p class="meet-meta">'+esc(tagLabel(p.tag))+'</p>'+distLine(p)
+    +(p.note?'<p>'+esc(p.note)+'</p>':'')+(p.openTo?'<p class="muted">'+esc(openToLine(p.openTo))+'</p>':'')+socialsHtml(p.socials)+'</div>';
+  wireSocials(el);
+}
+$("#personBack").addEventListener("click",function(){go(personReturnView||"home")});
+$("#personChatForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  var p=personData;if(!p||!p.userId)return;
+  var inp=$("#personChatText"),txt=inp.value.trim();
+  if(!txt)return;
+  if(!me.name){toast(t("toast_need_profile"));revealCardForm();go("profile");return}
+  inp.value="";
+  api("thread",{otherId:p.userId}).then(function(r){
+    if(r.error){toast(r.error==="unavailable"?t("toast_unavailable"):t("toast_no_chat"));inp.value=txt;return}
+    api("send",{threadId:r.threadId,text:txt}).then(function(s2){
+      if(s2.error){toast(t("toast_no_send"));inp.value=txt;return}
+      openChat(r.threadId,r.other||p);refreshThreads();
+    });
+  });
+});
+window.openPerson=openPerson;
+
 
 /* ---- threads ---- */
 function renderThreads(list){
@@ -2260,7 +2348,7 @@ if(_avf)_avf.addEventListener("change",function(){
 if(_avr)_avr.addEventListener("click",function(){avatarPending=null;avatarRemove=true;if(_avf)_avf.value="";refreshAvatarPrev()});
 refreshAvatarPrev();
 renderProfile();
-window.__meetRetrans=function(){syncCardFormMode();refreshAvatarPrev();renderProfile();if(typeof window.__i18nAttrs==="function")window.__i18nAttrs();if(travelersLoaded&&lastTravelers){renderTravelers(lastTravelers);renderAroundGrids();}refreshThreads();};
+window.__meetRetrans=function(){syncCardFormMode();refreshAvatarPrev();renderProfile();if(typeof window.__i18nAttrs==="function")window.__i18nAttrs();if(travelersLoaded&&lastTravelers){renderTravelers(lastTravelers);renderAroundGrids();}if(personData&&currentView()==="person"){renderPersonCard();}refreshThreads();};
 applyI18n();
 refreshAll();
 })();
