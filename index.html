@@ -1803,7 +1803,6 @@ function renderSouvenirs(){
   });
 }
 function openPaywall(){
-  if(!me.name){toast(t("toast_need_profile"));return}
   renderSouvenirs();
   var o=$("#payOverlay");if(o){o.hidden=false;applyI18n()}
   var fb=$("#freeWeekBtn");if(fb)fb.hidden=true;
@@ -1824,7 +1823,7 @@ function claimFreeWeek(){
 function closePaywall(){var o=$("#payOverlay");if(o)o.hidden=true}
 /* paywall lives only on the Perks (mystery box) page */
 function paywallOnPerks(){
-  if(me.name&&me.kind!=="local"){
+  if(me.kind!=="local"){
     hasAccess().then(function(ok){if(!ok)openPaywall()});
   }
 }
