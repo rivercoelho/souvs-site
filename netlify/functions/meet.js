@@ -33,7 +33,7 @@ const TAGS = [
 ];
 const REASONS = ["spam", "harassment", "inappropriate", "scam", "other"];
 const UID_RE = /^[A-Za-z0-9_-]{8,64}$/;
-const NAME_RE = /^[A-Za-z0-9 _.'-]{1,40}$/;
+const NAME_RE = /^[A-Za-z0-9 _.'-]{1,24}$/;
 const HANDLE_RE = /^[A-Za-z0-9._-]{1,30}$/;
 const CARD_TTL_MS = 14 * 24 * 3600 * 1000;
 const ONLINE_WINDOW_MS = 4 * 60 * 1000; // green "online" dot: seen in the last 4 minutes
