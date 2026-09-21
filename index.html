@@ -192,6 +192,13 @@
     </section>
 </main>
 
+  <div class="install-banner" id="installBanner" hidden>
+    <img src="apple-touch-icon.png" alt="" width="40" height="40" />
+    <p class="install-title" data-i18n="install_title">Add Souvs to your Home Screen</p>
+    <button type="button" class="install-add" id="installAdd" data-i18n="install_add">Add</button>
+    <button type="button" class="install-close" id="installClose" data-i18n-aria="install_close" aria-label="Dismiss">×</button>
+    <p class="install-steps" id="installSteps" data-i18n="install_steps" hidden></p>
+  </div>
   <nav class="bottom-nav" aria-label="Primary">
     <button class="active" data-go="home" data-i18n-aria="nav_home" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span data-i18n="nav_home">Home</span></button>
     <button data-go="chat" data-i18n-aria="nav_chat" aria-label="Chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8M8 13h5"/></svg><span data-i18n="nav_chat">Chat</span></button>
@@ -383,6 +390,10 @@ en:{
   you: "you",
   person_n: "people",
   around_none: "No one else is around right now — check back soon.",
+  install_title: "Add Souvs to your Home Screen",
+  install_add: "Add",
+  install_steps: "Tap Share, then \u201cAdd to Home Screen\u201d.",
+  install_close: "Dismiss",
   badge_live: "Live",
   kind_traveler: "Traveler",
   kind_local: "Local",
@@ -663,6 +674,10 @@ es:{
   you: "tú",
   person_n: "personas",
   around_none: "No hay nadie más por aquí ahora — vuelve pronto.",
+  install_title: "Añade Souvs a tu pantalla de inicio",
+  install_add: "Añadir",
+  install_steps: "Toca Compartir y luego \u00abAñadir a pantalla de inicio\u00bb.",
+  install_close: "Descartar",
   badge_live: "En vivo",
   kind_traveler: "Viajero",
   kind_local: "Local",
@@ -942,6 +957,10 @@ pt:{
   you: "você",
   person_n: "pessoas",
   around_none: "Não há mais ninguém por aqui agora — volte em breve.",
+  install_title: "Adicione o Souvs à sua tela de início",
+  install_add: "Adicionar",
+  install_steps: "Toque em Compartilhar e depois em \u201cAdicionar à tela de início\u201d.",
+  install_close: "Dispensar",
   badge_live: "Ao vivo",
   kind_traveler: "Viajante",
   kind_local: "Local",
@@ -1222,6 +1241,10 @@ fr:{
   you: "toi",
   person_n: "personnes",
   around_none: "Personne d’autre dans le coin pour l’instant — revenez bientôt.",
+  install_title: "Ajoutez Souvs à votre écran d\u2019accueil",
+  install_add: "Ajouter",
+  install_steps: "Touchez Partager, puis \u00ab Sur l\u2019écran d\u2019accueil \u00bb.",
+  install_close: "Ignorer",
   badge_live: "En direct",
   kind_traveler: "Voyageur",
   kind_local: "Local",
@@ -1502,6 +1525,10 @@ de:{
   you: "du",
   person_n: "Personen",
   around_none: "Gerade ist sonst niemand in der Nähe — schau später wieder vorbei.",
+  install_title: "Füge Souvs zu deinem Home-Bildschirm hinzu",
+  install_add: "Hinzufügen",
+  install_steps: "Tippe auf Teilen und dann auf \u201eZum Home-Bildschirm\u201c.",
+  install_close: "Schließen",
   badge_live: "Live",
   kind_traveler: "Reisender",
   kind_local: "Local",
@@ -1671,7 +1698,24 @@ applyI18n();
   ];}
   let currentGuide='scurry',currentDeal=null,wallet=[],favorite='';
   const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-  function go(view){$$('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===view));$$('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===view));window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});if(view==='chat')renderChat();if(view==='chat'||view==='perks'){if(window.renderAroundGrids)window.renderAroundGrids()}if(view==='profile'&&window.renderProfile)window.renderProfile();if(view==='perks')setTimeout(function(){if(window.paywallOnPerks)window.paywallOnPerks()},600);}
+  function go(view){$$('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===view));$$('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===view));window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});if(view==='chat')renderChat();if(view==='chat'||view==='perks'){if(window.renderAroundGrids)window.renderAroundGrids()}if(view==='profile'&&window.renderProfile)window.renderProfile();if(view==='perks')setTimeout(function(){if(window.paywallOnPerks)window.paywallOnPerks()},600);updateInstallBanner();}
+/* ---- install banner: add Souvs to the phone home screen ---- */
+var _deferredInstallPrompt=null;
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();_deferredInstallPrompt=e;});
+function _isStandalone(){return (window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||window.navigator.standalone===true;}
+function updateInstallBanner(){
+  var b=$("#installBanner");if(!b)return;
+  var show=currentView()==="home"&&!_isStandalone();
+  try{if(localStorage.getItem("souvs-install-dismissed"))show=false;}catch(e){}
+  b.hidden=!show;
+}
+document.addEventListener("click",function(e){
+  if(e.target&&e.target.id==="installClose"){try{localStorage.setItem("souvs-install-dismissed","1");}catch(x){}$("#installBanner").hidden=true;}
+  if(e.target&&e.target.id==="installAdd"){
+    if(_deferredInstallPrompt){var p=_deferredInstallPrompt;_deferredInstallPrompt=null;p.prompt();p.userChoice.then(function(){});return;}
+    var s=$("#installSteps");if(s){s.hidden=!s.hidden;}
+  }
+});
   $$('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
   $$('[data-open-guide]').forEach(b=>b.addEventListener('click',()=>{currentGuide=b.dataset.openGuide;go('chat')}));
   const cityButton=$('#cityButton'),cityMenu=$('#cityMenu'),teaser=$('#cityTeaser');
@@ -1810,6 +1854,15 @@ window.__retrans=function(){renderChat(false);renderChoices();renderWallet();if(
 .pref-ctl input:checked+.pref-switch::after{left:25px}
 .pref-ctl input:focus-visible+.pref-switch{outline:2px solid var(--violet);outline-offset:2px}
 .pref-note{margin:0;font-size:13px;opacity:.7}
+/* install banner: slim strip above the bottom nav on home */
+.install-banner{position:fixed;z-index:39;left:50%;bottom:calc(max(12px,env(safe-area-inset-bottom)) + 84px);transform:translateX(-50%);width:min(480px,calc(100% - 24px));display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 12px;border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 30px rgba(49,54,88,.18)}
+.install-banner[hidden]{display:none}
+.install-banner img{width:40px;height:40px;border-radius:10px;flex:none}
+.install-banner .install-title{margin:0;font-size:13px;font-weight:800;color:var(--ink);flex:1;min-width:0}
+.install-add{flex:none;padding:9px 16px;border:0;border-radius:12px;background:var(--navy);color:#fff;font-size:13px;font-weight:800;cursor:pointer}
+.install-close{flex:none;border:0;background:none;font-size:20px;line-height:1;color:var(--muted);cursor:pointer;padding:4px 6px}
+.install-steps{flex-basis:100%;margin:0;font-size:12px;font-weight:600;color:var(--muted)}
+.install-steps[hidden]{display:none}
 </style>
 <script>
 (function(){
@@ -2459,6 +2512,7 @@ renderProfile();
 window.__meetRetrans=function(){syncCardFormMode();refreshAvatarPrev();renderProfile();if(typeof window.__i18nAttrs==="function")window.__i18nAttrs();if(travelersLoaded&&lastTravelers){renderTravelers(lastTravelers);renderAroundGrids();}if(personData&&currentView()==="person"){renderPersonCard();}refreshThreads();};
 applyI18n();
 refreshAll();
+updateInstallBanner();
 /* presence heartbeat: green "online" dot = seen in the last few minutes */
 var _pingN=0;
 function presenceTick(){
