@@ -20,22 +20,12 @@ function throttled(ip) {
   return arr.length > 5;
 }
 
-
-// CORS: only allow requests from our own domains
-const ALLOWED_ORIGINS = ["https://souvs.netlify.app", "https://souvs.shop", "https://www.souvs.shop"];
-function corsHeaders(event) {
-  const origin = (event.headers && (event.headers.origin || event.headers.Origin)) || "";
-  const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
-  return {
-    "Access-Control-Allow-Origin": allow,
+exports.handler = async (event) => {
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Content-Type": "application/json",
   };
-}
-
-exports.handler = async (event) => {
-  const headers = corsHeaders(event);
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 204, headers, body: "" };
   }
