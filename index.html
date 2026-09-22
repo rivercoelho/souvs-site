@@ -2573,8 +2573,8 @@ function refreshDealsLock(){
   });
 }
 function paywallOnPerks(){refreshDealsLock()}
-window.paywallOnPerks=paywallOnPerks;
-window.refreshDealsLock=refreshDealsLock;
+window.paywallOnPerks=paywallOnPerks; window.refreshDealsLock=refreshDealsLock;
+window.SOUVENIRS=SOUVENIRS; window.MYSTERY_BOX=MYSTERY_BOX; window.esc=esc;
 function buyItem(item){
   payApi("checkout",{item:item}).then(function(r){
     if(r.error||!r.url){toast(t("pay_failed"));return}
