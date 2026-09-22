@@ -38,6 +38,26 @@ const HANDLE_RE = /^[A-Za-z0-9._-]{1,30}$/;
 const CARD_TTL_MS = 14 * 24 * 3600 * 1000;
 const ONLINE_WINDOW_MS = 4 * 60 * 1000; // green "online" dot: seen in the last 4 minutes
 
+// live cities (must match the site's city switcher)
+const LIVE_CITIES = ["nyc", "miami"];
+const CITY_COORDS = {
+  nyc: [40.7128, -74.006],
+  miami: [25.7617, -80.1918],
+};
+function nearestLiveCity(lat, lng) {
+  let best = "nyc", bestD = Infinity;
+  for (const k of LIVE_CITIES) {
+    const d = haversineKm(lat, lng, CITY_COORDS[k][0], CITY_COORDS[k][1]);
+    if (d < bestD) { bestD = d; best = k; }
+  }
+  return best;
+}
+function cardCity(c) {
+  if (c && LIVE_CITIES.includes(c.city)) return c.city;
+  if (c && validCoords(c.lat, c.lng)) return nearestLiveCity(c.lat, c.lng);
+  return "nyc";
+}
+
 // socials: only handles we can turn into real platform links (never raw user URLs)
 const SOCIALS = {
   instagram: "instagram.com",
@@ -117,8 +137,10 @@ const publicCard = (c) =>
         socials: cleanSocials(c.socials),
         avatar: (c.avatarAt || 0) > 0,
         avatarAt: c.avatarAt || 0,
+        avatarPreset: c.avatarPreset != null ? c.avatarPreset : null,
         gender: c.gender === "female" ? "female" : c.gender === "male" ? "male" : "",
         online: (c.seenAt || 0) > Date.now() - ONLINE_WINDOW_MS,
+        city: cardCity(c),
       }
     : null;
 
@@ -208,6 +230,12 @@ exports.handler = async (event) => {
       if (g && g !== "female" && g !== "male") return bad(400, "bad gender");
       gender = g;
     }
+    let city = null;
+    if (body.city !== undefined) {
+      const cc = String(body.city || "").trim().toLowerCase();
+      if (cc && !LIVE_CITIES.includes(cc)) return bad(400, "bad city");
+      city = cc || null;
+    }
     let lat = null, lng = null;
     if (body.lat !== undefined || body.lng !== undefined) {
       const la = Number(body.lat), lo = Number(body.lng);
@@ -223,12 +251,23 @@ exports.handler = async (event) => {
     card.email = email !== null ? email : (prev && prev.email) || "";
     if (lat !== null) { card.lat = lat; card.lng = lng; }
     else if (prev && validCoords(prev.lat, prev.lng)) { card.lat = prev.lat; card.lng = prev.lng; }
+    if (city) card.city = city;
+    else if (prev && prev.city && LIVE_CITIES.includes(prev.city)) card.city = prev.city;
+    else if (lat !== null) card.city = nearestLiveCity(lat, lng);
+    else if (prev && validCoords(prev.lat, prev.lng)) card.city = nearestLiveCity(prev.lat, prev.lng);
+    else card.city = "nyc";
     let avatarAt = null;
     if (body.avatarAt !== undefined) {
       const n = Number(body.avatarAt);
       avatarAt = Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
     }
     card.avatarAt = avatarAt !== null ? avatarAt : (prev && prev.avatarAt) || 0;
+    if (body.avatarPreset !== undefined) {
+      const p = Number(body.avatarPreset);
+      card.avatarPreset = Number.isInteger(p) && p >= 0 && p < 12 ? p : null;
+    } else if (prev) {
+      card.avatarPreset = prev.avatarPreset != null ? prev.avatarPreset : null;
+    }
     await store.setJSON(`traveler/${userId}.json`, card);
     return ok({ ok: true, card: publicCard(card) });
   }
@@ -284,10 +323,13 @@ exports.handler = async (event) => {
   }
 
   // ---- list live profiles (nearest first when viewer shares location) ----
+  // Optional body.city ("nyc"|"miami") filters to that city only.
   if (action === "travelers") {
     const now = Date.now();
     const vLat = Number(body.lat), vLng = Number(body.lng);
     const hasViewer = validCoords(vLat, vLng);
+    const cityFilter = String(body.city || "").trim().toLowerCase();
+    const filterCity = LIVE_CITIES.includes(cityFilter) ? cityFilter : null;
     const mine = await getBlocks(store, userId);
     const listed = await store.list({ prefix: "traveler/" }).catch(() => ({ blobs: [] }));
     const cards = [];
@@ -298,6 +340,7 @@ exports.handler = async (event) => {
       if (mine.includes(c.userId)) continue;
       if (c.openTo && !c.openTo.travelers && !c.openTo.friends) continue;
       const pub = publicCard(c);
+      if (filterCity && pub.city !== filterCity) continue;
       if (hasViewer && validCoords(c.lat, c.lng)) {
         pub.distanceKm = Math.round(haversineKm(vLat, vLng, c.lat, c.lng) * 10) / 10;
       }
