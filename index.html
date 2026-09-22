@@ -449,6 +449,11 @@ en:{
   form_kind: "I am a",
   kind_traveler_opt: "Traveler",
   kind_local_opt: "Local person",
+  form_gender: "Gender",
+  gender_pick: "Select",
+  gender_female: "Female",
+  gender_male: "Male",
+  toast_need_gender: "Please choose female or male",
   form_tag: "Into",
   form_note: "Note",
   form_note_ph: "In town till Sunday, up for a gallery crawl",
@@ -733,6 +738,11 @@ es:{
   form_kind: "Soy",
   kind_traveler_opt: "Viajero",
   kind_local_opt: "Persona local",
+  form_gender: "Género",
+  gender_pick: "Seleccionar",
+  gender_female: "Femenino",
+  gender_male: "Masculino",
+  toast_need_gender: "Elige femenino o masculino",
   form_tag: "Me gusta",
   form_note: "Nota",
   form_note_ph: "En la ciudad hasta el domingo, me apunto a una ruta de galerías",
@@ -1016,6 +1026,11 @@ pt:{
   form_kind: "Eu sou",
   kind_traveler_opt: "Viajante",
   kind_local_opt: "Pessoa local",
+  form_gender: "Gênero",
+  gender_pick: "Selecionar",
+  gender_female: "Feminino",
+  gender_male: "Masculino",
+  toast_need_gender: "Escolha feminino ou masculino",
   form_tag: "Curte",
   form_note: "Nota",
   form_note_ph: "Na cidade até domingo, afim de um roteiro de galerias",
@@ -1300,6 +1315,11 @@ fr:{
   form_kind: "Je suis",
   kind_traveler_opt: "Voyageur",
   kind_local_opt: "Local",
+  form_gender: "Genre",
+  gender_pick: "Choisir",
+  gender_female: "Femme",
+  gender_male: "Homme",
+  toast_need_gender: "Choisissez femme ou homme",
   form_tag: "Passion",
   form_note: "Note",
   form_note_ph: "En ville jusqu’à dimanche, partant pour une virée galeries",
@@ -1584,6 +1604,11 @@ de:{
   form_kind: "Ich bin",
   kind_traveler_opt: "Reisender",
   kind_local_opt: "Person vor Ort",
+  form_gender: "Geschlecht",
+  gender_pick: "Wählen",
+  gender_female: "Weiblich",
+  gender_male: "Männlich",
+  toast_need_gender: "Bitte weiblich oder männlich wählen",
   form_tag: "Steht auf",
   form_note: "Notiz",
   form_note_ph: "Bis Sonntag in der Stadt, Lust auf eine Galerie-Tour",
@@ -2024,6 +2049,7 @@ var cardFormHtml=
  +'<p class="meet-card-sub" data-i18n="form_sub">Tell fellow travelers who you are. No account needed.</p>'
  +'<label><span data-i18n="form_name">Display name</span><input id="mcName" maxlength="24" data-i18n-ph="form_name_ph" placeholder="Alex" autocomplete="nickname"></label>'
  +'<label><span data-i18n="form_kind">I am a</span><select id="mcKind"><option value="traveler" data-i18n="kind_traveler_opt">Traveler</option><option value="local" data-i18n="kind_local_opt">Local person</option></select></label>'
+ +'<label><span data-i18n="form_gender">Gender</span><select id="mcGender"><option value="" data-i18n="gender_pick">Select</option><option value="female" data-i18n="gender_female">Female</option><option value="male" data-i18n="gender_male">Male</option></select></label>'
  +'<label><span data-i18n="form_tag">Into</span><select id="mcTag">'+tagOpts+'</select></label>'
  +'<label><span data-i18n="form_note">Note</span> <span class="opt" data-i18n="signup_optional">optional</span><textarea id="mcNote" maxlength="140" data-i18n-ph="form_note_ph" placeholder="In town till Sunday, up for a gallery crawl"></textarea></label>'
  +'<label><span data-i18n="form_email">Email</span> <span class="opt" data-i18n="signup_optional">optional</span><input id="mcEmail" type="email" maxlength="120" data-i18n-ph="form_email_ph" placeholder="you@example.com" autocomplete="email"></label>'
@@ -2094,7 +2120,8 @@ function getSocials(){
 }
 /* ---- profile photos ---- */
 function avatarSrc(t){return API+"?action=avatar&userId="+encodeURIComponent(t.userId)+"&v="+(t.avatarAt||0)}
-function faceIdx(t){var s=String((t&&(t.userId||t.name))||"?");var h=0;for(var i=0;i<s.length;i++){h=((h*31)+s.charCodeAt(i))|0}return (Math.abs(h)%5)+1}
+var FACES_F=[2,4],FACES_M=[1,3,5];
+function faceIdx(t){var s=String((t&&(t.userId||t.name))||"?");var h=0;for(var i=0;i<s.length;i++){h=((h*31)+s.charCodeAt(i))|0}h=Math.abs(h);var g=t&&t.gender;var pool=g==="female"?FACES_F:g==="male"?FACES_M:[1,2,3,4,5];return pool[h%pool.length]}
 function avatarHtml(t,big){
   if(t&&t.avatar&&t.userId)return '<img class="meet-avatar-img'+(big?" big":"")+'" src="'+esc(avatarSrc(t))+'" alt="">';
   return '<img class="meet-avatar-img face'+(big?" big":"")+'" src="faces/face-'+faceIdx(t)+'.png" alt="">';
@@ -2159,7 +2186,7 @@ function renderTravelers(list){
     var you=document.createElement("article");
     you.className="meet-card meet-mini";you.setAttribute("data-you","1");
     you.innerHTML='<button type="button" class="meet-person-link meet-tile" aria-label="'+esc(t("you"))+'">'
-      +'<span class="meet-tile-photo">'+avatarHtml({userId:me.id,name:me.name,avatar:(me.avatarAt||0)>0,avatarAt:me.avatarAt||0})+'</span>'
+      +'<span class="meet-tile-photo">'+avatarHtml({userId:me.id,name:me.name,gender:me.gender,avatar:(me.avatarAt||0)>0,avatarAt:me.avatarAt||0})+'</span>'
       +'<span class="meet-name-badge on">'+esc(t("you"))+'</span></button>';
     you.querySelector(".meet-person-link").addEventListener("click",function(){go("profile")});
     grid.appendChild(you);
@@ -2208,7 +2235,7 @@ function renderAroundInto(wrapId,statusId){
     wrap.appendChild(el);
   }
   if(me.name){
-    addTile({userId:me.id,name:t("you"),avatar:(me.avatarAt||0)>0,avatarAt:me.avatarAt||0,online:true},function(){go("profile")});
+    addTile({userId:me.id,name:t("you"),gender:me.gender,avatar:(me.avatarAt||0)>0,avatarAt:me.avatarAt||0,online:true},function(){go("profile")});
   }
   others.forEach(function(p){
     (function(card){addTile(card,function(){openPerson(card)})})(p);
@@ -2342,18 +2369,19 @@ $("#chatReport").addEventListener("click",function(){
 
 /* ---- register form ---- */
 function doCardSubmit(form){
-  var name=$("#mcName").value.trim(),kind=$("#mcKind").value,tag=$("#mcTag").value,note=$("#mcNote").value.trim(),email=$("#mcEmail").value.trim();
+  var name=$("#mcName").value.trim(),kind=$("#mcKind").value,tag=$("#mcTag").value,note=$("#mcNote").value.trim(),email=$("#mcEmail").value.trim(),gender=$("#mcGender").value;
   if(!name){toast(t("toast_need_name"));return}
+  if(!gender){toast(t("toast_need_gender"));return}
   if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast(t("toast_bad_email"));return}
   var btn=form.querySelector('button[type="submit"]');
   var finish=function(avatarAt){
     getGeo().then(function(g){
-    var payload={name:name,kind:kind,tag:tag,note:note,email:email,openTo:getOpenTo(),socials:getSocials(),avatarAt:avatarAt};
+    var payload={name:name,kind:kind,tag:tag,note:note,email:email,gender:gender,openTo:getOpenTo(),socials:getSocials(),avatarAt:avatarAt};
     if(g){payload.lat=g.lat;payload.lng=g.lng}
     api("register",payload).then(function(r){
       if(btn)btn.disabled=false;
       if(r.error){toast(t("toast_no_save"));return}
-      me.name=name;me.kind=kind;me.tag=tag;me.note=note;me.email=email;me.socials=(r.card&&r.card.socials)||{};me.avatarAt=(r.card&&r.card.avatarAt)||0;saveMe();
+      me.name=name;me.kind=kind;me.tag=tag;me.note=note;me.email=email;me.gender=gender;me.socials=(r.card&&r.card.socials)||{};me.avatarAt=(r.card&&r.card.avatarAt)||0;saveMe();
       avatarPending=null;avatarRemove=false;refreshAvatarPrev();
       syncCardFormMode();
       toast(t("toast_live"));
@@ -2402,7 +2430,7 @@ document.addEventListener("click",function(e){
   api("remove",{}).then(function(r){
     b.disabled=false;
     if(r.error){toast(t("toast_no_save"));b.textContent=t("profile_remove");return}
-    me.name="";me.kind="traveler";me.tag=TAGS[0];me.note="";me.email="";me.socials={};me.avatarAt=0;saveMe();
+    me.name="";me.kind="traveler";me.gender="";me.tag=TAGS[0];me.note="";me.email="";me.socials={};me.avatarAt=0;saveMe();
     var ids=["mcName","mcNote","mcEmail","mcIg","mcTiktok","mcX"];
     ids.forEach(function(id){var el=$("#"+id);if(el)el.value=""});
     b.textContent=t("profile_remove");
@@ -2424,7 +2452,7 @@ function renderProfile(){
   var o=getOpenTo();
   if(me.name){
     var ph=openToPhrases();
-    wrap.innerHTML=avatarHtml({userId:me.id,name:me.name,avatar:(me.avatarAt||0)>0,avatarAt:me.avatarAt||0},true)+'<div>'
+    wrap.innerHTML=avatarHtml({userId:me.id,name:me.name,gender:me.gender,avatar:(me.avatarAt||0)>0,avatarAt:me.avatarAt||0},true)+'<div>'
       +'<div class="meet-kind"><span>'+esc(t(me.kind==="local"?"kind_local":"kind_traveler"))+'</span><span>'+esc(tagLabel(me.tag||""))+'</span></div>'
       +'<h3>'+esc(me.name)+'</h3>'
       +(me.note?'<p>'+esc(me.note)+'</p>':'')
@@ -2486,6 +2514,7 @@ function refreshAll(){
 function syncCardFormMode(){var tt=$("#cardFormTitle"),b=$("#cardFormSubmit"),edit=!!(me&&me.name);if(tt)tt.textContent=edit?t("form_edit"):t("form_create");if(b)b.textContent=t("form_save");var rm=$("#cardRemove");if(rm){rm.hidden=!edit;removeArmed=false;rm.disabled=false;rm.textContent=t("profile_remove");}var ts=$("#mcTag");if(ts){var cv=ts.value||(me&&me.tag)||TAGS[0];ts.innerHTML=TAGS.map(function(tag){return '<option value="'+esc(tag)+'"'+(tag===cv?" selected":"")+">"+esc(tagLabel(tag))+"</option>"}).join("");}}
 $("#mcName").value=me.name||"";
 $("#mcKind").value=me.kind||"traveler";
+$("#mcGender").value=me.gender||"";
 $("#mcTag").value=me.tag||TAGS[0];
 $("#mcNote").value=me.note||"";
 $("#mcEmail").value=me.email||"";

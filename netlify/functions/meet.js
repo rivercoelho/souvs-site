@@ -117,6 +117,7 @@ const publicCard = (c) =>
         socials: cleanSocials(c.socials),
         avatar: (c.avatarAt || 0) > 0,
         avatarAt: c.avatarAt || 0,
+        gender: c.gender === "female" ? "female" : c.gender === "male" ? "male" : "",
         online: (c.seenAt || 0) > Date.now() - ONLINE_WINDOW_MS,
       }
     : null;
@@ -201,6 +202,12 @@ exports.handler = async (event) => {
     }
     let socials = null;
     if (body.socials && typeof body.socials === "object") socials = cleanSocials(body.socials);
+    let gender = null;
+    if (body.gender !== undefined) {
+      const g = String(body.gender || "").trim().toLowerCase();
+      if (g && g !== "female" && g !== "male") return bad(400, "bad gender");
+      gender = g;
+    }
     let lat = null, lng = null;
     if (body.lat !== undefined || body.lng !== undefined) {
       const la = Number(body.lat), lo = Number(body.lng);
@@ -212,6 +219,7 @@ exports.handler = async (event) => {
     const card = { userId, name, kind, tag, note, updatedAt: Date.now(), seenAt: Date.now() };
     card.openTo = openTo || (prev && prev.openTo) || { travelers: true, friends: true };
     card.socials = socials || (prev && prev.socials) || {};
+    card.gender = gender !== null ? gender : (prev && prev.gender) || "";
     card.email = email !== null ? email : (prev && prev.email) || "";
     if (lat !== null) { card.lat = lat; card.lng = lng; }
     else if (prev && validCoords(prev.lat, prev.lng)) { card.lat = prev.lat; card.lng = prev.lng; }
