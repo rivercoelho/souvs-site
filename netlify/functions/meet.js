@@ -264,7 +264,7 @@ exports.handler = async (event) => {
     card.avatarAt = avatarAt !== null ? avatarAt : (prev && prev.avatarAt) || 0;
     if (body.avatarPreset !== undefined) {
       const p = Number(body.avatarPreset);
-      card.avatarPreset = Number.isInteger(p) && p >= 0 && p < 8 ? p : null;
+      card.avatarPreset = Number.isInteger(p) && p >= 0 && p < 12 ? p : null;
     } else if (prev) {
       card.avatarPreset = prev.avatarPreset != null ? prev.avatarPreset : null;
     }
