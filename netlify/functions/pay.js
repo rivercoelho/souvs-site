@@ -24,11 +24,12 @@ const PASSES = {
   daily:  { amount: 199,  name: "Souvs day pass",  days: 1 },
   weekly: { amount: 999,  name: "Souvs week pass", days: 7 },
 };
-// Placeholder lineup — swap for the real souvenirs when ready.
+// Miami plushie souvenirs — matches the frontend SOUVENIRS lineup.
 const SOUVENIRS = [
-  { id: "pip-plush",    name: "Pip plush",            amount: 2499 },
-  { id: "sticker-pack", name: "Critter sticker pack", amount: 699 },
-  { id: "souvs-tee",    name: "Souvs NYC tee",        amount: 2999 },
+  { id: "swoop-plush", name: "Swoop plush", amount: 2499 },
+  { id: "iggy-plush",  name: "Iggy plush",  amount: 2499 },
+  { id: "finn-plush",  name: "Finn plush",  amount: 2499 },
+  { id: "drift-plush", name: "Drift plush", amount: 2499 },
 ];
 
 const hits = new Map();
