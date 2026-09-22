@@ -38,6 +38,26 @@ const HANDLE_RE = /^[A-Za-z0-9._-]{1,30}$/;
 const CARD_TTL_MS = 14 * 24 * 3600 * 1000;
 const ONLINE_WINDOW_MS = 4 * 60 * 1000; // green "online" dot: seen in the last 4 minutes
 
+// live cities (must match the site's city switcher)
+const LIVE_CITIES = ["nyc", "miami"];
+const CITY_COORDS = {
+  nyc: [40.7128, -74.006],
+  miami: [25.7617, -80.1918],
+};
+function nearestLiveCity(lat, lng) {
+  let best = "nyc", bestD = Infinity;
+  for (const k of LIVE_CITIES) {
+    const d = haversineKm(lat, lng, CITY_COORDS[k][0], CITY_COORDS[k][1]);
+    if (d < bestD) { bestD = d; best = k; }
+  }
+  return best;
+}
+function cardCity(c) {
+  if (c && LIVE_CITIES.includes(c.city)) return c.city;
+  if (c && validCoords(c.lat, c.lng)) return nearestLiveCity(c.lat, c.lng);
+  return "nyc";
+}
+
 // socials: only handles we can turn into real platform links (never raw user URLs)
 const SOCIALS = {
   instagram: "instagram.com",
@@ -70,13 +90,21 @@ function cleanSocials(obj) {
   return out;
 }
 
-const headers = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "Content-Type",
-  "Content-Type": "application/json",
-};
-const ok = (body) => ({ statusCode: 200, headers, body: JSON.stringify(body) });
-const bad = (code, error) => ({ statusCode: code, headers, body: JSON.stringify({ error }) });
+
+// CORS: only allow requests from our own domains
+const ALLOWED_ORIGINS = ["https://souvs.netlify.app", "https://souvs.shop", "https://www.souvs.shop"];
+function corsHeaders(event) {
+  const origin = (event.headers && (event.headers.origin || event.headers.Origin)) || "";
+  const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allow,
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Content-Type": "application/json",
+  };
+}
+const ok = (body, headers) => ({ statusCode: 200, headers, body: JSON.stringify(body) });
+const bad = (code, error, headers) => ({ statusCode: code, headers, body: JSON.stringify({ error }) });
 
 // light per-instance throttle
 const hits = new Map();
@@ -117,8 +145,10 @@ const publicCard = (c) =>
         socials: cleanSocials(c.socials),
         avatar: (c.avatarAt || 0) > 0,
         avatarAt: c.avatarAt || 0,
+        avatarPreset: c.avatarPreset != null ? c.avatarPreset : null,
         gender: c.gender === "female" ? "female" : c.gender === "male" ? "male" : "",
         online: (c.seenAt || 0) > Date.now() - ONLINE_WINDOW_MS,
+        city: cardCity(c),
       }
     : null;
 
@@ -134,6 +164,7 @@ function validCoords(lat, lng) {
 }
 
 exports.handler = async (event) => {
+  const headers = corsHeaders(event);
   if (event.httpMethod === "OPTIONS") return { statusCode: 204, headers, body: "" };
 
   let store;
@@ -144,21 +175,21 @@ exports.handler = async (event) => {
       token: process.env.NETLIFY_BLOBS_TOKEN,
     });
   } catch {
-    return bad(500, "storage unavailable");
+    return bad(500, "storage unavailable", headers);
   }
 
   // ---- public avatar image (GET ?action=avatar&userId=...) ----
   if (event.httpMethod === "GET") {
     const qs = event.queryStringParameters || {};
-    if (qs.action !== "avatar") return bad(400, "unknown action");
+    if (qs.action !== "avatar") return bad(400, "unknown action", headers);
     const userId = String(qs.userId || "");
-    if (!UID_RE.test(userId)) return bad(400, "bad user");
+    if (!UID_RE.test(userId)) return bad(400, "bad user", headers);
     const buf = await store.get(`avatar/${userId}.bin`, { type: "arrayBuffer" }).catch(() => null);
-    if (!buf) return bad(404, "no avatar");
+    if (!buf) return bad(404, "no avatar", headers);
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": ALLOWED_ORIGINS[0],
         "Content-Type": "image/jpeg",
         "Cache-Control": "public, max-age=3600",
       },
@@ -167,33 +198,33 @@ exports.handler = async (event) => {
     };
   }
 
-  if (event.httpMethod !== "POST") return bad(405, "POST only");
+  if (event.httpMethod !== "POST") return bad(405, "POST only", headers);
 
   let body;
   try {
     body = JSON.parse(event.body || "{}");
   } catch {
-    return bad(400, "bad request");
+    return bad(400, "bad request", headers);
   }
   const action = body.action;
   const userId = String(body.userId || "");
-  if (!UID_RE.test(userId)) return bad(400, "bad user");
+  if (!UID_RE.test(userId)) return bad(400, "bad user", headers);
   const ip = ipOf(event);
 
   // ---- register / update profile ----
   if (action === "register") {
-    if (throttle(`reg:${ip}`, 5, 10 * 60 * 1000)) return bad(429, "slow down");
+    if (throttle(`reg:${ip}`, 5, 10 * 60 * 1000)) return bad(429, "slow down", headers);
     const name = String(body.name || "").trim();
     const kind = String(body.kind || "");
     const tag = String(body.tag || "");
     const note = String(body.note || "").trim().slice(0, 140);
-    if (!NAME_RE.test(name)) return bad(400, "bad name");
-    if (!KINDS.includes(kind)) return bad(400, "bad kind");
-    if (!TAGS.includes(tag)) return bad(400, "bad tag");
+    if (!NAME_RE.test(name)) return bad(400, "bad name", headers);
+    if (!KINDS.includes(kind)) return bad(400, "bad kind", headers);
+    if (!TAGS.includes(tag)) return bad(400, "bad tag", headers);
     let email = null;
     if (body.email !== undefined) {
       const e = String(body.email || "").trim().toLowerCase().slice(0, 120);
-      if (e && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)) return bad(400, "bad email");
+      if (e && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)) return bad(400, "bad email", headers);
       email = e;
     }
     let openTo = null;
@@ -205,13 +236,19 @@ exports.handler = async (event) => {
     let gender = null;
     if (body.gender !== undefined) {
       const g = String(body.gender || "").trim().toLowerCase();
-      if (g && g !== "female" && g !== "male") return bad(400, "bad gender");
+      if (g && g !== "female" && g !== "male") return bad(400, "bad gender", headers);
       gender = g;
+    }
+    let city = null;
+    if (body.city !== undefined) {
+      const cc = String(body.city || "").trim().toLowerCase();
+      if (cc && !LIVE_CITIES.includes(cc)) return bad(400, "bad city", headers);
+      city = cc || null;
     }
     let lat = null, lng = null;
     if (body.lat !== undefined || body.lng !== undefined) {
       const la = Number(body.lat), lo = Number(body.lng);
-      if (!validCoords(la, lo)) return bad(400, "bad location");
+      if (!validCoords(la, lo)) return bad(400, "bad location", headers);
       lat = Math.round(la * 10000) / 10000;
       lng = Math.round(lo * 10000) / 10000;
     }
@@ -223,29 +260,40 @@ exports.handler = async (event) => {
     card.email = email !== null ? email : (prev && prev.email) || "";
     if (lat !== null) { card.lat = lat; card.lng = lng; }
     else if (prev && validCoords(prev.lat, prev.lng)) { card.lat = prev.lat; card.lng = prev.lng; }
+    if (city) card.city = city;
+    else if (prev && prev.city && LIVE_CITIES.includes(prev.city)) card.city = prev.city;
+    else if (lat !== null) card.city = nearestLiveCity(lat, lng);
+    else if (prev && validCoords(prev.lat, prev.lng)) card.city = nearestLiveCity(prev.lat, prev.lng);
+    else card.city = "nyc";
     let avatarAt = null;
     if (body.avatarAt !== undefined) {
       const n = Number(body.avatarAt);
       avatarAt = Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
     }
     card.avatarAt = avatarAt !== null ? avatarAt : (prev && prev.avatarAt) || 0;
+    if (body.avatarPreset !== undefined) {
+      const p = Number(body.avatarPreset);
+      card.avatarPreset = Number.isInteger(p) && p >= 0 && p < 12 ? p : null;
+    } else if (prev) {
+      card.avatarPreset = prev.avatarPreset != null ? prev.avatarPreset : null;
+    }
     await store.setJSON(`traveler/${userId}.json`, card);
-    return ok({ ok: true, card: publicCard(card) });
+    return ok({ ok: true, card: publicCard(card) }, headers);
   }
 
   // ---- delete profile ----
   if (action === "remove") {
-    if (throttle(`rm:${ip}`, 5, 10 * 60 * 1000)) return bad(429, "slow down");
+    if (throttle(`rm:${ip}`, 5, 10 * 60 * 1000)) return bad(429, "slow down", headers);
     await store.delete(`traveler/${userId}.json`).catch(() => {});
     await store.delete(`avatar/${userId}.bin`).catch(() => {});
-    return ok({ ok: true });
+    return ok({ ok: true }, headers);
   }
 
   // ---- upload / remove profile photo ----
   // POST { action:"avatar", userId, data } — data is raw base64 of a small JPEG
   // (client resizes to <=256px). Empty data removes the photo.
   if (action === "avatar") {
-    if (throttle(`av:${ip}`, 10, 10 * 60 * 1000)) return bad(429, "slow down");
+    if (throttle(`av:${ip}`, 10, 10 * 60 * 1000)) return bad(429, "slow down", headers);
     const data = String(body.data || "");
     const prev = await getCard(store, userId);
     if (!data) {
@@ -254,12 +302,12 @@ exports.handler = async (event) => {
         prev.avatarAt = 0;
         await store.setJSON(`traveler/${userId}.json`, prev);
       }
-      return ok({ ok: true, avatarAt: 0 });
+      return ok({ ok: true, avatarAt: 0 }, headers);
     }
-    if (!/^[A-Za-z0-9+/=]+$/.test(data) || data.length % 4 !== 0) return bad(400, "bad image");
+    if (!/^[A-Za-z0-9+/=]+$/.test(data) || data.length % 4 !== 0) return bad(400, "bad image", headers);
     const buf = Buffer.from(data, "base64");
-    if (buf.length > 200 * 1024 || buf.length < 100) return bad(400, "bad image");
-    if (!(buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff)) return bad(400, "jpeg only");
+    if (buf.length > 200 * 1024 || buf.length < 100) return bad(400, "bad image", headers);
+    if (!(buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff)) return bad(400, "jpeg only", headers);
     await store.set(
       `avatar/${userId}.bin`,
       buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength)
@@ -269,25 +317,28 @@ exports.handler = async (event) => {
       prev.avatarAt = at;
       await store.setJSON(`traveler/${userId}.json`, prev);
     }
-    return ok({ ok: true, avatarAt: at });
+    return ok({ ok: true, avatarAt: at }, headers);
   }
 
   // ---- presence heartbeat: marks this browser as recently active ----
   if (action === "ping") {
-    if (throttle(`ping:${ip}`, 90, 60 * 1000)) return ok({ ok: true });
+    if (throttle(`ping:${ip}`, 90, 60 * 1000)) return ok({ ok: true }, headers);
     const c = await store.get(`traveler/${userId}.json`, { type: "json" }).catch(() => null);
     if (c && Date.now() - (c.seenAt || 0) > 30000) {
       c.seenAt = Date.now();
       await store.setJSON(`traveler/${userId}.json`, c);
     }
-    return ok({ ok: true });
+    return ok({ ok: true }, headers);
   }
 
   // ---- list live profiles (nearest first when viewer shares location) ----
+  // Optional body.city ("nyc"|"miami") filters to that city only.
   if (action === "travelers") {
     const now = Date.now();
     const vLat = Number(body.lat), vLng = Number(body.lng);
     const hasViewer = validCoords(vLat, vLng);
+    const cityFilter = String(body.city || "").trim().toLowerCase();
+    const filterCity = LIVE_CITIES.includes(cityFilter) ? cityFilter : null;
     const mine = await getBlocks(store, userId);
     const listed = await store.list({ prefix: "traveler/" }).catch(() => ({ blobs: [] }));
     const cards = [];
@@ -298,6 +349,7 @@ exports.handler = async (event) => {
       if (mine.includes(c.userId)) continue;
       if (c.openTo && !c.openTo.travelers && !c.openTo.friends) continue;
       const pub = publicCard(c);
+      if (filterCity && pub.city !== filterCity) continue;
       if (hasViewer && validCoords(c.lat, c.lng)) {
         pub.distanceKm = Math.round(haversineKm(vLat, vLng, c.lat, c.lng) * 10) / 10;
       }
@@ -306,16 +358,16 @@ exports.handler = async (event) => {
     if (hasViewer) {
       cards.sort((a, b) => (a.distanceKm == null ? 1e9 : a.distanceKm) - (b.distanceKm == null ? 1e9 : b.distanceKm));
     }
-    return ok({ ok: true, travelers: cards.slice(0, 50) });
+    return ok({ ok: true, travelers: cards.slice(0, 50) }, headers);
   }
 
   // ---- get-or-create thread ----
   if (action === "thread") {
     const otherId = String(body.otherId || "");
-    if (!UID_RE.test(otherId) || otherId === userId) return bad(400, "bad peer");
+    if (!UID_RE.test(otherId) || otherId === userId) return bad(400, "bad peer", headers);
     const [me, other] = await Promise.all([getCard(store, userId), getCard(store, otherId)]);
-    if (!other) return bad(404, "traveler gone");
-    if (await blockedEither(store, userId, otherId)) return bad(403, "unavailable");
+    if (!other) return bad(404, "traveler gone", headers);
+    if (await blockedEither(store, userId, otherId)) return bad(403, "unavailable", headers);
     const tid = threadIdFor(userId, otherId);
     const metaKey = `thread/${tid}.json`;
     const existing = await store.get(metaKey, { type: "json" }).catch(() => null);
@@ -329,7 +381,7 @@ exports.handler = async (event) => {
         }
       }
     }
-    return ok({ ok: true, threadId: tid, other: publicCard(other), me: publicCard(me) });
+    return ok({ ok: true, threadId: tid, other: publicCard(other), me: publicCard(me) }, headers);
   }
 
   // ---- my threads with preview ----
@@ -357,16 +409,16 @@ exports.handler = async (event) => {
         lastFrom: last ? last.from : null,
       });
     }
-    return ok({ ok: true, threads: out });
+    return ok({ ok: true, threads: out }, headers);
   }
 
   // ---- poll messages ----
   if (action === "messages") {
     const threadId = String(body.threadId || "");
     const since = Number(body.since || 0);
-    if (!/^[a-f0-9]{32}$/.test(threadId)) return bad(400, "bad thread");
+    if (!/^[a-f0-9]{32}$/.test(threadId)) return bad(400, "bad thread", headers);
     const meta = await store.get(`thread/${threadId}.json`, { type: "json" }).catch(() => null);
-    if (!meta || (meta.a !== userId && meta.b !== userId)) return bad(403, "no access");
+    if (!meta || (meta.a !== userId && meta.b !== userId)) return bad(403, "no access", headers);
     const listed = await store.list({ prefix: `msg/${threadId}/` }).catch(() => ({ blobs: [] }));
     const msgs = [];
     for (const b of (listed.blobs || []).slice(-100)) {
@@ -374,47 +426,47 @@ exports.handler = async (event) => {
       if (m && m.at > since) msgs.push({ from: m.from, text: m.text, at: m.at });
     }
     msgs.sort((x, y) => x.at - y.at);
-    return ok({ ok: true, messages: msgs.slice(-100) });
+    return ok({ ok: true, messages: msgs.slice(-100) }, headers);
   }
 
   // ---- send a message ----
   if (action === "send") {
-    if (throttle(`send:${ip}`, 30, 60 * 1000)) return bad(429, "slow down");
+    if (throttle(`send:${ip}`, 30, 60 * 1000)) return bad(429, "slow down", headers);
     const threadId = String(body.threadId || "");
     const text = String(body.text || "").trim().slice(0, 500);
-    if (!/^[a-f0-9]{32}$/.test(threadId)) return bad(400, "bad thread");
-    if (!text) return bad(400, "empty message");
+    if (!/^[a-f0-9]{32}$/.test(threadId)) return bad(400, "bad thread", headers);
+    if (!text) return bad(400, "empty message", headers);
     const meta = await store.get(`thread/${threadId}.json`, { type: "json" }).catch(() => null);
-    if (!meta || (meta.a !== userId && meta.b !== userId)) return bad(403, "no access");
+    if (!meta || (meta.a !== userId && meta.b !== userId)) return bad(403, "no access", headers);
     const otherId = meta.a === userId ? meta.b : meta.a;
-    if (await blockedEither(store, userId, otherId)) return bad(403, "unavailable");
+    if (await blockedEither(store, userId, otherId)) return bad(403, "unavailable", headers);
     const at = Date.now();
     const key = `msg/${threadId}/${at}-${crypto.randomBytes(4).toString("hex")}.json`;
     await store.setJSON(key, { threadId, from: userId, text, at });
     meta.updatedAt = at;
     await store.setJSON(`thread/${threadId}.json`, meta);
-    return ok({ ok: true, at });
+    return ok({ ok: true, at }, headers);
   }
 
   // ---- block ----
   if (action === "block") {
     const blockedId = String(body.blockedId || "");
-    if (!UID_RE.test(blockedId) || blockedId === userId) return bad(400, "bad user");
+    if (!UID_RE.test(blockedId) || blockedId === userId) return bad(400, "bad user", headers);
     const list = await getBlocks(store, userId);
     if (!list.includes(blockedId)) {
       list.push(blockedId);
       await store.setJSON(`blocks/${userId}.json`, list.slice(-200));
     }
-    return ok({ ok: true });
+    return ok({ ok: true }, headers);
   }
 
   // ---- report (stores report + auto-blocks) ----
   if (action === "report") {
-    if (throttle(`rep:${ip}`, 10, 10 * 60 * 1000)) return bad(429, "slow down");
+    if (throttle(`rep:${ip}`, 10, 10 * 60 * 1000)) return bad(429, "slow down", headers);
     const reportedId = String(body.reportedId || "");
     const reason = String(body.reason || "");
-    if (!UID_RE.test(reportedId) || reportedId === userId) return bad(400, "bad user");
-    if (!REASONS.includes(reason)) return bad(400, "bad reason");
+    if (!UID_RE.test(reportedId) || reportedId === userId) return bad(400, "bad user", headers);
+    if (!REASONS.includes(reason)) return bad(400, "bad reason", headers);
     const at = Date.now();
     await store.setJSON(`report/${at}-${crypto.randomBytes(4).toString("hex")}.json`, {
       reporter: userId,
@@ -427,8 +479,8 @@ exports.handler = async (event) => {
       list.push(reportedId);
       await store.setJSON(`blocks/${userId}.json`, list.slice(-200));
     }
-    return ok({ ok: true });
+    return ok({ ok: true }, headers);
   }
 
-  return bad(400, "unknown action");
+  return bad(400, "unknown action", headers);
 };
