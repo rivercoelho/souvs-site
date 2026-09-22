@@ -137,6 +137,7 @@ const publicCard = (c) =>
         socials: cleanSocials(c.socials),
         avatar: (c.avatarAt || 0) > 0,
         avatarAt: c.avatarAt || 0,
+        avatarPreset: c.avatarPreset != null ? c.avatarPreset : null,
         gender: c.gender === "female" ? "female" : c.gender === "male" ? "male" : "",
         online: (c.seenAt || 0) > Date.now() - ONLINE_WINDOW_MS,
         city: cardCity(c),
@@ -261,6 +262,12 @@ exports.handler = async (event) => {
       avatarAt = Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
     }
     card.avatarAt = avatarAt !== null ? avatarAt : (prev && prev.avatarAt) || 0;
+    if (body.avatarPreset !== undefined) {
+      const p = Number(body.avatarPreset);
+      card.avatarPreset = Number.isInteger(p) && p >= 0 && p < 8 ? p : null;
+    } else if (prev) {
+      card.avatarPreset = prev.avatarPreset != null ? prev.avatarPreset : null;
+    }
     await store.setJSON(`traveler/${userId}.json`, card);
     return ok({ ok: true, card: publicCard(card) });
   }
