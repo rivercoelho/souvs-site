@@ -2091,9 +2091,10 @@ function getSocials(){
 }
 /* ---- profile photos ---- */
 function avatarSrc(t){return API+"?action=avatar&userId="+encodeURIComponent(t.userId)+"&v="+(t.avatarAt||0)}
+function faceIdx(t){var s=String((t&&(t.userId||t.name))||"?");var h=0;for(var i=0;i<s.length;i++){h=((h*31)+s.charCodeAt(i))|0}return (Math.abs(h)%5)+1}
 function avatarHtml(t,big){
   if(t&&t.avatar&&t.userId)return '<img class="meet-avatar-img'+(big?" big":"")+'" src="'+esc(avatarSrc(t))+'" alt="">';
-  return '<span class="meet-avatar'+(big?" big":"")+'" aria-hidden="true">'+esc(initials(t&&t.name))+'</span>';
+  return '<img class="meet-avatar-img'+(big?" big":"")+'" src="faces/face-'+faceIdx(t)+'.png" alt="">';
 }
 var avatarPending=null,avatarRemove=false,avatarBusy=0,avatarSeq=0,avatarWaitTimer=null;
 function setAvatarBusy(){
