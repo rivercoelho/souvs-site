@@ -2023,6 +2023,7 @@ applyI18n();
   ];}
   let currentGuide='scurry',currentCity='nyc',currentDeal=null,wallet=[],favorite='';
   try{const sc=localStorage.getItem('souvs-city');if(sc==='nyc'||sc==='miami')currentCity=sc;}catch(e){}
+  window.__getSouvsCity=function(){return currentCity};
   const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
   function go(view){$$('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===view));$$('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===view));window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});if(view==='chat'){renderChat()}if(view==='profile'&&window.renderProfile)window.renderProfile();if(view==='perks')setTimeout(function(){if(window.paywallOnPerks)window.paywallOnPerks()},600);updateInstallBanner();}
 /* ---- install banner: add Souvs to the phone home screen ---- */
@@ -2543,6 +2544,7 @@ $all("[data-meet-filter]").forEach(function(b){b.addEventListener("click",functi
 })});
 
 /* ---- people around right now (profile + home) ---- */
+function myCity(){try{return (window.__getSouvsCity&&window.__getSouvsCity())||localStorage.getItem('souvs-city')||'nyc';}catch(e){return 'nyc';}}
 function renderAroundInto(wrapId,statusId){
   var wrap=$("#"+wrapId),st=$("#"+statusId);
   if(!wrap)return;
@@ -2550,7 +2552,8 @@ function renderAroundInto(wrapId,statusId){
     if(st)st.textContent=t("meet_offline");
     wrap.innerHTML="";return;
   }
-  var others=lastTravelers.filter(function(t){return t.userId&&t.userId!==me.id});
+  var _mc=myCity();
+  var others=lastTravelers.filter(function(t){return t.userId&&t.userId!==me.id&&(t.city||'nyc')===_mc});
   if(st)st.textContent=others.length?t("around_live",{n:others.length,people:others.length===1?t("person_1"):t("person_n")}):t("around_none");
   wrap.innerHTML="";
   function addTile(p,onTap){
@@ -2704,7 +2707,7 @@ function doCardSubmit(form){
   var btn=form.querySelector('button[type="submit"]');
   var finish=function(avatarAt){
     getGeo().then(function(g){
-    var payload={name:name,kind:kind,tag:tag,note:note,email:email,gender:gender,openTo:getOpenTo(),socials:getSocials(),avatarAt:avatarAt};
+    var payload={name:name,kind:kind,tag:tag,note:note,email:email,gender:gender,city:myCity(),openTo:getOpenTo(),socials:getSocials(),avatarAt:avatarAt};
     if(g){payload.lat=g.lat;payload.lng=g.lng}
     api("register",payload).then(function(r){
       if(btn)btn.disabled=false;
@@ -2811,7 +2814,7 @@ function renderProfile(){
   var n=$("#prefNote"),ph2=openToPhrases();
   if(n)n.textContent=ph2.length?t("profile_visible",{list:ph2.join(" "+t("and_word")+" ")}):t("profile_hidden");
 }
-function syncOpenTo(){if(!me.name)return;var o=getOpenTo();api("register",{name:me.name,kind:me.kind,tag:me.tag,note:me.note,openTo:o,socials:getSocials(),avatarAt:me.avatarAt||0}).then(function(){})}
+function syncOpenTo(){if(!me.name)return;var o=getOpenTo();api("register",{name:me.name,kind:me.kind,tag:me.tag,note:me.note,city:myCity(),openTo:o,socials:getSocials(),avatarAt:me.avatarAt||0}).then(function(){})}
 var _pt=$("#prefTravelers"),_pf=$("#prefFriends");
 if(_pt)_pt.addEventListener("change",function(){getOpenTo().travelers=this.checked;saveMe();syncOpenTo();renderProfile()});
 if(_pf)_pf.addEventListener("change",function(){getOpenTo().friends=this.checked;saveMe();syncOpenTo();renderProfile()});
@@ -2823,7 +2826,8 @@ function refreshThreads(){return api("threads",{}).then(function(r){if(r&&r.thre
 function refreshAll(){
   return getGeo().then(function(g){
   var coords=g?{lat:g.lat,lng:g.lng}:{};
-  var base={name:me.name,kind:me.kind,tag:me.tag,note:me.note,email:me.email||"",openTo:getOpenTo(),socials:getSocials(),avatarAt:me.avatarAt||0};
+  coords.city=myCity();
+  var base={name:me.name,kind:me.kind,tag:me.tag,note:me.note,email:me.email||"",city:myCity(),openTo:getOpenTo(),socials:getSocials(),avatarAt:me.avatarAt||0};
   var reg=me.name?api("register",Object.assign({},base,coords)):Promise.resolve({});
   return reg.then(function(){return api("travelers",coords)}).then(function(r){
     if(r.error||!r.travelers){
