@@ -310,7 +310,7 @@ en:{
   events_loading: "Loading events\u2026",
   ev_join: "Are you going?",
   ev_joined: "I'm going \u2713",
-  ev_more: "More info \u2192",
+  ev_more: "Learn more",
   ev_going_none: "Be the first to say you're going",
   ev_who: "Who's going",
   ev_going: "{n} going",
@@ -753,7 +753,7 @@ es:{
   events_loading: "Cargando eventos\u2026",
   ev_join: "\u00bfVas a ir?",
   ev_joined: "Voy \u2713",
-  ev_more: "M\u00e1s info \u2192",
+  ev_more: "M\u00e1s informaci\u00f3n",
   ev_going_none: "S\u00e9 la primera persona en decir que va",
   ev_who: "Qui\u00e9nes van",
   ev_going: "{n} van",
@@ -1195,7 +1195,7 @@ pt:{
   events_loading: "Carregando eventos\u2026",
   ev_join: "Voc\u00ea vai?",
   ev_joined: "Vou \u2713",
-  ev_more: "Mais info \u2192",
+  ev_more: "Saiba mais",
   ev_going_none: "Seja a primeira pessoa a dizer que vai",
   ev_who: "Quem vai",
   ev_going: "{n} v\u00e3o",
@@ -1638,7 +1638,7 @@ fr:{
   events_loading: "Chargement des \u00e9v\u00e9nements\u2026",
   ev_join: "Vous y allez ?",
   ev_joined: "J'y vais \u2713",
-  ev_more: "Plus d'infos \u2192",
+  ev_more: "En savoir plus",
   ev_going_none: "Soyez le premier \u00e0 dire que vous y allez",
   ev_who: "Qui y va",
   ev_going: "{n} participent",
@@ -2081,7 +2081,7 @@ de:{
   events_loading: "Events werden geladen\u2026",
   ev_join: "Gehst du hin?",
   ev_joined: "Ich gehe hin \u2713",
-  ev_more: "Mehr Infos \u2192",
+  ev_more: "Mehr erfahren",
   ev_going_none: "Sag als Erster, dass du hingehst",
   ev_who: "Wer geht hin",
   ev_going: "{n} dabei",
@@ -3496,14 +3496,14 @@ function notifyTick(){
 /* ---- events & hangouts ---- */
 var EVENTS_API="/.netlify/functions/events";
 var EVENTS=[
- {id:"nyc-mundo-lingo",city:"nyc",name:"Mundo Lingo NYC",com:"ev_com_multi",freq:"ev_weekly",desc:"ev_mundolingo_nyc_desc",sched:"ev_mundolingo_nyc_sched",venue:"Midtown",link:""},
+ {id:"nyc-mundo-lingo",city:"nyc",name:"Mundo Lingo NYC",com:"ev_com_multi",freq:"ev_weekly",desc:"ev_mundolingo_nyc_desc",sched:"ev_mundolingo_nyc_sched",venue:"Midtown",link:"https://www.meetup.com/mundo-lingo-new-york-city/"},
  {id:"nyc-forro",city:"nyc",name:"Forr\u00f3 New York",com:"ev_com_brazilian",freq:"ev_weekly",desc:"ev_forro_desc",sched:"ev_forro_sched",venue:"Manhattan",link:"https://www.forronewyork.com/forro-new-york-scene/weekly-forro-dance-classes"},
- {id:"nyc-brazilian-day",city:"nyc",name:"Brazilian Day",com:"ev_com_brazilian",freq:"ev_annual",desc:"ev_brazday_desc",sched:"ev_brazday_sched",venue:"46th St \u00b7 Little Brazil",link:""},
- {id:"nyc-langroops",city:"nyc",name:"Langroops NYC",com:"ev_com_multi",freq:"ev_weekly",desc:"ev_langroops_desc",sched:"ev_langroops_sched",venue:"Bryant Park",link:""},
- {id:"mia-mundo-lingo",city:"miami",name:"Mundo Lingo Miami",com:"ev_com_multi",freq:"ev_weekly",desc:"ev_mundolingo_mia_desc",sched:"ev_mundolingo_mia_sched",venue:"Brickell",link:""},
- {id:"mia-viernes",city:"miami",name:"Viernes Culturales",com:"ev_com_latin",freq:"ev_monthly",desc:"ev_viernes_desc",sched:"ev_viernes_sched",venue:"Calle Ocho \u00b7 Little Havana",link:""},
+ {id:"nyc-brazilian-day",city:"nyc",name:"Brazilian Day",com:"ev_com_brazilian",freq:"ev_annual",desc:"ev_brazday_desc",sched:"ev_brazday_sched",venue:"46th St \u00b7 Little Brazil",link:"https://www.brazilianday.com/en/informacoes/"},
+ {id:"nyc-langroops",city:"nyc",name:"Langroops NYC",com:"ev_com_multi",freq:"ev_weekly",desc:"ev_langroops_desc",sched:"ev_langroops_sched",venue:"Bryant Park",link:"https://www.meetup.com/new-york-langroops-language-exchange/"},
+ {id:"mia-mundo-lingo",city:"miami",name:"Mundo Lingo Miami",com:"ev_com_multi",freq:"ev_weekly",desc:"ev_mundolingo_mia_desc",sched:"ev_mundolingo_mia_sched",venue:"Brickell",link:"https://mundolingo.org"},
+ {id:"mia-viernes",city:"miami",name:"Viernes Culturales",com:"ev_com_latin",freq:"ev_monthly",desc:"ev_viernes_desc",sched:"ev_viernes_sched",venue:"Calle Ocho \u00b7 Little Havana",link:"https://viernesculturales.org"},
  {id:"mia-alliance",city:"miami",name:"Alliance Fran\u00e7aise Miami",com:"ev_com_french",freq:"ev_monthly",desc:"ev_afmia_desc",sched:"ev_afmia_sched",venue:"Downtown Miami",link:"http://www.af-miami.org/"},
- {id:"mia-calle-ocho",city:"miami",name:"Calle Ocho Festival",com:"ev_com_latin",freq:"ev_annual",desc:"ev_calleocho_desc",sched:"ev_calleocho_sched",venue:"Little Havana",link:""}
+ {id:"mia-calle-ocho",city:"miami",name:"Calle Ocho Festival",com:"ev_com_latin",freq:"ev_annual",desc:"ev_calleocho_desc",sched:"ev_calleocho_sched",venue:"Little Havana",link:"https://carnavalmiami.com/events/calle-ocho/"}
 ];
 function evApi(action,data){
   var payload={action:action};
