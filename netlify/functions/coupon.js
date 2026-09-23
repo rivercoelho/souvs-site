@@ -61,7 +61,16 @@ exports.handler = async (event) => {
   }
   // Allow ?action=verify&code=... for staff links opened from a plain browser.
   const action = body.action || (event.queryStringParameters || {}).action;
-  const store = getStore("souvs-coupons");
+  let store;
+  try {
+    store = getStore({
+      name: "souvs-coupons",
+      siteID: process.env.NETLIFY_SITE_ID,
+      token: process.env.NETLIFY_BLOBS_TOKEN,
+    });
+  } catch {
+    return { statusCode: 500, headers, body: JSON.stringify({ error: "storage unavailable" }) };
+  }
   const ip =
     (event.headers && (event.headers["x-forwarded-for"] || event.headers["X-Forwarded-For"]) || "")
       .split(",")[0]
