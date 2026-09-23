@@ -79,8 +79,39 @@ exports.handler = async (event) => {
   }
   if (!Array.isArray(list)) list = [];
 
+  // Attach each attendee's current profile avatar (photo or preset character)
+  // by looking up their traveler profile in the souvs-meet store.
+  let meetStore = null;
+  function getMeetStore() {
+    if (!meetStore) {
+      meetStore = getStore({
+        name: "souvs-meet",
+        siteID: process.env.NETLIFY_SITE_ID,
+        token: process.env.NETLIFY_BLOBS_TOKEN,
+      });
+    }
+    return meetStore;
+  }
+  async function enrichAttendees(arr) {
+    const ms = getMeetStore();
+    return Promise.all(
+      arr.map(async (a) => {
+        let avatarPreset = null;
+        let hasPhoto = false;
+        try {
+          const c = await ms.get(`traveler/${a.userId}.json`, { type: "json" });
+          if (c) {
+            if (Number.isInteger(c.avatarPreset)) avatarPreset = c.avatarPreset;
+            hasPhoto = (c.avatarAt || 0) > 0;
+          }
+        } catch {}
+        return { userId: a.userId, name: a.name, at: a.at, avatarPreset, hasPhoto };
+      })
+    );
+  }
+
   if (action === "attendees") {
-    return { statusCode: 200, headers, body: JSON.stringify({ ok: true, attendees: list }) };
+    return { statusCode: 200, headers, body: JSON.stringify({ ok: true, attendees: await enrichAttendees(list) }) };
   }
 
   if (action === "rsvp") {
@@ -93,14 +124,14 @@ exports.handler = async (event) => {
       list.push({ userId, name, at: Date.now() });
       await store.setJSON(key, list);
     }
-    return { statusCode: 200, headers, body: JSON.stringify({ ok: true, attendees: list }) };
+    return { statusCode: 200, headers, body: JSON.stringify({ ok: true, attendees: await enrichAttendees(list) }) };
   }
 
   if (action === "unrsvp") {
     const userId = String(body.userId || "").slice(0, 64);
     const next = list.filter((a) => a.userId !== userId);
     if (next.length !== list.length) await store.setJSON(key, next);
-    return { statusCode: 200, headers, body: JSON.stringify({ ok: true, attendees: next }) };
+    return { statusCode: 200, headers, body: JSON.stringify({ ok: true, attendees: await enrichAttendees(next) }) };
   }
 
   return { statusCode: 400, headers, body: JSON.stringify({ error: "bad action" }) };

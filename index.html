@@ -312,6 +312,7 @@ en:{
   ev_joined: "I'm going \u2713",
   ev_more: "More info \u2192",
   ev_going_none: "Be the first to say you're going",
+  ev_who: "Who's going",
   ev_going: "{n} going",
   ev_weekly: "Weekly",
   ev_monthly: "Monthly",
@@ -754,6 +755,7 @@ es:{
   ev_joined: "Voy \u2713",
   ev_more: "M\u00e1s info \u2192",
   ev_going_none: "S\u00e9 la primera persona en decir que va",
+  ev_who: "Qui\u00e9nes van",
   ev_going: "{n} van",
   ev_weekly: "Semanal",
   ev_monthly: "Mensual",
@@ -1195,6 +1197,7 @@ pt:{
   ev_joined: "Vou \u2713",
   ev_more: "Mais info \u2192",
   ev_going_none: "Seja a primeira pessoa a dizer que vai",
+  ev_who: "Quem vai",
   ev_going: "{n} v\u00e3o",
   ev_weekly: "Semanal",
   ev_monthly: "Mensal",
@@ -1637,6 +1640,7 @@ fr:{
   ev_joined: "J'y vais \u2713",
   ev_more: "Plus d'infos \u2192",
   ev_going_none: "Soyez le premier \u00e0 dire que vous y allez",
+  ev_who: "Qui y va",
   ev_going: "{n} participent",
   ev_weekly: "Hebdo",
   ev_monthly: "Mensuel",
@@ -2079,6 +2083,7 @@ de:{
   ev_joined: "Ich gehe hin \u2713",
   ev_more: "Mehr Infos \u2192",
   ev_going_none: "Sag als Erster, dass du hingehst",
+  ev_who: "Wer geht hin",
   ev_going: "{n} dabei",
   ev_weekly: "W\u00f6chentlich",
   ev_monthly: "Monatlich",
@@ -2770,7 +2775,7 @@ function syncCityCards(){$$('.guide-card[data-city]').forEach(c=>{c.hidden=c.dat
 .avatar-preset img{width:100%;height:100%;object-fit:contain;display:block;border-radius:50%}
 .avatar-preset.sel{border-color:var(--pink-dark);background:#fff}
 .avatar-rm{background:none;border:0;padding:0;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
-.event-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}.ev-card{padding:22px;border-radius:22px;background:var(--surface-faint);display:flex;flex-direction:column;gap:8px}.ev-card h3{margin:0;font-size:20px}.ev-top{display:flex;gap:8px;flex-wrap:wrap}.ev-com,.ev-freq{font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--violet);color:var(--navy)}.ev-freq{background:rgba(191,232,244,.5)}.ev-sched{margin:0;font-size:13px;font-weight:800}.ev-desc{margin:0;font-size:14px;color:var(--muted)}.ev-going{margin-top:6px}.ev-going.none{color:var(--muted);font-size:13px}.ev-chips{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}.ev-chip{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;font-weight:900}.ev-more{align-self:center;font-size:12px;font-weight:800;color:var(--muted)}.ev-going p{margin:0;font-size:13px;color:var(--muted)}.ev-actions{margin-top:auto;display:flex;gap:12px;align-items:center;padding-top:8px}.ev-join.joined{background:#fff;color:#000}.ev-link{font-size:13px;font-weight:800;white-space:nowrap}@media(max-width:880px){.event-grid{grid-template-columns:1fr}}.pref-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #e6e6ee;border-radius:16px;background:#fff;cursor:pointer}
+.event-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}.ev-card{padding:22px;border-radius:22px;background:var(--surface-faint);display:flex;flex-direction:column;gap:8px}.ev-card h3{margin:0;font-size:20px}.ev-top{display:flex;gap:8px;flex-wrap:wrap}.ev-com,.ev-freq{font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--violet);color:var(--navy)}.ev-freq{background:rgba(191,232,244,.5)}.ev-sched{margin:0;font-size:13px;font-weight:800}.ev-desc{margin:0;font-size:14px;color:var(--muted)}.ev-going{margin-top:6px}.ev-going.none{color:var(--muted);font-size:13px}.ev-chips{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}.ev-chip{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;font-weight:900}.ev-more{align-self:center;font-size:12px;font-weight:800;color:var(--muted)}.ev-going p{margin:0;font-size:13px;color:var(--muted)}.ev-going .ev-who{margin:6px 0;font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.ev-chip.ev-pic{object-fit:cover;padding:0}.ev-actions{margin-top:auto;display:flex;gap:12px;align-items:center;padding-top:8px}.ev-join.joined{background:#fff;color:#000}.ev-link{font-size:13px;font-weight:800;white-space:nowrap}@media(max-width:880px){.event-grid{grid-template-columns:1fr}}.pref-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #e6e6ee;border-radius:16px;background:#fff;cursor:pointer}
 .pref-text{flex:1;display:grid;gap:2px}
 .pref-text strong{font-size:15px;color:var(--ink)}
 .pref-text span{font-size:13px;opacity:.65}
@@ -3508,12 +3513,17 @@ function evApi(action,data){
     .catch(function(){return{error:"offline"}});
 }
 function evInitials(n){return String(n||"?").trim().split(/\s+/).map(function(w){return w[0]}).join("").slice(0,2).toUpperCase()}
+function evChipHtml(a){
+  if(a.avatarPreset!=null&&AVATAR_PRESETS[a.avatarPreset])return '<img class="ev-chip ev-pic" src="'+AVATAR_PRESETS[a.avatarPreset]+'" alt="" title="'+esc(a.name)+'">';
+  if(a.hasPhoto)return '<img class="ev-chip ev-pic" src="/.netlify/functions/meet?action=avatar&userId='+esc(a.userId)+'" alt="" title="'+esc(a.name)+'">';
+  return '<span class="ev-chip" title="'+esc(a.name)+'">'+esc(evInitials(a.name))+'</span>';
+}
 function evGoingHtml(list){
   if(!list||!list.length)return '<p class="ev-going none">'+esc(t("ev_going_none"))+'</p>';
-  var chips=list.slice(0,6).map(function(a){return '<span class="ev-chip" title="'+esc(a.name)+'">'+esc(evInitials(a.name))+'</span>'}).join("");
+  var chips=list.slice(0,6).map(evChipHtml).join("");
   var extra=list.length>6?'<span class="ev-more">+'+(list.length-6)+'</span>':"";
   var names=list.slice(0,3).map(function(a){return esc(a.name)}).join(", ")+(list.length>3?"\u2026":"");
-  return '<div class="ev-going"><div class="ev-chips">'+chips+extra+'</div><p>'+esc(t("ev_going",{n:list.length}))+' \u00b7 '+names+'</p></div>';
+  return '<div class="ev-going"><p class="ev-who">'+esc(t("ev_who"))+'</p><div class="ev-chips">'+chips+extra+'</div><p>'+esc(t("ev_going",{n:list.length}))+' \u00b7 '+names+'</p></div>';
 }
 function evCardHtml(ev,att){
   var joined=att.some(function(a){return a.userId===me.id});
