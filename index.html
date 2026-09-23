@@ -627,6 +627,13 @@ en:{
   pref_travelers_sub: "Travelers visiting the city can see your profile and say hi.",
   pref_friends: "New friends",
   pref_friends_sub: "Open to making friends, not just trip buddies.",
+  prefs_notify_title: "Notifications",
+  pref_notify: "New message alerts",
+  pref_notify_sub: "Get an alert when someone messages you.",
+  notify_denied: "Notifications are blocked \u2014 enable them in your browser settings.",
+  notify_unsupported: "This browser doesn\u2019t support notifications.",
+  notify_on: "Message alerts on",
+  notify_off: "Message alerts off",
   socials_check: "check my socials",
   socials_hide: "hide socials",
   tag_art: "art walk",
@@ -1025,6 +1032,13 @@ es:{
   pref_travelers_sub: "Los viajeros que visitan la ciudad pueden ver tu perfil y saludarte.",
   pref_friends: "Nuevos amigos",
   pref_friends_sub: "Abierto a hacer amigos, no solo compañeros de viaje.",
+  prefs_notify_title: "Notificaciones",
+  pref_notify: "Avisos de mensajes nuevos",
+  pref_notify_sub: "Recibe un aviso cuando alguien te escriba.",
+  notify_denied: "Las notificaciones están bloqueadas: actívalas en los ajustes de tu navegador.",
+  notify_unsupported: "Este navegador no admite notificaciones.",
+  notify_on: "Avisos activados",
+  notify_off: "Avisos desactivados",
   socials_check: "mira mis redes",
   socials_hide: "ocultar redes",
   tag_art: "ruta de arte",
@@ -1422,6 +1436,13 @@ pt:{
   pref_travelers_sub: "Viajantes visitando a cidade podem ver seu perfil e te dar um oi.",
   pref_friends: "Novos amigos",
   pref_friends_sub: "Aberto a fazer amigos, não só parceiros de viagem.",
+  prefs_notify_title: "Notificações",
+  pref_notify: "Alertas de mensagens novas",
+  pref_notify_sub: "Receba um alerta quando alguém te mandar mensagem.",
+  notify_denied: "Notificações bloqueadas: ative nas configurações do navegador.",
+  notify_unsupported: "Este navegador não suporta notificações.",
+  notify_on: "Alertas ativados",
+  notify_off: "Alertas desativados",
   socials_check: "veja minhas redes",
   socials_hide: "ocultar redes",
   tag_art: "passeio de arte",
@@ -1820,6 +1841,13 @@ fr:{
   pref_travelers_sub: "Les voyageurs de passage peuvent voir votre profil et vous saluer.",
   pref_friends: "Nouveaux amis",
   pref_friends_sub: "Ouvert aux amitiés, pas seulement aux compagnons de voyage.",
+  prefs_notify_title: "Notifications",
+  pref_notify: "Alertes de nouveaux messages",
+  pref_notify_sub: "Recevez une alerte quand quelqu\u2019un vous écrit.",
+  notify_denied: "Notifications bloquées : activez-les dans les réglages du navigateur.",
+  notify_unsupported: "Ce navigateur ne prend pas en charge les notifications.",
+  notify_on: "Alertes activées",
+  notify_off: "Alertes désactivées",
   socials_check: "voir mes réseaux",
   socials_hide: "masquer les réseaux",
   tag_art: "balade arty",
@@ -2218,6 +2246,13 @@ de:{
   pref_travelers_sub: "Reisende in der Stadt können dein Profil sehen und hallo sagen.",
   pref_friends: "Neue Freunde",
   pref_friends_sub: "Offen für Freundschaften, nicht nur Reisebuddys.",
+  prefs_notify_title: "Mitteilungen",
+  pref_notify: "Hinweise bei neuen Nachrichten",
+  pref_notify_sub: "Erhalte einen Hinweis, wenn dir jemand schreibt.",
+  notify_denied: "Mitteilungen sind blockiert: aktiviere sie in den Browser-Einstellungen.",
+  notify_unsupported: "Dieser Browser unterstützt keine Mitteilungen.",
+  notify_on: "Hinweise aktiviert",
+  notify_off: "Hinweise deaktiviert",
   socials_check: "check meine Socials",
   socials_hide: "Socials verbergen",
   tag_art: "Kunst-Walk",
@@ -2766,6 +2801,9 @@ var cardFormHtml=
  +'<label class="pref-row"><span class="pref-text"><strong data-i18n="pref_travelers">New travelers</strong><span data-i18n="pref_travelers_sub">Travelers visiting the city can see your profile and say hi.</span></span><span class="pref-ctl"><input type="checkbox" id="prefTravelers"><span class="pref-switch" aria-hidden="true"></span></span></label>'
  +'<label class="pref-row"><span class="pref-text"><strong data-i18n="pref_friends">New friends</strong><span data-i18n="pref_friends_sub">Open to making friends, not just trip buddies.</span></span><span class="pref-ctl"><input type="checkbox" id="prefFriends"><span class="pref-switch" aria-hidden="true"></span></span></label>'
  +'<p class="pref-note" id="prefNote" role="status"></p></div>'
+ +'<div class="profile-prefs"><h3 data-i18n="prefs_notify_title">Notifications</h3>'
+ +'<label class="pref-row"><span class="pref-text"><strong data-i18n="pref_notify">New message alerts</strong><span data-i18n="pref_notify_sub">Get an alert when someone messages you.</span></span><span class="pref-ctl"><input type="checkbox" id="prefNotify"><span class="pref-switch" aria-hidden="true"></span></span></label>'
+ +'<p class="pref-note" id="notifyNote" role="status"></p></div>'
  +'<p class="muted" data-i18n="form_loc_note">Your location is only used to sort nearby profiles \u2014 it\u2019s never shown publicly.</p>'
  +'<button class="primary" type="submit" id="cardFormSubmit"></button>'
  +'<button class="danger-link" type="button" id="cardRemove" data-i18n="profile_remove">Remove profile</button>'
@@ -3185,6 +3223,7 @@ function renderProfile(){
   var pt=$("#prefTravelers"),pf=$("#prefFriends");
   if(pt)pt.checked=!!o.travelers;
   if(pf)pf.checked=!!o.friends;
+  syncNotifyToggle();
   var n=$("#prefNote"),ph2=openToPhrases();
   if(n)n.textContent=ph2.length?t("profile_visible",{list:ph2.join(" "+t("and_word")+" ")}):t("profile_hidden");
 }
@@ -3192,10 +3231,67 @@ function syncOpenTo(){if(!me.name)return;var o=getOpenTo();api("register",{name:
 var _pt=$("#prefTravelers"),_pf=$("#prefFriends");
 if(_pt)_pt.addEventListener("change",function(){getOpenTo().travelers=this.checked;saveMe();syncOpenTo();renderProfile()});
 if(_pf)_pf.addEventListener("change",function(){getOpenTo().friends=this.checked;saveMe();syncOpenTo();renderProfile()});
+var _pn=$("#prefNotify");
+if(_pn)_pn.addEventListener("change",function(){setNotify(this.checked)});
 window.renderProfile=renderProfile;
 
 /* ---- boot ---- */
 
+/* ---- message notifications ---- */
+function notifyPref(){try{return localStorage.getItem("souvs-notify")==="1"}catch(e){return false}}
+function notifyState(){
+  if(!("Notification" in window))return "unsupported";
+  if(notifyPref()&&Notification.permission==="granted")return "on";
+  if(Notification.permission==="denied")return "blocked";
+  return "off";
+}
+function syncNotifyToggle(){
+  var el=$("#prefNotify");if(!el)return;
+  el.checked=notifyState()==="on";
+  var n=$("#notifyNote");if(!n)return;
+  var st=notifyState();
+  n.textContent=st==="blocked"?t("notify_denied"):st==="unsupported"?t("notify_unsupported"):"";
+}
+function setNotify(on){
+  if(!("Notification" in window)){toast(t("notify_unsupported"));syncNotifyToggle();return}
+  if(!on){try{localStorage.setItem("souvs-notify","0")}catch(e){}syncNotifyToggle();toast(t("notify_off"));return}
+  var done=function(p){
+    try{localStorage.setItem("souvs-notify",p==="granted"?"1":"0")}catch(e){}
+    if(p==="granted"){try{localStorage.setItem("souvs-notify-baseline",String(Date.now()))}catch(e){}startNotifyPoll()}
+    syncNotifyToggle();
+    toast(t(p==="granted"?"notify_on":"notify_denied"));
+  };
+  try{
+    var pr=Notification.requestPermission();
+    if(pr&&pr.then)pr.then(done);else done(Notification.permission);
+  }catch(e){done(Notification.permission)}
+}
+function fireMsgNotify(name,text){
+  try{
+    if(notifyState()!=="on")return;
+    var n=new Notification(name||"Souvs",{body:String(text||"").slice(0,140),tag:"souvs-msg"});
+    n.onclick=function(){try{window.focus();n.close()}catch(e){}};
+  }catch(e){}
+}
+var notifyTimer=null;
+function startNotifyPoll(){if(notifyTimer)return;notifyTimer=setInterval(notifyTick,15000);notifyTick()}
+function notifyTick(){
+  if(notifyState()!=="on"||!me||!me.id)return;
+  api("threads",{}).then(function(r){
+    if(!r||!r.threads)return;
+    var base=0;try{base=+(localStorage.getItem("souvs-notify-baseline")||0)}catch(e){}
+    var ov=$("#chatOverlay");
+    r.threads.forEach(function(th){
+      if(!th.lastFrom||th.lastFrom===me.id)return;
+      if(th.threadId===chatTid&&ov&&!ov.hidden)return;
+      var seen=0;try{seen=+(localStorage.getItem("souvs-seen-"+th.threadId)||0)}catch(e){}
+      if(th.lastAt>seen&&th.lastAt>base){
+        fireMsgNotify(th.other&&th.other.name,th.lastText);
+        try{localStorage.setItem("souvs-notify-baseline",String(th.lastAt))}catch(e){}
+      }
+    });
+  }).catch(function(){});
+}
 function refreshThreads(){return api("threads",{}).then(function(r){if(r&&r.threads)renderThreads(r.threads)})}
 function refreshAll(){
   return getGeo().then(function(g){
@@ -3289,6 +3385,7 @@ function softReloadTravelers(){
 }
 document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")presenceTick();});
 setInterval(presenceTick,60000);
+if(notifyState()==="on")startNotifyPoll();
 presenceTick();
 })();
 </script>
