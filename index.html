@@ -2794,7 +2794,7 @@ document.addEventListener("click",function(e){
   $$('[data-open-guide]').forEach(b=>b.addEventListener('click',()=>{currentGuide=b.dataset.openGuide;go('chat')}));
   const cityButton=$('#cityButton'),cityMenu=$('#cityMenu'),teaser=$('#cityTeaser');
   cityButton.addEventListener('click',()=>{const willOpen=cityMenu.hidden;cityMenu.hidden=!willOpen;cityButton.setAttribute('aria-expanded',String(willOpen));teaser.hidden=true});
-  const CITY_INFO={'New York City':{key:'nyc',short:'NYC'},'Miami':{key:'miami',short:'MIA'}};
+  const CITY_INFO={'New York City':{key:'nyc',short:'NYC',hello:'NYC'},'Miami':{key:'miami',short:'MIA',hello:'Miami'}};
   const CITY_BY_KEY={nyc:'New York City',miami:'Miami'};
 /* ---- site location: ask only once, always open on the user's city ---- */
 const GEO_ASKED_KEY='souvs-geo-asked',GEO_OK_KEY='souvs-geo-ok';
@@ -2831,7 +2831,7 @@ function autoSelectCityFromLocation(){
   });
 }const LOGO_SRC=(document.querySelector('img.logo')||{src:''}).src;
   function cityGuides(){return Object.entries(guides).filter(([k,g])=>(g.city||'nyc')===currentCity).map(([k])=>k);}
-  function applyCityCopy(){const mi=currentCity==='miami';const hh=document.getElementById('heroHello');if(hh){const ci=CITY_INFO[CITY_BY_KEY[currentCity]];hh.textContent=t('hero_hello')+', '+(ci?ci.short:currentCity)}const hs=document.getElementById('heroSub');if(hs)hs.textContent=t(mi?'hero_sub_miami':'hero_sub');const ct=document.getElementById('chatTitle');if(ct)ct.textContent=t(mi?'chat_title_miami':'chat_title');document.title=mi?'Souvs \u2014 Miami':'Souvs \u2014 NYC';}
+  function applyCityCopy(){const mi=currentCity==='miami';const hh=document.getElementById('heroHello');if(hh){const ci=CITY_INFO[CITY_BY_KEY[currentCity]];hh.textContent=t('hero_hello')+', '+(ci?(ci.hello||ci.short):currentCity)}const hs=document.getElementById('heroSub');if(hs)hs.textContent=t(mi?'hero_sub_miami':'hero_sub');const ct=document.getElementById('chatTitle');if(ct)ct.textContent=t(mi?'chat_title_miami':'chat_title');document.title=mi?'Souvs \u2014 Miami':'Souvs \u2014 NYC';}
     function switchCity(cityName){const info=CITY_INFO[cityName];if(!info)return;currentCity=info.key;document.documentElement.dataset.city=currentCity;try{localStorage.setItem('souvs-city',currentCity)}catch(e){}const lbl=document.getElementById('cityLabel');if(lbl)lbl.textContent=info.short;$$('.city-option').forEach(o=>{const active=o.dataset.live&&CITY_INFO[o.dataset.city]&&CITY_INFO[o.dataset.city].key===currentCity;o.querySelectorAll('.cur-ind,.cur-check').forEach(el=>{el.hidden=!active})});const inCity=cityGuides();if(!inCity.includes(currentGuide))currentGuide=inCity[0];const hp=document.getElementById('heroPick');if(hp)hp.dataset.openGuide=inCity[0];cityMenu.hidden=true;cityButton.setAttribute('aria-expanded','false');applyCityCopy();syncCityCards();renderChat();renderChoices();dealReset();if(window.renderHomeEvents)window.renderHomeEvents();}
   $$('.city-option').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.live){switchCity(b.dataset.city);return}const city=b.dataset.city;$('#teaserTitle').textContent=t('city_teaser_title',{city});teaser.hidden=false;$('#notifyButton').dataset.city=city}));
   $('#notifyButton').addEventListener('click',e=>{$('#signupCity').value=e.currentTarget.dataset.city;cityMenu.hidden=true;cityButton.setAttribute('aria-expanded','false');go('signup')});
