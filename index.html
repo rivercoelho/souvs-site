@@ -169,7 +169,7 @@ body.redeeming .app{display:none}
   <main>
     <section class="view active" id="homeView" data-view="home">
       <section class="hero">
-        <div class="hero-copy"><p class="hero-hello" id="heroHello">hello, NYC</p><h1 data-i18n="hero_title">Explore the city<br>with a local friend.</h1><p class="hero-sub" id="heroSub"></p><div class="hero-actions"><button class="primary" data-go="profile" data-i18n="hero_join">Join us</button><button class="primary" id="heroPick" data-open-guide="scurry" data-i18n="hero_pick">pick a guide</button></div></div>
+        <div class="hero-copy"><p class="hero-hello" id="heroHello">hello, NYC</p><p class="hero-sub" id="heroSub"></p><div class="hero-actions"><button class="primary" data-go="profile" data-i18n="hero_join">Join us</button><button class="primary" id="heroPick" data-open-guide="scurry" data-i18n="hero_pick">pick a guide</button></div></div>
         
       </section>
       <section class="guide-section">
@@ -387,7 +387,6 @@ en:{
   city_teaser: "It’s coming soon. Join the waitlist and we’ll email you when the crew lands.",
   city_teaser_title: "The crew hasn’t landed in {city} yet.",
   notify_me: "Notify me",
-  hero_title: "Explore the city<br>with a local friend.",
   hero_hello: "hello",
   hero_sub: "let the coolest New Yorkers show you around",
   hero_sub_miami: "let the coolest Miami locals show you around",
@@ -874,7 +873,6 @@ es:{
   city_teaser: "Llegará pronto. Únete a la lista de espera y te avisaremos por correo cuando el equipo aterrice.",
   city_teaser_title: "El equipo aún no ha llegado a {city}.",
   notify_me: "Avísame",
-  hero_title: "Explora la ciudad<br>con un amigo local.",
   hero_hello: "hola",
   hero_sub: "deja que los neoyorquinos más cool te enseñen la ciudad",
   hero_sub_miami: "deja que los locales más cool de Miami te enseñen la ciudad",
@@ -1360,7 +1358,6 @@ pt:{
   city_teaser: "Está chegando. Entre na lista de espera e te avisamos por e-mail quando a turma desembarcar.",
   city_teaser_title: "A turma ainda não desembarcou em {city}.",
   notify_me: "Me avise",
-  hero_title: "Explore a cidade<br>com um amigo local.",
   hero_hello: "olá",
   hero_sub: "deixe os nova-iorquinos mais legais te mostrarem a cidade",
   hero_sub_miami: "deixe os locais mais legais de Miami te mostrarem a cidade",
@@ -1847,7 +1844,6 @@ fr:{
   city_teaser: "Ça arrive bientôt. Rejoignez la liste d’attente et on vous écrira quand l’équipe débarque.",
   city_teaser_title: "L’équipe n’a pas encore débarqué à {city}.",
   notify_me: "Prévenez-moi",
-  hero_title: "Explorez la ville<br>avec un ami local.",
   hero_hello: "bonjour",
   hero_sub: "laissez les New-Yorkais les plus cool vous faire visiter",
   hero_sub_miami: "laissez les locaux les plus cool de Miami vous faire visiter",
@@ -2334,7 +2330,6 @@ de:{
   city_teaser: "Kommt bald. Tragen Sie sich in die Warteliste ein und wir mailen Ihnen, wenn die Crew landet.",
   city_teaser_title: "Die Crew ist in {city} noch nicht gelandet.",
   notify_me: "Benachrichtige mich",
-  hero_title: "Entdecke die Stadt<br>mit einem Freund vor Ort.",
   hero_hello: "hallo",
   hero_sub: "lass dich von den coolsten New Yorkern herumführen",
   hero_sub_miami: "lass dich von den coolsten Miami-Locals herumführen",
@@ -2736,7 +2731,7 @@ let lang="en";
 try{const _sl=localStorage.getItem("souvs-lang");if(_sl&&I18N[_sl])lang=_sl;}catch(e){}
 function t(key,vars){let s=(I18N[lang]&&I18N[lang][key]!=null)?I18N[lang][key]:((I18N.en&&I18N.en[key]!=null)?I18N.en[key]:key);s=String(s);if(vars){for(const k in vars)s=s.split("{"+k+"}").join(vars[k]);}return s;}
 window.__i18nAttrs=function(){
-  document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.getAttribute("data-i18n");if(k==="hero_title"){el.innerHTML=t(k);}else{el.textContent=t(k);}});
+  document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=t(el.getAttribute("data-i18n"));});
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>{el.setAttribute("placeholder",t(el.getAttribute("data-i18n-ph")));});
   document.querySelectorAll("[data-i18n-aria]").forEach(el=>{el.setAttribute("aria-label",t(el.getAttribute("data-i18n-aria")));});
   document.querySelectorAll("[data-i18n-alt]").forEach(el=>{el.setAttribute("alt",t(el.getAttribute("data-i18n-alt")));});
