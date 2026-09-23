@@ -361,6 +361,18 @@ exports.handler = async (event) => {
     return ok({ ok: true, travelers: cards.slice(0, 50) }, headers);
   }
 
+  // ---- get one public profile (shared profile links) ----
+  if (action === "get") {
+    if (throttle(`get:${ip}`, 30, 10 * 60 * 1000)) return bad(429, "slow down", headers);
+    const target = String(body.target || "");
+    if (!UID_RE.test(target)) return bad(400, "bad target", headers);
+    const card = await getCard(store, target);
+    if (!card) return bad(404, "not found", headers);
+    if (card.openTo && !card.openTo.travelers && !card.openTo.friends) return bad(404, "not found", headers);
+    if (await blockedEither(store, userId, target)) return bad(404, "not found", headers);
+    return ok({ ok: true, card: publicCard(card) }, headers);
+  }
+
   // ---- get-or-create thread ----
   if (action === "thread") {
     const otherId = String(body.otherId || "");

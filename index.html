@@ -308,7 +308,7 @@ en:{
   events_see_all: "See all events \u2192",
   events_empty: "No events here yet \u2014 check back soon.",
   events_loading: "Loading events\u2026",
-  ev_join: "Are you going?",
+  ev_join: "I\u2019m going!",
   ev_joined: "I'm going \u2713",
   ev_more: "Learn more",
   ev_going_none: "Be the first to say you're going",
@@ -647,6 +647,11 @@ en:{
   profile_no_sub: "Post your profile to meet travelers and make friends around the city.",
   profile_create: "Create your profile",
   profile_edit: "Edit your profile",
+  profile_share: "Share profile",
+  profile_share_text: "Meet {name} on Souvs",
+  profile_link_copied: "Profile link copied.",
+  profile_link_copy_fail: "Couldn't copy the link.",
+  profile_link_invalid: "That profile link didn't work.",
   form_create: "Your profile",
   form_edit: "Your profile",
   form_save: "Post my profile",
@@ -790,7 +795,7 @@ es:{
   events_see_all: "Ver todos los eventos \u2192",
   events_empty: "A\u00fan no hay eventos \u2014 vuelve pronto.",
   events_loading: "Cargando eventos\u2026",
-  ev_join: "\u00bfVas a ir?",
+  ev_join: "\u00a1Voy!",
   ev_joined: "Voy \u2713",
   ev_more: "M\u00e1s informaci\u00f3n",
   ev_going_none: "S\u00e9 la primera persona en decir que va",
@@ -1129,6 +1134,11 @@ es:{
   profile_no_sub: "Publica tu perfil para conocer viajeros y hacer amigos en la ciudad.",
   profile_create: "Crear mi perfil",
   profile_edit: "Editar mi perfil",
+  profile_share: "Compartir perfil",
+  profile_share_text: "Conoce a {name} en Souvs",
+  profile_link_copied: "Enlace del perfil copiado.",
+  profile_link_copy_fail: "No se pudo copiar el enlace.",
+  profile_link_invalid: "Ese enlace de perfil no funciona.",
   form_create: "Tu perfil",
   form_edit: "Tu perfil",
   form_save: "Publicar mi perfil",
@@ -1271,7 +1281,7 @@ pt:{
   events_see_all: "Ver todos os eventos \u2192",
   events_empty: "Nenhum evento por aqui ainda \u2014 volte em breve.",
   events_loading: "Carregando eventos\u2026",
-  ev_join: "Voc\u00ea vai?",
+  ev_join: "Vou!",
   ev_joined: "Vou \u2713",
   ev_more: "Saiba mais",
   ev_going_none: "Seja a primeira pessoa a dizer que vai",
@@ -1610,6 +1620,11 @@ pt:{
   profile_no_sub: "Publique seu perfil para conhecer viajantes e fazer amigos pela cidade.",
   profile_create: "Criar meu perfil",
   profile_edit: "Editar meu perfil",
+  profile_share: "Compartilhar perfil",
+  profile_share_text: "Conheça {name} no Souvs",
+  profile_link_copied: "Link do perfil copiado.",
+  profile_link_copy_fail: "Não foi possível copiar o link.",
+  profile_link_invalid: "Esse link de perfil não funcionou.",
   form_create: "Seu perfil",
   form_edit: "Seu perfil",
   form_save: "Publicar meu perfil",
@@ -1753,7 +1768,7 @@ fr:{
   events_see_all: "Voir tous les \u00e9v\u00e9nements \u2192",
   events_empty: "Pas encore d'\u00e9v\u00e9nements ici \u2014 revenez bient\u00f4t.",
   events_loading: "Chargement des \u00e9v\u00e9nements\u2026",
-  ev_join: "Vous y allez ?",
+  ev_join: "J\u2019y vais !",
   ev_joined: "J'y vais \u2713",
   ev_more: "En savoir plus",
   ev_going_none: "Soyez le premier \u00e0 dire que vous y allez",
@@ -2092,6 +2107,11 @@ fr:{
   profile_no_sub: "Publiez votre profil pour rencontrer des voyageurs et vous faire des amis en ville.",
   profile_create: "Créer mon profil",
   profile_edit: "Modifier mon profil",
+  profile_share: "Partager le profil",
+  profile_share_text: "Rencontrez {name} sur Souvs",
+  profile_link_copied: "Lien du profil copié.",
+  profile_link_copy_fail: "Impossible de copier le lien.",
+  profile_link_invalid: "Ce lien de profil ne fonctionne pas.",
   form_create: "Votre profil",
   form_edit: "Votre profil",
   form_save: "Publier mon profil",
@@ -2235,7 +2255,7 @@ de:{
   events_see_all: "Alle Events ansehen \u2192",
   events_empty: "Noch keine Events hier \u2014 schau bald wieder vorbei.",
   events_loading: "Events werden geladen\u2026",
-  ev_join: "Gehst du hin?",
+  ev_join: "Ich gehe hin!",
   ev_joined: "Ich gehe hin \u2713",
   ev_more: "Mehr erfahren",
   ev_going_none: "Sag als Erster, dass du hingehst",
@@ -2574,6 +2594,11 @@ de:{
   profile_no_sub: "Poste dein Profil, um Reisende zu treffen und Freunde in der Stadt zu finden.",
   profile_create: "Mein Profil erstellen",
   profile_edit: "Mein Profil bearbeiten",
+  profile_share: "Profil teilen",
+  profile_share_text: "Triff {name} auf Souvs",
+  profile_link_copied: "Profil-Link kopiert.",
+  profile_link_copy_fail: "Link konnte nicht kopiert werden.",
+  profile_link_invalid: "Dieser Profil-Link funktioniert nicht.",
   form_create: "Dein Profil",
   form_edit: "Dein Profil",
   form_save: "Mein Profil posten",
@@ -2933,6 +2958,8 @@ function syncCityCards(){$$('.guide-card[data-city]').forEach(c=>{c.hidden=c.dat
 .profile-card p{margin:6px 0;color:var(--muted);font-size:14px}
 .pref-badges{font-size:13px;font-weight:800;color:var(--pink-dark)}
 .profile-card .secondary{margin-top:10px}
+.profile-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.profile-actions .secondary{margin-top:0}
 .profile-prefs{display:grid;gap:10px;padding:20px;border-radius:22px;background:var(--surface-faint)}
 .profile-prefs h3{margin:0;color:var(--ink);font-size:18px}
 .profile-travelers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:2px}
@@ -3598,9 +3625,10 @@ function renderProfile(){
       +'<p class="pref-badges">'+esc(ph.length?t("open_to",{list:ph.join(" \u00b7 ")}):t("profile_open_none"))+'</p>'
       +socialsHtml(me.socials)
       +'<p class="pref-badges" id="accessLine"></p>'
-      +'<button class="secondary" id="profileEdit" type="button" data-i18n="profile_edit">Edit your profile</button></div>';
+      +'<div class="profile-actions"><button class="secondary" id="profileEdit" type="button" data-i18n="profile_edit">Edit your profile</button><button class="secondary" id="profileShare" type="button" data-i18n="profile_share">Share profile</button></div></div>';
     wireSocials(wrap);
     $("#profileEdit").addEventListener("click",editCard);
+    $("#profileShare").addEventListener("click",shareProfile);
     (function(){
       var line=$("#accessLine");if(!line)return;
       if(me.kind==="local"){line.textContent=t("pay_local_free");return}
@@ -3630,6 +3658,41 @@ if(_pf)_pf.addEventListener("change",function(){getOpenTo().friends=this.checked
 var _pn=$("#prefNotify");
 if(_pn)_pn.addEventListener("change",function(){setNotify(this.checked)});
 window.renderProfile=renderProfile;
+
+/* ---- share profile link ---- */
+function profileLink(){
+  var base="https://souvs.shop/";
+  try{if(location.origin&&location.pathname)base=location.origin+location.pathname}catch(e){}
+  return base+"?profile="+encodeURIComponent(me.id);
+}
+function legacyCopy(text){
+  try{
+    var ta=document.createElement("textarea");ta.value=text;ta.style.cssText="position:fixed;opacity:0";
+    document.body.appendChild(ta);ta.select();
+    var ok=document.execCommand("copy");document.body.removeChild(ta);return !!ok;
+  }catch(e){return false}
+}
+function copyLink(text){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(text).then(function(){return true},function(){return legacyCopy(text)});
+  }
+  return Promise.resolve(legacyCopy(text));
+}
+function shareProfile(){
+  if(!me||!me.name){toast(t("toast_need_profile"));revealCardForm();return}
+  var url=profileLink();
+  if(navigator.share){
+    navigator.share({title:"Souvs",text:t("profile_share_text",{name:me.name}),url:url}).catch(function(){});
+    return;
+  }
+  copyLink(url).then(function(ok){toast(t(ok?"profile_link_copied":"profile_link_copy_fail"))});
+}
+function openSharedProfile(uid){
+  api("get",{target:uid}).then(function(r){
+    if(r&&r.card)openPerson(r.card);
+    else toast(t("profile_link_invalid"));
+  });
+}
 
 /* ---- boot ---- */
 
@@ -3863,6 +3926,7 @@ if(_avf)_avf.addEventListener("change",function(){
 if(_avr)_avr.addEventListener("click",function(){avatarPending=null;avatarPresetSel=null;renderAvatarPresets();avatarRemove=true;if(_avf)_avf.value="";refreshAvatarPrev()});
 avatarPresetSel=(me.avatarPreset!=null?me.avatarPreset:null);renderAvatarPresets();refreshAvatarPrev();
 renderProfile();
+(function(){var pid=null;try{pid=new URLSearchParams(location.search).get("profile")}catch(e){}if(pid)openSharedProfile(pid)})();
 window.__meetRetrans=function(){syncCardFormMode();refreshAvatarPrev();renderProfile();if(typeof window.__i18nAttrs==="function")window.__i18nAttrs();if(travelersLoaded&&lastTravelers){renderTravelers(lastTravelers);renderAroundGrids();}if(personData&&currentView()==="person"){renderPersonCard();}refreshThreads();};
 applyI18n();
 autoSelectCityFromLocation();
