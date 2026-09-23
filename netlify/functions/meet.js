@@ -9,6 +9,7 @@
 //             JPEG; client resizes to <=256px). Empty data removes the photo.
 //   GET ?action=avatar&userId=... -> serves the profile photo (image/jpeg)
 //   travelers { userId, lat?, lng? }                   -> list live profiles, nearest first
+//   get       { userId, target }                        -> one public profile by userId or username
 //   remove    { userId }                                -> delete profile + photo
 //   thread    { userId, otherId }                    -> get-or-create thread
 //   threads   { userId }                             -> my threads w/ preview
@@ -33,6 +34,10 @@ const TAGS = [
 ];
 const REASONS = ["spam", "harassment", "inappropriate", "scam", "other"];
 const UID_RE = /^[A-Za-z0-9_-]{8,64}$/;
+// vanity username slug for profile links: lowercase alphanumeric, from the display name
+const slugify = (s) =>
+  String(s || "").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "").slice(0, 24);
 const NAME_RE = /^[A-Za-z0-9 _.'-]{1,24}$/;
 const HANDLE_RE = /^[A-Za-z0-9._-]{1,30}$/;
 const CARD_TTL_MS = 14 * 24 * 3600 * 1000;
@@ -135,6 +140,7 @@ const publicCard = (c) =>
   c
     ? {
         userId: c.userId,
+        username: c.username || "",
         name: c.name,
         kind: c.kind,
         tag: c.tag,
@@ -277,6 +283,21 @@ exports.handler = async (event) => {
     } else if (prev) {
       card.avatarPreset = prev.avatarPreset != null ? prev.avatarPreset : null;
     }
+    // vanity username for profile links (www.souvs.shop/<username>): assigned once, then stable
+    let username = (prev && prev.username) || "";
+    if (!username) {
+      const base = slugify(name) || ("user" + Math.random().toString(36).slice(2, 6));
+      username = base;
+      const listed = await store.list({ prefix: "traveler/" }).catch(() => ({ blobs: [] }));
+      const taken = new Set();
+      for (const b of (listed.blobs || []).slice(0, 500)) {
+        if (b.key === `traveler/${userId}.json`) continue;
+        const oc = await store.get(b.key, { type: "json" }).catch(() => null);
+        if (oc && oc.username) taken.add(oc.username);
+      }
+      for (let n = 1; taken.has(username); n++) username = base + n;
+    }
+    card.username = username;
     await store.setJSON(`traveler/${userId}.json`, card);
     return ok({ ok: true, card: publicCard(card) }, headers);
   }
@@ -361,15 +382,26 @@ exports.handler = async (event) => {
     return ok({ ok: true, travelers: cards.slice(0, 50) }, headers);
   }
 
-  // ---- get one public profile (shared profile links) ----
+  // ---- get one public profile by userId or username (shared profile links) ----
   if (action === "get") {
     if (throttle(`get:${ip}`, 30, 10 * 60 * 1000)) return bad(429, "slow down", headers);
-    const target = String(body.target || "");
-    if (!UID_RE.test(target)) return bad(400, "bad target", headers);
-    const card = await getCard(store, target);
+    const target = String(body.target || "").slice(0, 64);
+    if (!target) return bad(400, "bad target", headers);
+    let card = null;
+    if (UID_RE.test(target)) card = await getCard(store, target);
+    if (!card) {
+      const uname = slugify(target);
+      if (uname) {
+        const listed = await store.list({ prefix: "traveler/" }).catch(() => ({ blobs: [] }));
+        for (const b of (listed.blobs || []).slice(0, 500)) {
+          const c = await store.get(b.key, { type: "json" }).catch(() => null);
+          if (c && (c.username || "") === uname) { card = c; break; }
+        }
+      }
+    }
     if (!card) return bad(404, "not found", headers);
     if (card.openTo && !card.openTo.travelers && !card.openTo.friends) return bad(404, "not found", headers);
-    if (await blockedEither(store, userId, target)) return bad(404, "not found", headers);
+    if (await blockedEither(store, userId, card.userId)) return bad(404, "not found", headers);
     return ok({ ok: true, card: publicCard(card) }, headers);
   }
 

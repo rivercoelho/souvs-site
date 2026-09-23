@@ -1,3 +1,10 @@
 [build]
   publish = "."
   functions = "netlify/functions"
+
+# pretty profile links: www.souvs.shop/<username> serves the SPA (200 rewrite,
+# browser URL stays). Non-forced, so real files (qr.min.js, manifest, …) win.
+[[redirects]]
+  from = "/:username"
+  to = "/index.html"
+  status = 200

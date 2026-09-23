@@ -94,6 +94,7 @@ exports.handler = async (event) => {
         status,
         title: cpn ? cpn.title : "",
         biz: cpn ? cpn.biz : "",
+        perkId: cpn && cpn.perkId ? cpn.perkId : "",
         code,
       }),
     };
