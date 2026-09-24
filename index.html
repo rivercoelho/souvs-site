@@ -2984,7 +2984,7 @@ function syncCityCards(){$$('.guide-card[data-city]').forEach(c=>{c.hidden=c.dat
 .avatar-preset img{width:100%;height:100%;object-fit:contain;display:block;border-radius:50%}
 .avatar-preset.sel{border-color:var(--pink-dark);background:#fff}
 .avatar-rm{background:none;border:0;padding:0;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
-.event-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}.ev-card{padding:22px;border-radius:22px;background:var(--surface-faint);display:flex;flex-direction:column;gap:8px}.ev-card h3{margin:0;font-size:20px}.ev-top{display:flex;gap:8px;flex-wrap:wrap}.ev-com,.ev-freq{font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--violet);color:var(--navy)}.ev-freq{background:rgba(191,232,244,.5)}.ev-sched{margin:0;font-size:13px;font-weight:800}.ev-desc{margin:0;font-size:14px;color:var(--muted)}.ev-going{margin-top:6px}.ev-going.none{color:var(--muted);font-size:13px}.ev-chips{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}.ev-chip{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;font-weight:900}.ev-chip-link{display:inline-flex;border-radius:50%;text-decoration:none;cursor:pointer}.ev-chip-link:hover{outline:2px solid var(--pink);outline-offset:2px}.ev-more{align-self:center;font-size:12px;font-weight:800;color:var(--muted)}.ev-going p{margin:0;font-size:13px;color:var(--muted)}.ev-going .ev-who{margin:6px 0;font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.ev-chip.ev-pic{object-fit:cover;padding:0}.ev-actions{margin-top:auto;display:flex;gap:12px;align-items:center;padding-top:8px}.ev-join.joined{background:#fff;color:#000}.ev-link{font-size:13px;font-weight:800;white-space:nowrap}@media(max-width:880px){.event-grid{grid-template-columns:1fr}}.pref-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #e6e6ee;border-radius:16px;background:#fff;cursor:pointer}
+.event-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}.ev-card{padding:22px;border-radius:22px;background:var(--surface-faint);display:flex;flex-direction:column;gap:8px}.ev-card h3{margin:0;font-size:20px}.ev-top{display:flex;gap:8px;flex-wrap:wrap}.ev-com,.ev-freq{font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--violet);color:var(--navy)}.ev-freq{background:rgba(191,232,244,.5)}.ev-sched{margin:0;font-size:13px;font-weight:800}.ev-desc{margin:0;font-size:14px;color:var(--muted)}.ev-going{margin-top:6px}.ev-going.none{color:var(--muted);font-size:13px}.ev-chips{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}.ev-chip{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;font-weight:900}.ev-chip-link{display:inline-flex;border-radius:50%;text-decoration:none;cursor:pointer}#souvBlock{display:none}.ev-chip-link:hover{outline:2px solid var(--pink);outline-offset:2px}.ev-more{align-self:center;font-size:12px;font-weight:800;color:var(--muted)}.ev-going p{margin:0;font-size:13px;color:var(--muted)}.ev-going .ev-who{margin:6px 0;font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.ev-chip.ev-pic{object-fit:cover;padding:0}.ev-actions{margin-top:auto;display:flex;gap:12px;align-items:center;padding-top:8px}.ev-join.joined{background:#fff;color:#000}.ev-link{font-size:13px;font-weight:800;white-space:nowrap}@media(max-width:880px){.event-grid{grid-template-columns:1fr}}.pref-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #e6e6ee;border-radius:16px;background:#fff;cursor:pointer}
 .pref-text{flex:1;display:grid;gap:2px}
 .pref-text strong{font-size:15px;color:var(--ink)}
 .pref-text span{font-size:13px;opacity:.65}
@@ -3126,19 +3126,11 @@ function claimFreeWeek(e){
   });
 }
 function closePaywall(){var o=$("#payOverlay");if(o)o.hidden=true}
-/* paywall no longer blocks the Mystery Box: only the Local deals block is gated */
+/* paywall DEACTIVATED 2026-09-24: Local deals open for everyone. To reactivate, restore the veil logic below. */
 function refreshDealsLock(){
   var deals=$('#dealsBlock');if(!deals)return Promise.resolve(true);
   var old=deals.querySelector('.lock-veil');if(old)old.remove();
-  if(me.kind==='local')return Promise.resolve(true);
-  return hasAccess().then(function(ok){
-    if(ok)return true;
-    var veil=document.createElement('div');veil.className='lock-veil';
-    veil.innerHTML='<p data-i18n="pay_deals_locked">'+t('pay_deals_locked')+'</p><button class="primary" type="button">'+t('pay_deals_unlock')+'</button>';
-    deals.appendChild(veil);
-    veil.querySelector('button').addEventListener('click',openPaywall);
-    return false;
-  });
+  return Promise.resolve(true);
 }
 function paywallOnPerks(){refreshDealsLock()}
 window.paywallOnPerks=paywallOnPerks; window.refreshDealsLock=refreshDealsLock;
