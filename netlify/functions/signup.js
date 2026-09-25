@@ -5,6 +5,7 @@
 
 const crypto = require("crypto");
 const { getStore } = require("@netlify/blobs");
+const { sendWelcome } = require("./welcome-email");
 
 const CITIES = ["New York City", "Miami", "Chicago", "Los Angeles", "San Francisco"];
 const CRITTERS = ["scurry", "rico", "pip", "zippy", ""];
@@ -99,7 +100,19 @@ exports.handler = async (event) => {
       siteID: process.env.NETLIFY_SITE_ID,
       token: process.env.NETLIFY_BLOBS_TOKEN,
     });
+    const previous = await store.get(key, { type: "json" });
+    if (previous && previous.welcomeEmailSentAt) record.welcomeEmailSentAt = previous.welcomeEmailSentAt;
     await store.setJSON(key, record);
+    if (!record.welcomeEmailSentAt) {
+      try {
+        if (await sendWelcome({ email, name, kind: "signup" })) {
+          record.welcomeEmailSentAt = new Date().toISOString();
+          await store.setJSON(key, record);
+        }
+      } catch (err) {
+        console.error("Signup welcome email failed:", err);
+      }
+    }
   } catch (err) {
     return { statusCode: 500, headers, body: JSON.stringify({ error: "storage unavailable" }) };
   }
