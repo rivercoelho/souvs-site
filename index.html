@@ -99,6 +99,9 @@
 .person-chatbox{background:var(--surface-faint);border-radius:22px;padding:16px}
 .person-chatbox .muted{margin:0 0 10px;padding:0}
 .person-chatbox .chat-input{border-top:0;padding:0}
+.profile-contact{display:flex;justify-content:center;padding:20px 16px 28px}
+.profile-contact a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 18px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--navy);font-weight:800;text-decoration:none;text-align:center}
+.profile-contact a:hover,.profile-contact a:focus-visible{border-color:var(--navy);text-decoration:underline}
 .sent-badge{display:inline-flex;align-items:center;gap:6px;margin:0 0 10px;padding:7px 14px;border-radius:999px;background:#dcf3e5;color:#14663a;font-size:12.5px;font-weight:900}
 .sent-badge[hidden]{display:none}
 /* around-right-now profile links */
@@ -247,6 +250,7 @@ body.redeeming .app{display:none}
           <p class="meet-status" id="meetStatus">Finding travelers nearby…</p>
           <div class="profile-travelers" id="meetGrid">
           </section>
+        <div class="profile-contact"><a href="mailto:hello@souvs.shop"><span data-i18n="profile_contact">Contact</span>: hello@souvs.shop</a></div>
       </div>
     </section>
     <section class="view" id="personView" data-view="person">
@@ -632,6 +636,7 @@ en:{
   profile_eyebrow: "Your profile",
   profile_title: "You, out in the city.",
   profile_sub: "Your profile, and who can find you.",
+  profile_contact: "Contact",
   explore_eyebrow: "Explore together",
   explore_title: "Meet someone for the next stop.",
   filter_traveler: "Another traveler",
@@ -1128,6 +1133,7 @@ es:{
   profile_eyebrow: "Tu perfil",
   profile_title: "Tú, en la ciudad.",
   profile_sub: "Tu perfil, y quién puede encontrarte.",
+  profile_contact: "Contacto",
   explore_eyebrow: "Explora juntos",
   explore_title: "Conoce a alguien para la próxima parada.",
   filter_traveler: "Otro viajero",
@@ -1623,6 +1629,7 @@ pt:{
   profile_eyebrow: "Seu perfil",
   profile_title: "Você, pela cidade.",
   profile_sub: "Seu perfil, e quem pode te encontrar.",
+  profile_contact: "Contato",
   explore_eyebrow: "Explore junto",
   explore_title: "Conheça alguém pra próxima parada.",
   filter_traveler: "Outro viajante",
@@ -2119,6 +2126,7 @@ fr:{
   profile_eyebrow: "Votre profil",
   profile_title: "Vous, dans la ville.",
   profile_sub: "Votre profil, et qui peut vous trouver.",
+  profile_contact: "Contact",
   explore_eyebrow: "Explorez ensemble",
   explore_title: "Rencontrez quelqu’un pour la prochaine étape.",
   filter_traveler: "Un autre voyageur",
@@ -2615,6 +2623,7 @@ de:{
   profile_eyebrow: "Dein Profil",
   profile_title: "Du, draußen in der Stadt.",
   profile_sub: "Dein Profil, und wer dich finden kann.",
+  profile_contact: "Kontakt",
   explore_eyebrow: "Gemeinsam entdecken",
   explore_title: "Triff jemanden für den nächsten Stopp.",
   filter_traveler: "Ein anderer Reisender",
