@@ -1,1 +1,1 @@
-{"dependencies":{"@netlify/blobs":"^8.0.0","stripe":"^17.0.0"},"name":"souvs-site","private":true}
+{"dependencies":{"@netlify/blobs":"^8.0.0","nodemailer":"^7.0.0","stripe":"^17.0.0"},"name":"souvs-site","private":true}
