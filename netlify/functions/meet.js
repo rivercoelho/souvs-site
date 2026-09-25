@@ -20,6 +20,7 @@
 
 const crypto = require("crypto");
 const { getStore } = require("@netlify/blobs");
+const { sendWelcome } = require("./welcome-email");
 
 const KINDS = ["traveler", "local"];
 const TAGS = [
@@ -298,7 +299,18 @@ exports.handler = async (event) => {
       for (let n = 1; taken.has(username); n++) username = base + n;
     }
     card.username = username;
+    if (prev && prev.welcomeEmailSentAt) card.welcomeEmailSentAt = prev.welcomeEmailSentAt;
     await store.setJSON(`traveler/${userId}.json`, card);
+    if (card.email && !card.welcomeEmailSentAt) {
+      try {
+        if (await sendWelcome({ email: card.email, name: card.name, kind: "profile" })) {
+          card.welcomeEmailSentAt = new Date().toISOString();
+          await store.setJSON(`traveler/${userId}.json`, card);
+        }
+      } catch (err) {
+        console.error("Profile welcome email failed:", err);
+      }
+    }
     return ok({ ok: true, card: publicCard(card) }, headers);
   }
 
