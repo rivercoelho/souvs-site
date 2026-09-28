@@ -299,14 +299,18 @@ exports.handler = async (event) => {
     }
     card.username = username;
     await store.setJSON(`traveler/${userId}.json`, card);
+    // username index for the pretty-URL router (only real usernames resolve)
+    await store.setJSON(`usernames/${username}.json`, { userId });
     return ok({ ok: true, card: publicCard(card) }, headers);
   }
 
   // ---- delete profile ----
   if (action === "remove") {
     if (throttle(`rm:${ip}`, 5, 10 * 60 * 1000)) return bad(429, "slow down", headers);
+    const prevCard = await store.get(`traveler/${userId}.json`, { type: "json" }).catch(() => null);
     await store.delete(`traveler/${userId}.json`).catch(() => {});
     await store.delete(`avatar/${userId}.bin`).catch(() => {});
+    if (prevCard && prevCard.username) await store.delete(`usernames/${prevCard.username}.json`).catch(() => {});
     return ok({ ok: true }, headers);
   }
 
