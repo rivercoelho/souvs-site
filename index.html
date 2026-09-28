@@ -3067,8 +3067,8 @@ applyI18n();
   try{const sc=localStorage.getItem('souvs-city');if(sc==='nyc'||sc==='miami')currentCity=sc;}catch(e){}
   window.__getSouvsCity=function(){return currentCity};
   const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-  var VIEW_PATHS={home:"/",events:"/events",perks:"/deals",chat:"/chat",profile:"/profile"};
-  var PATH_VIEWS={"/":"home","/events":"events","/deals":"perks","/chat":"chat","/profile":"profile"};
+  var VIEW_PATHS={home:"/",events:"/events",perks:"/deals",chat:"/guides",profile:"/profile"};
+  var PATH_VIEWS={"/":"home","/events":"events","/deals":"perks","/guides":"chat","/profile":"profile"};
   var VIEW_SEO={
     home:{t:"Souvs — NYC & Miami AI City Guide | Events, Deals & Tours",d:"Souvs is the AI-powered city guide for NYC & Miami tourism. Find New York events, Miami events, local deals, happy hours and hidden spots. Chat with AI animal tour guides."},
     events:{t:"NYC & Miami Events — Souvs",d:"The best and most updated events in New York City and Miami: festivals, concerts, street fairs, stargazing, live music and more, picked by your AI city guide."},

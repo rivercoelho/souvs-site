@@ -15,7 +15,7 @@ import { getStore } from "@netlify/blobs";
 
 const SLUG_RE = /^[a-z0-9]{1,24}$/;
 // page URLs served by the SPA — never treated as usernames
-const PAGE_SLUGS = new Set(["events", "deals", "chat", "profile"]);
+const PAGE_SLUGS = new Set(["events", "deals", "guides", "profile"]);
 
 const NOT_FOUND_HTML = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8" />
@@ -54,6 +54,7 @@ export default async (req, context) => {
   // real files (anything with a dot) pass through to static hosting
   if (!seg || seg.includes(".") || seg.includes("/")) return context.next();
   const slug = seg.toLowerCase();
+  if (slug === "chat") return Response.redirect(new URL("/guides", req.url).toString(), 301);
   if (PAGE_SLUGS.has(slug)) return context.rewrite(new URL("/index.html", req.url));
   if (!SLUG_RE.test(slug)) return notFound();
   try {

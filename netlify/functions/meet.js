@@ -39,7 +39,7 @@ const slugify = (s) =>
   String(s || "").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "").slice(0, 24);
 const NAME_RE = /^[A-Za-z0-9 _.'-]{1,24}$/;
-const RESERVED_USERNAMES = ["events", "deals", "chat", "profile"];
+const RESERVED_USERNAMES = ["events", "deals", "guides", "profile", "chat"];
 const HANDLE_RE = /^[A-Za-z0-9._-]{1,30}$/;
 const CARD_TTL_MS = 14 * 24 * 3600 * 1000;
 const ONLINE_WINDOW_MS = 4 * 60 * 1000; // green "online" dot: seen in the last 4 minutes
