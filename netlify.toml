@@ -4,8 +4,7 @@
 
 # pretty profile links: www.souvs.shop/<username> serves the SPA (200 rewrite,
 # browser URL stays). Non-forced, so real files (qr.min.js, manifest, …) win.
-[[redirects]]
-  from = "/:username"
-  to = "/.netlify/functions/username-router?u=:username"
-  status = 200
+[[edge_functions]]
+  path = "/:username"
+  function = "username-router"
   # only real profile usernames resolve; everything else gets a 404 (SEO)
