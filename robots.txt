@@ -1,0 +1,5 @@
+User-agent: OAI-AdsBot
+Allow: /
+
+User-agent: *
+Allow: /
