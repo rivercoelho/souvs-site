@@ -3067,7 +3067,17 @@ applyI18n();
   try{const sc=localStorage.getItem('souvs-city');if(sc==='nyc'||sc==='miami')currentCity=sc;}catch(e){}
   window.__getSouvsCity=function(){return currentCity};
   const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-  function go(view){$$('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===view));$$('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===view));window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});if(view==='chat'){renderChat()}if(view==='profile'&&window.renderProfile)window.renderProfile();if(view==='perks')setTimeout(function(){if(window.paywallOnPerks)window.paywallOnPerks()},600);if(view==='events'&&window.renderEvents)window.renderEvents();updateInstallBanner();}
+  var VIEW_PATHS={home:"/",events:"/events",perks:"/deals",chat:"/chat",profile:"/profile"};
+  var PATH_VIEWS={"/":"home","/events":"events","/deals":"perks","/chat":"chat","/profile":"profile"};
+  var VIEW_SEO={
+    home:{t:"Souvs — NYC & Miami AI City Guide | Events, Deals & Tours",d:"Souvs is the AI-powered city guide for NYC & Miami tourism. Find New York events, Miami events, local deals, happy hours and hidden spots. Chat with AI animal tour guides."},
+    events:{t:"NYC & Miami Events — Souvs",d:"The best and most updated events in New York City and Miami: festivals, concerts, street fairs, stargazing, live music and more, picked by your AI city guide."},
+    perks:{t:"Local Deals in NYC & Miami — Souvs",d:"Check out the best local deals in NYC and Miami: happy hours, restaurant weeks, discounts and hidden gems, updated weekly."},
+    chat:{t:"Chat with AI City Guides — Souvs",d:"Chat with Souvs AI animal tour guides — Scurry, Rico, Pip and Zippy in NYC, Drift, Finn, Iggy and Swoop in Miami. Ask anything about the city."},
+    profile:{t:"Your Traveler Profile — Souvs",d:"Create your Souvs traveler profile, meet fellow travelers and new friends in NYC and Miami, and share your profile link."}
+  };
+  function go(view,push){$$('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===view));$$('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===view));window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});if(view==='chat'){renderChat()}if(view==='profile'&&window.renderProfile)window.renderProfile();if(view==='perks')setTimeout(function(){if(window.paywallOnPerks)window.paywallOnPerks()},600);if(view==='events'&&window.renderEvents)window.renderEvents();updateInstallBanner();var seo=VIEW_SEO[view],path=VIEW_PATHS[view];if(seo){document.title=seo.t;var md=document.querySelector('meta[name="description"]');if(md)md.setAttribute("content",seo.d);var ogt=document.querySelector('meta[property="og:title"]');if(ogt)ogt.setAttribute("content",seo.t);var ogd=document.querySelector('meta[property="og:description"]');if(ogd)ogd.setAttribute("content",seo.d);}if(path){var cn=document.querySelector('link[rel="canonical"]');if(cn)cn.setAttribute("href","https://souvs.shop"+path);if(push!==false){try{if(location.pathname!==path)history.pushState({view:view},"",path);}catch(e){}}}}
+  window.go=go;window.PATH_VIEWS=PATH_VIEWS;window.VIEW_PATHS=VIEW_PATHS;
 /* ---- install banner: add Souvs to the phone home screen ---- */
 var _deferredInstallPrompt=null;
 window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();_deferredInstallPrompt=e;});
@@ -4242,8 +4252,12 @@ if(_avr)_avr.addEventListener("click",function(){avatarPending=null;avatarPreset
 avatarPresetSel=(me.avatarPreset!=null?me.avatarPreset:null);renderAvatarPresets();refreshAvatarPrev();
 renderProfile();
 (function(){var pid=null;try{pid=new URLSearchParams(location.search).get("profile")}catch(e){}
-if(!pid){try{var m=location.pathname.replace(/^\/+|\/+$/g,"");if(m&&m.indexOf("/")<0&&m.toLowerCase()!=="index.html")pid=decodeURIComponent(m)}catch(e2){}}
+/* page URLs: /events /deals /chat /profile open their view directly */
+var pv=null;try{var seg=location.pathname.replace(/^\/+|\/+$/g,"").toLowerCase();pv=(window.PATH_VIEWS||{})[seg?"/"+seg:"/"]||null;}catch(e){}
+if(pv&&window.go){try{window.go(pv,false);}catch(e3){}}
+if(!pid&&!pv){try{var m=location.pathname.replace(/^\/+|\/+$/g,"");if(m&&m.indexOf("/")<0&&m.toLowerCase()!=="index.html")pid=decodeURIComponent(m)}catch(e2){}}
 if(pid)openSharedProfile(pid)})();
+window.addEventListener("popstate",function(){try{var seg=location.pathname.replace(/^\/+|\/+$/g,"").toLowerCase();var pv=(window.PATH_VIEWS||{})[seg?"/"+seg:"/"];if(pv&&window.go)window.go(pv,false);}catch(e){}});
 window.__meetRetrans=function(){syncCardFormMode();refreshAvatarPrev();renderProfile();if(typeof window.__i18nAttrs==="function")window.__i18nAttrs();if(travelersLoaded&&lastTravelers){renderTravelers(lastTravelers);renderAroundGrids();}if(personData&&currentView()==="person"){renderPersonCard();}refreshThreads();};
 applyI18n();
 autoSelectCityFromLocation();
