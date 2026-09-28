@@ -139,6 +139,34 @@ function corsHeaders(event) {
   };
 }
 
+// Rate limit: 20 AI replies per 60s per IP, per warm function instance.
+// The frontend falls back to canned guide replies on any non-OK response,
+// so a 429 degrades gracefully instead of breaking chat.
+const RL_WINDOW_MS = 60000;
+const RL_MAX = 20;
+const rlHits = new Map();
+function clientIp(event) {
+  const h = event.headers || {};
+  return (
+    h["x-nf-client-connection-ip"] ||
+    String(h["x-forwarded-for"] || "").split(",")[0].trim() ||
+    "unknown"
+  );
+}
+function overLimit(ip) {
+  const now = Date.now();
+  let rec = rlHits.get(ip);
+  if (!rec || now - rec.start > RL_WINDOW_MS) {
+    rec = { start: now, count: 0 };
+    rlHits.set(ip, rec);
+  }
+  rec.count += 1;
+  if (rlHits.size > 4000) {
+    for (const [k, v] of rlHits) if (now - v.start > RL_WINDOW_MS) rlHits.delete(k);
+  }
+  return rec.count > RL_MAX;
+}
+
 exports.handler = async (event) => {
   const headers = corsHeaders(event);
   if (event.httpMethod === "OPTIONS") {
@@ -146,6 +174,10 @@ exports.handler = async (event) => {
   }
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, headers, body: JSON.stringify({ error: "POST only" }) };
+  }
+
+  if (overLimit(clientIp(event))) {
+    return { statusCode: 429, headers, body: JSON.stringify({ error: "slow down" }) };
   }
 
   let body;

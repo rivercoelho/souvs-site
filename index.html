@@ -10,6 +10,14 @@
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="manifest" href="manifest.webmanifest" />
   <meta name="theme-color" content="#bfe8f4" />
+  <meta name="description" content="Souvs — explore NYC & Miami with AI animal tour guides. Chat with the local crew, find events, unbox surprise perks." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Souvs" />
+  <meta property="og:title" content="Souvs — explore the city with a local friend" />
+  <meta property="og:description" content="Chat with AI animal tour guides in NYC & Miami, find events and unbox surprise perks." />
+  <meta property="og:url" content="https://souvs.shop" />
+  <meta property="og:image" content="https://souvs.shop/icon-512.png" />
+  <meta name="twitter:card" content="summary" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -99,9 +107,6 @@
 .person-chatbox{background:var(--surface-faint);border-radius:22px;padding:16px}
 .person-chatbox .muted{margin:0 0 10px;padding:0}
 .person-chatbox .chat-input{border-top:0;padding:0}
-.profile-contact{display:flex;justify-content:center;padding:20px 16px 28px}
-.profile-contact a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 18px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--navy);font-weight:800;text-decoration:none;text-align:center}
-.profile-contact a:hover,.profile-contact a:focus-visible{border-color:var(--navy);text-decoration:underline}
 .sent-badge{display:inline-flex;align-items:center;gap:6px;margin:0 0 10px;padding:7px 14px;border-radius:999px;background:#dcf3e5;color:#14663a;font-size:12.5px;font-weight:900}
 .sent-badge[hidden]{display:none}
 /* around-right-now profile links */
@@ -250,7 +255,6 @@ body.redeeming .app{display:none}
           <p class="meet-status" id="meetStatus">Finding travelers nearby…</p>
           <div class="profile-travelers" id="meetGrid">
           </section>
-        <div class="profile-contact"><a href="mailto:hello@souvs.shop"><span data-i18n="profile_contact">Contact</span>: hello@souvs.shop</a></div>
       </div>
     </section>
     <section class="view" id="personView" data-view="person">
@@ -625,18 +629,20 @@ en:{
   signup_legend: "Most excited to meet",
   signup_optional: "optional",
   signup_honesty: "We’ll email you when your city opens.",
+  signup_honesty_live: "Get the city’s best drops, events and new guides by email.",
   signup_submit: "Notify me",
+  signup_submit_live: "Count me in",
   signup_joining: "Joining…",
   signup_error: "That did not go through — check your connection and try again.",
   confirm_eyebrow: "You’re on the list",
   confirm_title: "You’re in!",
   confirm_sub: "We’ll email you when your city opens. Your info stays with the Souvs crew.",
+  confirm_sub_live: "We’ll email you the city’s best drops, events and new guides. Your info stays with the Souvs crew.",
   confirm_back: "Back to the crew",
   confirm_alt: "Zippy celebrating",
   profile_eyebrow: "Your profile",
   profile_title: "You, out in the city.",
   profile_sub: "Your profile, and who can find you.",
-  profile_contact: "Contact",
   explore_eyebrow: "Explore together",
   explore_title: "Meet someone for the next stop.",
   filter_traveler: "Another traveler",
@@ -1122,18 +1128,20 @@ es:{
   signup_legend: "Más ganas de conocer a",
   signup_optional: "opcional",
   signup_honesty: "Te avisaremos por correo cuando tu ciudad abra.",
+  signup_honesty_live: "Recibe por correo lo mejor de la ciudad: eventos, novedades y nuevos guías.",
   signup_submit: "Avísame",
+  signup_submit_live: "Apúntame",
   signup_joining: "Uniéndome…",
   signup_error: "No se pudo enviar — revisa tu conexión e inténtalo de nuevo.",
   confirm_eyebrow: "Estás en la lista",
   confirm_title: "¡Listo!",
   confirm_sub: "Te avisaremos por correo cuando tu ciudad abra. Tu información se queda con el equipo Souvs.",
+  confirm_sub_live: "Te enviaremos por correo lo mejor de la ciudad: eventos, novedades y nuevos guías. Tu información se queda con el equipo Souvs.",
   confirm_back: "Volver al equipo",
   confirm_alt: "Zippy celebrando",
   profile_eyebrow: "Tu perfil",
   profile_title: "Tú, en la ciudad.",
   profile_sub: "Tu perfil, y quién puede encontrarte.",
-  profile_contact: "Contacto",
   explore_eyebrow: "Explora juntos",
   explore_title: "Conoce a alguien para la próxima parada.",
   filter_traveler: "Otro viajero",
@@ -1618,18 +1626,20 @@ pt:{
   signup_legend: "Mais animado pra conhecer",
   signup_optional: "opcional",
   signup_honesty: "Te avisaremos por e-mail quando sua cidade abrir.",
+  signup_honesty_live: "Receba por e-mail o melhor da cidade: eventos, novidades e novos guias.",
   signup_submit: "Me avise",
+  signup_submit_live: "Conta comigo",
   signup_joining: "Entrando…",
   signup_error: "Não foi — confira sua conexão e tente de novo.",
   confirm_eyebrow: "Você está na lista",
   confirm_title: "Você entrou!",
   confirm_sub: "Te avisaremos por e-mail quando sua cidade abrir. Suas informações ficam com a turma Souvs.",
+  confirm_sub_live: "Vamos te enviar por e-mail o melhor da cidade: eventos, novidades e novos guias. Suas informações ficam com a turma Souvs.",
   confirm_back: "Voltar pra turma",
   confirm_alt: "Zippy comemorando",
   profile_eyebrow: "Seu perfil",
   profile_title: "Você, pela cidade.",
   profile_sub: "Seu perfil, e quem pode te encontrar.",
-  profile_contact: "Contato",
   explore_eyebrow: "Explore junto",
   explore_title: "Conheça alguém pra próxima parada.",
   filter_traveler: "Outro viajante",
@@ -2115,18 +2125,20 @@ fr:{
   signup_legend: "Le plus impatient de rencontrer",
   signup_optional: "facultatif",
   signup_honesty: "On vous écrira quand votre ville ouvrira.",
+  signup_honesty_live: "Recevez par e-mail le meilleur de la ville : événements, nouveautés et nouveaux guides.",
   signup_submit: "Prévenez-moi",
+  signup_submit_live: "Je m’inscris",
   signup_joining: "Inscription…",
   signup_error: "Ça n’a pas marché — vérifiez votre connexion et réessayez.",
   confirm_eyebrow: "Vous êtes sur la liste",
   confirm_title: "C’est parti !",
   confirm_sub: "On vous écrira quand votre ville ouvrira. Vos infos restent avec l’équipe Souvs.",
+  confirm_sub_live: "On vous enverra par e-mail le meilleur de la ville : événements, nouveautés et nouveaux guides. Vos infos restent avec l’équipe Souvs.",
   confirm_back: "Retour à l’équipe",
   confirm_alt: "Zippy qui fête ça",
   profile_eyebrow: "Votre profil",
   profile_title: "Vous, dans la ville.",
   profile_sub: "Votre profil, et qui peut vous trouver.",
-  profile_contact: "Contact",
   explore_eyebrow: "Explorez ensemble",
   explore_title: "Rencontrez quelqu’un pour la prochaine étape.",
   filter_traveler: "Un autre voyageur",
@@ -2612,18 +2624,20 @@ de:{
   signup_legend: "Am meisten gespannt auf",
   signup_optional: "optional",
   signup_honesty: "Wir mailen dir, wenn deine Stadt öffnet.",
+  signup_honesty_live: "Erhalte per Mail das Beste der Stadt: Events, Neuigkeiten und neue Guides.",
   signup_submit: "Benachrichtige mich",
+  signup_submit_live: "Bin dabei",
   signup_joining: "Wird vorgemerkt…",
   signup_error: "Das hat nicht geklappt — prüf deine Verbindung und versuch es nochmal.",
   confirm_eyebrow: "Du bist auf der Liste",
   confirm_title: "Du bist dabei!",
   confirm_sub: "Wir mailen dir, wenn deine Stadt öffnet. Deine Infos bleiben bei der Souvs-Crew.",
+  confirm_sub_live: "Wir schicken dir per Mail das Beste der Stadt: Events, Neuigkeiten und neue Guides. Deine Infos bleiben bei der Souvs-Crew.",
   confirm_back: "Zurück zur Crew",
   confirm_alt: "Zippy feiert",
   profile_eyebrow: "Dein Profil",
   profile_title: "Du, draußen in der Stadt.",
   profile_sub: "Dein Profil, und wer dich finden kann.",
-  profile_contact: "Kontakt",
   explore_eyebrow: "Gemeinsam entdecken",
   explore_title: "Triff jemanden für den nächsten Stopp.",
   filter_traveler: "Ein anderer Reisender",
@@ -2907,7 +2921,10 @@ function autoSelectCityFromLocation(){
   function applyCityCopy(){const mi=currentCity==='miami';const hh=document.getElementById('heroHello');if(hh){const ci=CITY_INFO[CITY_BY_KEY[currentCity]];hh.textContent=t('hero_hello')+', '+(ci?(ci.hello||ci.short):currentCity)}const hs=document.getElementById('heroSub');if(hs)hs.textContent=t(mi?'hero_sub_miami':'hero_sub');const ct=document.getElementById('chatTitle');if(ct)ct.textContent=t(mi?'chat_title_miami':'chat_title');document.title=mi?'Souvs \u2014 Miami':'Souvs \u2014 NYC';}
     function switchCity(cityName){const info=CITY_INFO[cityName];if(!info)return;currentCity=info.key;document.documentElement.dataset.city=currentCity;try{localStorage.setItem('souvs-city',currentCity)}catch(e){}const lbl=document.getElementById('cityLabel');if(lbl)lbl.textContent=info.short;$$('.city-option').forEach(o=>{const active=o.dataset.live&&CITY_INFO[o.dataset.city]&&CITY_INFO[o.dataset.city].key===currentCity;o.querySelectorAll('.cur-ind,.cur-check').forEach(el=>{el.hidden=!active})});const inCity=cityGuides();if(!inCity.includes(currentGuide))currentGuide=inCity[0];const hp=document.getElementById('heroPick');if(hp)hp.dataset.openGuide=inCity[0];cityMenu.hidden=true;cityButton.setAttribute('aria-expanded','false');applyCityCopy();syncCityCards();renderChat();renderChoices();dealReset();if(window.renderHomeEvents)window.renderHomeEvents();}
   $$('.city-option').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.live){switchCity(b.dataset.city);return}const city=b.dataset.city;$('#teaserTitle').textContent=t('city_teaser_title',{city});teaser.hidden=false;$('#notifyButton').dataset.city=city}));
-  $('#notifyButton').addEventListener('click',e=>{$('#signupCity').value=e.currentTarget.dataset.city;cityMenu.hidden=true;cityButton.setAttribute('aria-expanded','false');go('signup')});
+  function isLiveCity(v){return v==='New York City'||v==='Miami'}
+  function syncSignupCopy(){const live=isLiveCity($('#signupCity').value);const h=document.querySelector('.form-honesty');h.setAttribute('data-i18n',live?'signup_honesty_live':'signup_honesty');h.textContent=t(live?'signup_honesty_live':'signup_honesty');const b=$('#signupForm button[type="submit"]');b.setAttribute('data-i18n',live?'signup_submit_live':'signup_submit');b.textContent=t(live?'signup_submit_live':'signup_submit')}
+  $('#signupCity').addEventListener('change',syncSignupCopy);
+  $('#notifyButton').addEventListener('click',e=>{$('#signupCity').value=e.currentTarget.dataset.city;cityMenu.hidden=true;cityButton.setAttribute('aria-expanded','false');syncSignupCopy();go('signup')});
   document.addEventListener('click',e=>{if(!e.target.closest('.city-switcher')){cityMenu.hidden=true;cityButton.setAttribute('aria-expanded','false')}});
 function syncCityCards(){$$('.guide-card[data-city]').forEach(c=>{c.hidden=c.dataset.city!==currentCity});resetGuideSlideshow();}let guideSlideIdx=0,guideSlideTimer=null;function guideSlideCards(){return $$('.guide-card[data-city]').filter(c=>!c.hidden);}function showGuideSlide(i){const cards=guideSlideCards();if(!cards.length)return;guideSlideIdx=(i+cards.length)%cards.length;cards.forEach((c,k)=>c.classList.toggle('slide-on',k===guideSlideIdx));const dots=document.getElementById('guideDots');if(dots)Array.prototype.forEach.call(dots.children,(d,k)=>d.classList.toggle('on',k===guideSlideIdx));}function buildGuideDots(){const dots=document.getElementById('guideDots');if(!dots)return;dots.innerHTML='';guideSlideCards().forEach((c,k)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Show guide '+(k+1));b.addEventListener('click',()=>{showGuideSlide(k);restartGuideSlideshow();});dots.appendChild(b);});}function restartGuideSlideshow(){if(guideSlideTimer)clearInterval(guideSlideTimer);guideSlideTimer=setInterval(()=>{if(!document.hidden)showGuideSlide(guideSlideIdx+1);},4000);}function resetGuideSlideshow(){buildGuideDots();showGuideSlide(0);restartGuideSlideshow();}(function(){const grid=document.getElementById('homeGuideGrid');if(!grid)return;let tx=null;grid.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});grid.addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;tx=null;if(Math.abs(dx)>40){showGuideSlide(guideSlideIdx+(dx<0?1:-1));restartGuideSlideshow();}},{passive:true});grid.addEventListener('pointerenter',()=>{if(guideSlideTimer){clearInterval(guideSlideTimer);guideSlideTimer=null;}});grid.addEventListener('pointerleave',()=>{restartGuideSlideshow();});})();
     function renderTabs(){const wrap=$('#guideTabs');wrap.innerHTML=Object.entries(guides).filter(([k,g])=>(g.city||'nyc')===currentCity).map(([k,g])=>`<button data-guide="${k}" class="${k===currentGuide?'active':''}"><img src="${g.face||g.image}" alt=""><span>${g.name}</span></button>`).join('');wrap.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{currentGuide=b.dataset.guide;renderChat()}));var _act=wrap.querySelector('button.active');if(_act)_act.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});}
@@ -2943,7 +2960,7 @@ function syncCityCards(){$$('.guide-card[data-city]').forEach(c=>{c.hidden=c.dat
   function renderWallet(){$('#walletCount').textContent=t('wallet_count',{n:wallet.length});const w=$('#walletContents');if(!wallet.length){w.className='empty-wallet';w.textContent=t('wallet_empty');return}w.className='wallet-grid';w.innerHTML=wallet.map(d=>{if(d.coupon){var pt=couponTitle(d);return `<article class="wallet-item coupon"><span>${t('perk_label')}</span><h3>${esc(pt.title)}</h3><p>${esc(pt.biz)}</p><div class="coupon-qr" data-code="${esc(d.code)}"></div><p class="coupon-code">${esc(d.code)}</p><p class="coupon-note">${t('coupon_scan')}</p><p class="coupon-exp">${t('coupon_valid_until',{date:fmtDate(d.expiresAt)})} · ${t('coupon_onetime')}</p></article>`}return `<article class="wallet-item"><span>${t('perk_label')}</span><h3>${esc(d.title)}</h3><p>${esc(d.business)}</p></article>`}).join('');
   w.querySelectorAll('.coupon-qr').forEach(function(el){drawQR(el,redeemURL(el.getAttribute('data-code')))})}
   function renderChoices(){const wrap=$('#guideChoice');wrap.innerHTML=Object.entries(guides).filter(([k,g])=>(g.city||'nyc')===currentCity).map(([k,g])=>`<label data-choice="${k}"><input type="radio" name="favorite" value="${k}"><img src="${g.image}" alt=""><span>${g.name.replace('Monsieur ','')}</span></label>`).join('');wrap.querySelectorAll('label').forEach(l=>l.addEventListener('click',()=>{favorite=l.dataset.choice;wrap.querySelectorAll('label').forEach(x=>x.classList.toggle('selected',x===l))}))}
-  $('#signupForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget;const btn=f.querySelector('button[type="submit"]');const prev=btn.textContent;btn.disabled=true;btn.textContent=t('signup_joining');const fav=f.querySelector('input[name="favorite"]:checked');const payload={name:$('#signupName').value.trim(),email:$('#signupEmail').value.trim(),city:$('#signupCity').value,critter:fav?fav.value:'',website:$('#signupWebsite').value};try{const r=await fetch('/.netlify/functions/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok)throw new Error(d.error||'signup failed');f.hidden=true;$('#signupConfirm').hidden=false}catch(err){btn.disabled=false;btn.textContent=prev;let n=$('#signupError');if(!n){n=document.createElement('p');n.id='signupError';n.setAttribute('role','alert');n.style.cssText='color:#b3261e;font-weight:600;margin-top:8px';f.appendChild(n)}n.textContent=t('signup_error')}});
+  $('#signupForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget;const btn=f.querySelector('button[type="submit"]');const prev=btn.textContent;btn.disabled=true;btn.textContent=t('signup_joining');const fav=f.querySelector('input[name="favorite"]:checked');const payload={name:$('#signupName').value.trim(),email:$('#signupEmail').value.trim(),city:$('#signupCity').value,critter:fav?fav.value:'',website:$('#signupWebsite').value};try{const r=await fetch('/.netlify/functions/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok)throw new Error(d.error||'signup failed');const ckey=isLiveCity(payload.city)?'confirm_sub_live':'confirm_sub';const cp=document.querySelector('#signupConfirm [data-i18n="confirm_sub"],#signupConfirm [data-i18n="confirm_sub_live"]');cp.setAttribute('data-i18n',ckey);cp.textContent=t(ckey);f.hidden=true;$('#signupConfirm').hidden=false}catch(err){btn.disabled=false;btn.textContent=prev;let n=$('#signupError');if(!n){n=document.createElement('p');n.id='signupError';n.setAttribute('role','alert');n.style.cssText='color:#b3261e;font-weight:600;margin-top:8px';f.appendChild(n)}n.textContent=t('signup_error')}});
   $$('[data-meet-filter]').forEach(button=>button.addEventListener('click',()=>{const kind=button.dataset.meetFilter;$$('[data-meet-filter]').forEach(b=>{const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});$$('[data-meet-kind]').forEach(card=>card.hidden=card.dataset.meetKind!==kind);$('#meetStatus').textContent=t('meet_finding');}));
   function showToast(text){const t=$('#toast');t.textContent=text;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
   switchCity(CITY_BY_KEY[currentCity]||'New York City');loadCoupons();renderWallet();
