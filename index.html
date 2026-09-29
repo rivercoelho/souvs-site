@@ -3116,9 +3116,17 @@ function getGeoOnce(){
   if(_geoOncePromise)return _geoOncePromise;
   _geoOncePromise=new Promise(function(res){
     if(!navigator.geolocation){res(null);return}
-    if(geoFlag(GEO_ASKED_KEY)&&!geoFlag(GEO_OK_KEY)){res(null);return}
+    if(geoFlag(GEO_ASKED_KEY)){
+      /* Already asked once: never trigger the browser location prompt again.
+         Reuse the cached coordinates (if any) for city + nearby sorting. */
+      try{
+        var la=parseFloat(localStorage.getItem('souvs-geo-lat')),lo=parseFloat(localStorage.getItem('souvs-geo-lng'));
+        if(isFinite(la)&&isFinite(lo)){res({lat:la,lng:lo});return}
+      }catch(e){}
+      res(null);return
+    }
     var done=false;
-    function fin(v,ok){if(done)return;done=true;setGeoFlag(GEO_ASKED_KEY);if(ok)setGeoFlag(GEO_OK_KEY);res(v)}
+    function fin(v,ok){if(done)return;done=true;setGeoFlag(GEO_ASKED_KEY);if(ok){setGeoFlag(GEO_OK_KEY);try{if(v){localStorage.setItem('souvs-geo-lat',String(v.lat));localStorage.setItem('souvs-geo-lng',String(v.lng))}}catch(e){}}res(v)}
     try{
       navigator.geolocation.getCurrentPosition(
         function(p){fin({lat:+p.coords.latitude.toFixed(4),lng:+p.coords.longitude.toFixed(4)},true)},
