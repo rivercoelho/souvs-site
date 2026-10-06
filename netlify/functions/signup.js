@@ -1,5 +1,5 @@
 // netlify/functions/signup.js
-// Souvs beta-signup backend. POST { name, email, city, critter } -> { ok: true }.
+// Souvs beta-signup backend. POST { name, email, city } -> { ok: true }.
 // Stores each signup as JSON in Netlify Blobs (store "souvs-signups").
 // No extra accounts or API keys needed: Blobs work automatically on Netlify.
 
@@ -7,7 +7,6 @@ const crypto = require("crypto");
 const { getStore } = require("@netlify/blobs");
 
 const CITIES = ["New York City", "Miami", "Chicago", "Los Angeles", "San Francisco"];
-const CRITTERS = ["scurry", "rico", "pip", "zippy", ""];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 // Light per-instance throttle: max 5 signups per IP per 10 minutes.
@@ -58,7 +57,6 @@ exports.handler = async (event) => {
   const name = String(body.name || "").trim().slice(0, 80);
   const email = String(body.email || "").trim().toLowerCase().slice(0, 254);
   const city = String(body.city || "");
-  const critter = String(body.critter || "");
 
   if (!name) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "name required" }) };
@@ -68,9 +66,6 @@ exports.handler = async (event) => {
   }
   if (!CITIES.includes(city)) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "unknown city" }) };
-  }
-  if (!CRITTERS.includes(critter)) {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: "unknown critter" }) };
   }
 
   const ip =
@@ -88,7 +83,7 @@ exports.handler = async (event) => {
     name,
     email,
     city,
-    critter: critter || null,
+    critter: null,
     createdAt: new Date().toISOString(),
     ip: ip || null,
   };
