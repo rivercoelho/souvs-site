@@ -82,7 +82,7 @@ async function sendWelcomeEmail(to) {
   const text =
     "Welcome to the crew!\n\n" +
     "Your first week of full Souvs access is activated. Here's what's waiting:\n" +
-    "- Chat with Scurry, Rico, Pip and Zippy, your local critter guides\n" +
+    "- Chat with Souvs, your AI city guide\n" +
     "- Unbox mystery perks: dinners, tickets and discounts around NYC\n" +
     "- Meet fellow travelers and locals\n\n" +
     "Open Souvs: https://souvs.shop\n\n" +
@@ -94,7 +94,7 @@ async function sendWelcomeEmail(to) {
     '<p style="margin:8px 0 0;font-size:16px">Your first week of full Souvs access is activated.</p></div>' +
     '<div style="padding:24px 28px;border:1px solid #eee;border-top:0;border-radius:0 0 16px 16px">' +
     "<p>Here's what's waiting for you:</p><ul>" +
-    "<li>Chat with <b>Scurry, Rico, Pip and Zippy</b> — your local critter guides</li>" +
+    "<li>Chat with <b>Souvs</b> — your AI city guide</li>" +
     "<li>Unbox <b>mystery perks</b>: dinners, tickets and discounts around NYC</li>" +
     "<li>Meet fellow travelers and locals</li></ul>" +
     '<p><a href="https://souvs.shop" style="display:inline-block;background:#22304a;color:#fff;' +
