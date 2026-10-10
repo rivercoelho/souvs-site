@@ -213,7 +213,7 @@ body.redeeming .app{display:none}
     <section class="view screen" id="chatView" data-view="chat">
       <div class="screen-head"><h1 id="chatTitle"></h1><p data-i18n="chat_sub">Ask about a route, food mood, park, or what to do next.</p><span class="pill-note" data-i18n="chat_live">Live AI guide</span></div>
       
-      <div class="chat-shell"><aside class="chat-profile blue" id="chatProfile"><img id="chatImage" src="souvs-logo.webp" alt="Souvs"/></aside><div class="chat-panel"><div class="chat-status"><div><strong id="statusName">Souvs</strong><span data-i18n="chat_ai_guide">AI guide</span></div></div><div class="messages" id="messages" aria-live="polite"></div><div class="typing" id="typing" hidden data-i18n-aria="chat_typing" aria-label="Guide is typing"><i></i><i></i><i></i></div><div class="suggestions" id="suggestions"></div><form class="composer" id="chatForm"><input id="chatInput" data-i18n-aria="chat_msg_label" aria-label="Message your guide" data-i18n-ph="chat_ask" placeholder="Ask Souvs…" maxlength="240"/><button type="submit" data-i18n="chat_send">Send</button></form></div></div>
+      <div class="chat-shell"><aside class="chat-profile blue" id="chatProfile"><img id="chatImage" src="img/souvs-mascot.webp" alt="Souvs"/></aside><div class="chat-panel"><div class="chat-status"><div><strong id="statusName">Souvs</strong><span data-i18n="chat_ai_guide">AI guide</span></div></div><div class="messages" id="messages" aria-live="polite"></div><div class="typing" id="typing" hidden data-i18n-aria="chat_typing" aria-label="Guide is typing"><i></i><i></i><i></i></div><div class="suggestions" id="suggestions"></div><form class="composer" id="chatForm"><input id="chatInput" data-i18n-aria="chat_msg_label" aria-label="Message your guide" data-i18n-ph="chat_ask" placeholder="Ask Souvs…" maxlength="240"/><button type="submit" data-i18n="chat_send">Send</button></form></div></div>
     </section>
 
     
@@ -2722,7 +2722,7 @@ applyI18n();
 <script src="qr.min.js"></script>
 <script>
   const guides={
-    souvs:{city:'nyc',name:'Souvs',roleKey:'role_souvs',color:'blue',image:'souvs-logo.webp',face:'souvs-logo.webp',reply(q){return t('souvs_fallback')}}
+    souvs:{city:'nyc',name:'Souvs',roleKey:'role_souvs',color:'blue',image:'img/souvs-mascot.webp',face:'img/souvs-mascot.webp',reply(q){return t('souvs_fallback')}}
   };
   
   function getDeals(){return[
