@@ -9,9 +9,10 @@
 //   freeweek { userId, email }    -> { hasAccess, pass, expires } (first-time users only;
 //                                    stores the email and sends a welcome email)
 //
-// Env: STRIPE_SECRET_KEY (required for checkout). RESEND_API_KEY (optional: enables the
-// automatic welcome email; without it the pass still activates and the skip is logged).
-// WELCOME_FROM (optional sender, default "Souvs <hello@souvs.shop>").
+// Env: STRIPE_SECRET_KEY (required for checkout). TITAN_SMTP_PASSWORD (optional:
+// enables the automatic welcome email via Titan SMTP from the hello@souvs.site
+// mailbox; without it the pass still activates and the skip is logged).
+// WELCOME_FROM (optional sender, default "Souvs <hello@souvs.site>").
 // Passes are fulfilled by pay-webhook.js on checkout.session.completed.
 
 const { getStore } = require("@netlify/blobs");
@@ -69,15 +70,17 @@ function getAccessStore() {
   });
 }
 
-// Automatic welcome email on free-week activation, via Resend.
-// Skips gracefully when RESEND_API_KEY is not configured.
+// Automatic welcome email on free-week activation, via Titan SMTP
+// (the hello@souvs.site mailbox). Skips gracefully when
+// TITAN_SMTP_PASSWORD is not configured.
 async function sendWelcomeEmail(to) {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) {
-    console.log("welcome email skipped: RESEND_API_KEY not configured");
+  const pass = process.env.TITAN_SMTP_PASSWORD;
+  if (!pass) {
+    console.log("welcome email skipped: TITAN_SMTP_PASSWORD not configured");
     return;
   }
-  const from = process.env.WELCOME_FROM || "Souvs <hello@souvs.shop>";
+  const smtpUser = process.env.TITAN_SMTP_USER || "hello@souvs.site";
+  const from = process.env.WELCOME_FROM || "Souvs <hello@souvs.site>";
   const subject = "Your free week of Souvs is on! 🎁";
   const text =
     "Welcome to the crew!\n\n" +
@@ -100,12 +103,24 @@ async function sendWelcomeEmail(to) {
     '<p><a href="https://souvs.site" style="display:inline-block;background:#22304a;color:#fff;' +
     'padding:12px 24px;border-radius:999px;text-decoration:none;font-weight:bold">Open Souvs</a></p>' +
     "<p>See you out there,<br>the Souvs crew</p></div></div>";
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: "Bearer " + key, "Content-Type": "application/json" },
-    body: JSON.stringify({ from, to, subject, text, html }),
+  let nodemailer;
+  try {
+    nodemailer = require("nodemailer");
+  } catch (e) {
+    console.log("welcome email failed: nodemailer unavailable", e && e.message);
+    return;
+  }
+  const transporter = nodemailer.createTransport({
+    host: process.env.TITAN_SMTP_HOST || "smtp.titan.email",
+    port: 465,
+    secure: true,
+    auth: { user: smtpUser, pass },
   });
-  if (!res.ok) console.log("welcome email failed:", res.status, await res.text().catch(() => ""));
+  try {
+    await transporter.sendMail({ from, to, subject, text, html });
+  } catch (e) {
+    console.log("welcome email failed:", e && e.message);
+  }
 }
 
 async function accessState(userId) {
