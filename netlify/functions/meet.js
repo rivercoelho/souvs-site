@@ -98,7 +98,7 @@ function cleanSocials(obj) {
 
 
 // CORS: only allow requests from our own domains
-const ALLOWED_ORIGINS = ["https://souvs.netlify.app", "https://souvs.shop", "https://www.souvs.shop"];
+const ALLOWED_ORIGINS = ["https://souvs.netlify.app", "https://souvs.site", "https://www.souvs.site", "https://souvs.shop", "https://www.souvs.shop"];
 function corsHeaders(event) {
   const origin = (event.headers && (event.headers.origin || event.headers.Origin)) || "";
   const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
@@ -284,7 +284,7 @@ exports.handler = async (event) => {
     } else if (prev) {
       card.avatarPreset = prev.avatarPreset != null ? prev.avatarPreset : null;
     }
-    // vanity username for profile links (www.souvs.shop/<username>): assigned once, then stable
+    // vanity username for profile links (souvs.site/<username>): assigned once, then stable
     let username = (prev && prev.username) || "";
     if (!username) {
       const base = slugify(name) || ("user" + Math.random().toString(36).slice(2, 6));

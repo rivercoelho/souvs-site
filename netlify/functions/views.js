@@ -1,5 +1,5 @@
 // netlify/functions/views.js
-// Anonymous page-view counter for souvs.shop.
+// Anonymous page-view counter for souvs.site.
 // POST { action:"hit", city } -> records one anonymous view (total + per-day + per-city).
 // GET ?action=stats -> { total, today, cities, days } (aggregate only, no personal data).
 // No cookies. Bots are not counted. Max one counted hit per IP per 5 minutes.
@@ -7,7 +7,7 @@
 
 const { getStore } = require("@netlify/blobs");
 
-const ALLOWED_ORIGINS = ["https://souvs.netlify.app", "https://souvs.shop", "https://www.souvs.shop"];
+const ALLOWED_ORIGINS = ["https://souvs.netlify.app", "https://souvs.site", "https://www.souvs.site", "https://souvs.shop", "https://www.souvs.shop"];
 function corsHeaders(event, methods) {
   const origin = (event.headers && (event.headers.origin || event.headers.Origin)) || "";
   const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];

@@ -85,7 +85,7 @@ async function sendWelcomeEmail(to) {
     "- Chat with Souvs, your AI city guide\n" +
     "- Unbox mystery perks: dinners, tickets and discounts around NYC\n" +
     "- Meet fellow travelers and locals\n\n" +
-    "Open Souvs: https://souvs.shop\n\n" +
+    "Open Souvs: https://souvs.site\n\n" +
     "See you out there,\nthe Souvs crew";
   const html =
     '<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#222">' +
@@ -97,7 +97,7 @@ async function sendWelcomeEmail(to) {
     "<li>Chat with <b>Souvs</b> — your AI city guide</li>" +
     "<li>Unbox <b>mystery perks</b>: dinners, tickets and discounts around NYC</li>" +
     "<li>Meet fellow travelers and locals</li></ul>" +
-    '<p><a href="https://souvs.shop" style="display:inline-block;background:#22304a;color:#fff;' +
+    '<p><a href="https://souvs.site" style="display:inline-block;background:#22304a;color:#fff;' +
     'padding:12px 24px;border-radius:999px;text-decoration:none;font-weight:bold">Open Souvs</a></p>' +
     "<p>See you out there,<br>the Souvs crew</p></div></div>";
   const res = await fetch("https://api.resend.com/emails", {

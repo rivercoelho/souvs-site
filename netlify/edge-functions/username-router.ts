@@ -35,7 +35,7 @@ const NOT_FOUND_HTML = `<!doctype html>
 <body><div class="card">
   <h1>Souvs</h1>
   <p>This page doesn't exist. The critters couldn't find it either.</p>
-  <a href="https://souvs.shop/">Back to Souvs</a>
+  <a href="https://souvs.site/">Back to Souvs</a>
 </div></body></html>`;
 
 function notFound() {

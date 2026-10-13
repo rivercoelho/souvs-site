@@ -4,7 +4,7 @@
 
 const { getStore } = require("@netlify/blobs");
 
-const ALLOWED_ORIGINS = ["https://souvs.netlify.app", "https://souvs.shop", "https://www.souvs.shop"];
+const ALLOWED_ORIGINS = ["https://souvs.netlify.app", "https://souvs.site", "https://www.souvs.site", "https://souvs.shop", "https://www.souvs.shop"];
 function corsHeaders(event) {
   const origin = (event.headers && (event.headers.origin || event.headers.Origin)) || "";
   const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
