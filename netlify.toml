@@ -8,3 +8,17 @@
   path = "/:username"
   function = "username-router"
   # only real profile usernames resolve; everything else gets a 404 (SEO)
+
+# domain migration (2026-10-13): souvs.shop retired — everything 301s to the
+# new primary domain souvs.site, paths preserved.
+[[redirects]]
+  from = "https://souvs.shop/*"
+  to = "https://souvs.site/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.souvs.shop/*"
+  to = "https://souvs.site/:splat"
+  status = 301
+  force = true
