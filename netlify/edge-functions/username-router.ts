@@ -50,7 +50,14 @@ function notFound() {
 }
 
 export default async (req, context) => {
-  const seg = new URL(req.url).pathname.replace(/^\/+|\/+$/g, "");
+  const url = new URL(req.url);
+  // domain migration (2026-10-13): old .shop host 301s to .site with the
+  // original path preserved — must run before the rewrites below, which
+  // would otherwise turn SPA paths into /index.html.
+  if (url.hostname === "souvs.shop" || url.hostname === "www.souvs.shop") {
+    return Response.redirect(`https://souvs.site${url.pathname}${url.search}`, 301);
+  }
+  const seg = url.pathname.replace(/^\/+|\/+$/g, "");
   // real files (anything with a dot) pass through to static hosting
   if (!seg || seg.includes(".") || seg.includes("/")) return context.next();
   const slug = seg.toLowerCase();
