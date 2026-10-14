@@ -1,5 +1,6 @@
 // netlify/functions/chat.js
-// Souvs real-AI guide backend. POST { critter, message, history, lang } -> { reply }.
+// Souvs real-AI guide backend. POST { critter, message, history, lang, city } -> { reply }.
+// city: the city the traveler selected in the app; the guide answers for it by default.
 // lang: en | es | pt | fr | de (defaults to en).
 // Requires OPENAI_API_KEY as a Netlify environment variable.
 
@@ -86,6 +87,9 @@ exports.handler = async (event) => {
   const LANG_NAMES = { en: "English", es: "Spanish", pt: "Portuguese", fr: "French", de: "German" };
   const lang = LANG_NAMES[body.lang] ? body.lang : "en";
   const langRule = lang === "en" ? "" : " Respond ONLY in " + LANG_NAMES[lang] + ". Keep the same personality, voice, and catchphrases (translated where natural).";
+  const CITIES = ["New York City", "Miami", "Chicago", "Los Angeles", "San Francisco"];
+  const city = CITIES.includes(body.city) ? body.city : null;
+  const cityRule = city ? " The traveler is currently browsing " + city + " in the app. Treat " + city + " as their city: answer about " + city + " by default and do NOT ask which city they mean. If they explicitly name a different city, help with that one instead." : "";
   const message = String(body.message || "").slice(0, 600).trim();
   if (!message) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "empty message" }) };
@@ -118,7 +122,7 @@ exports.handler = async (event) => {
       max_tokens: 280,
       temperature: 0.8,
       messages: [
-        { role: "system", content: critter.system + langRule },
+        { role: "system", content: critter.system + langRule + cityRule },
         ...history,
         { role: "user", content: message },
       ],
