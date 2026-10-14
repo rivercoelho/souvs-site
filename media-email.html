@@ -5,6 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light" />
 <title>Souvs Media — Book Your Media Spot</title>
+<style>
+  img { -ms-interpolation-mode: bicubic; }
+  @media only screen and (max-width: 620px) {
+    .email-container { width: 100% !important; max-width: 100% !important; }
+    .outer-td { padding: 16px 6px !important; }
+    .px { padding-left: 20px !important; padding-right: 20px !important; }
+    .headline { font-size: 23px !important; line-height: 29px !important; }
+    .subline { font-size: 13px !important; line-height: 19px !important; }
+    .big-title { font-size: 19px !important; line-height: 25px !important; }
+    .stack { display: block !important; width: 100% !important; max-width: 100% !important; padding-left: 0 !important; padding-right: 0 !important; }
+    .stack-pad { padding-top: 12px !important; }
+  }
+</style>
+<style>
+  /* Campaign preview: discourage saving the street-crew photos. */
+  img {
+    -webkit-touch-callout: none; /* iOS long-press */
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none; /* drag-to-save on desktop */
+  }
+</style>
 </head>
 <body style="margin:0; padding:0; background-color:#f2f0fa; font-family:Arial, Helvetica, sans-serif;">
 <!-- Preheader (preview text, hidden in body) -->
@@ -13,29 +38,29 @@
 </div>
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f2f0fa;">
-<tr><td align="center" style="padding:24px 12px;">
+<tr><td align="center" class="outer-td" style="padding:24px 12px;">
 
-  <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background-color:#ffffff; border-radius:16px; overflow:hidden;">
+  <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" style="width:100%; max-width:600px; background-color:#ffffff; border-radius:16px; overflow:hidden;">
 
     <!-- HEADER -->
     <tr>
-      <td align="center" style="background-color:#ff9d55; padding:28px 32px 4px 32px;">
-        <table role="presentation" align="center" cellpadding="0" cellspacing="0">
+      <td align="center" class="px" style="background-color:#ff9d55; padding:28px 32px 4px 32px;">
+        <table role="presentation" align="center" width="100%" cellpadding="0" cellspacing="0" style="width:100%;">
           <tr>
-            <td valign="middle"><img src="https://souvs.site/img/souvs-logo.png" width="350" alt="Souvs" style="display:block; width:350px; height:auto; border:0;" /></td>
-            <td width="10"></td>
-            <td valign="middle"><img src="https://souvs.site/img/souvs-mascot.png" width="138" alt="Souvs mascot" style="display:block; width:138px; height:auto; border:0;" /></td>
+            <td width="71%" align="right" valign="middle"><img src="https://souvs.site/img/souvs-logo.png" width="350" alt="Souvs" style="display:block; width:100%; max-width:350px; height:auto; border:0;" /></td>
+            <td width="3%"></td>
+            <td width="26%" align="left" valign="middle"><img src="https://souvs.site/img/souvs-mascot.png" width="138" alt="Souvs mascot" style="display:block; width:100%; max-width:138px; height:auto; border:0;" /></td>
           </tr>
         </table>
       </td>
     </tr>
     <tr>
-      <td align="center" style="background-color:#ff9d55; padding:0 32px 30px 32px;">
+      <td align="center" class="px" style="background-color:#ff9d55; padding:0 32px 30px 32px;">
         <div style="font-size:13px; letter-spacing:3px; color:#1a143f; font-weight:bold;">SOUVS&nbsp;MEDIA</div>
-        <div style="font-size:29px; line-height:36px; color:#1a143f; font-weight:bold; padding-top:10px;">
+        <div class="headline" style="font-size:29px; line-height:36px; color:#1a143f; font-weight:bold; padding-top:10px;">
           PROMOTE YOUR BUSINESS<br/>WITH THE SOUVS STREET CREW
         </div>
-        <div style="font-size:15px; line-height:22px; color:#57380d; padding-top:10px;">
+        <div class="subline" style="font-size:15px; line-height:22px; color:#57380d; padding-top:10px;">
           BOOK OUR FLYERS DISTRIBUTION AND SIGN HOLDING SERVICES
         </div>
       </td>
@@ -43,17 +68,17 @@
 
     <!-- INTRO -->
     <tr>
-      <td style="padding:26px 36px 0 36px; font-size:15px; line-height:23px; color:#333340;">
+      <td class="px" style="padding:26px 36px 0 36px; font-size:15px; line-height:23px; color:#333340;">
         Hello, there! We are Souvs, a website and media services agency for hospitality and entertainment companies. Let Souvs run your street marketing campaign. From sign holding to flyers distributing we attract all the attention to your business. Book a spot now!
       </td>
     </tr>
 
     <!-- PRICING CARDS -->
     <tr>
-      <td style="padding:18px 28px 0 28px;">
+      <td class="px" style="padding:18px 28px 0 28px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
           <tr>
-            <td width="50%" valign="top" style="padding:0 6px;">
+            <td class="stack" width="50%" valign="top" style="padding:0 6px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:2px solid #e8e4f5; border-radius:12px;">
                 <tr><td style="padding:18px 18px 16px 18px;">
                   <div style="font-size:12px; letter-spacing:2px; color:#7a72a8; font-weight:bold;">SIGN HOLDER</div>
@@ -70,7 +95,7 @@
                 </td></tr>
               </table>
             </td>
-            <td width="50%" valign="top" style="padding:0 6px;">
+            <td class="stack stack-pad" width="50%" valign="top" style="padding:0 6px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:2px solid #ff9d55; border-radius:12px; background-color:#fff8f2;">
                 <tr><td style="padding:18px 18px 16px 18px;">
                   <div style="font-size:12px; letter-spacing:2px; color:#e86a1e; font-weight:bold;">FLYERS + ONLINE AD ★ POPULAR</div>
@@ -97,19 +122,19 @@
 
     <!-- NOTE -->
     <tr>
-      <td align="center" style="padding:16px 36px 0 36px;">
-        <div style="font-size:22px; line-height:28px; font-weight:bold; color:#1a143f; padding-top:8px;">WE BRING THE MASCOT AND THE ENERGY!</div>
+      <td align="center" class="px" style="padding:16px 36px 0 36px;">
+        <div class="big-title" style="font-size:22px; line-height:28px; font-weight:bold; color:#1a143f; padding-top:8px;">WE BRING THE MASCOT AND THE ENERGY!</div>
       </td>
     </tr>
 
     <!-- PHOTO GALLERY -->
     <tr>
-      <td align="center" style="padding:24px 36px 0 36px;">
+      <td align="center" class="px" style="padding:24px 36px 0 36px;">
         <div style="font-size:12px; letter-spacing:3px; color:#e86a1e; font-weight:bold;">THE CREW IN ACTION</div>
       </td>
     </tr>
     <tr>
-      <td style="padding:14px 28px 0 28px;">
+      <td class="px" style="padding:14px 28px 0 28px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
           <tr>
             <td width="50%" style="padding:0 5px 10px 5px;">
@@ -133,7 +158,7 @@
 
     <!-- CTA BUTTON -->
     <tr>
-      <td align="center" style="padding:24px 36px 6px 36px;">
+      <td align="center" class="px" style="padding:24px 36px 6px 36px;">
         <table role="presentation" cellpadding="0" cellspacing="0">
           <tr>
             <td align="center" bgcolor="#ff9d55" style="border-radius:999px;">
@@ -147,7 +172,7 @@
       </td>
     </tr>
     <tr>
-      <td align="center" style="padding:6px 36px 28px 36px; font-size:13.5px; color:#7a72a8;">
+      <td align="center" class="px" style="padding:6px 36px 28px 36px; font-size:13.5px; color:#7a72a8;">
         One tap opens a booking email — just fill in your details and send.<br/>
         Questions? Just reply to this email.
       </td>
@@ -155,7 +180,7 @@
 
     <!-- FOOTER -->
     <tr>
-      <td align="center" style="background-color:#f7f5fc; padding:20px 36px 24px 36px; font-size:12px; line-height:18px; color:#8a84ad;">
+      <td align="center" class="px" style="background-color:#f7f5fc; padding:20px 36px 24px 36px; font-size:12px; line-height:18px; color:#8a84ad;">
         <span style="font-weight:bold; color:#5a5490;">Souvs Media</span><br/>
         <a href="https://souvs.site" style="color:#e86a1e; text-decoration:none;">souvs.site</a> · hello@souvs.site<br/>
         You're receiving this because your business is in our coverage area.<br/>
@@ -167,5 +192,15 @@
 
 </td></tr>
 </table>
+<script>
+(function () {
+  // Block right-click / long-press "Save image" and drag-to-save on this preview.
+  // (Does not change how the email itself renders; a screenshot can still capture it.)
+  document.addEventListener('contextmenu', function (e) { e.preventDefault(); }, true);
+  document.addEventListener('dragstart', function (e) { e.preventDefault(); }, true);
+  var imgs = document.querySelectorAll('img');
+  for (var i = 0; i < imgs.length; i++) { imgs[i].setAttribute('draggable', 'false'); }
+})();
+</script>
 </body>
 </html>
