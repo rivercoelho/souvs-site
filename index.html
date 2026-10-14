@@ -149,8 +149,8 @@ body.redeeming .app{display:none}
 .rd-status.ok{color:#15803d}.rd-status.done{color:#1d4ed8}.rd-status.bad{color:#b3261e}
 #rdRedeem{width:100%;margin-top:6px}
 /* ===== Homepage spots map (2026-10-14) ===== */
-.map-section{margin-top:16px;padding:38px;border-radius:34px 24px 38px 27px;background:var(--surface-soft);box-shadow:var(--shadow)}
-.home-map{height:400px;border-radius:22px;overflow:hidden;margin-top:20px;z-index:0;background:#dceef0}
+.map-section{margin-top:16px;padding:0;border-radius:34px 24px 38px 27px;background:var(--surface-soft);box-shadow:var(--shadow);overflow:hidden}
+.home-map{height:560px;border-radius:0;overflow:hidden;margin-top:0;z-index:0;background:#dceef0}
 .map-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .map-chips button{padding:9px 13px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-weight:800;font-size:13px;cursor:pointer}
 .map-chips button:hover{background:var(--blue)}
@@ -162,7 +162,7 @@ body.redeeming .app{display:none}
 .lg-dot{width:13px;height:13px;border-radius:50%;display:inline-block;box-shadow:0 0 0 2px #fff,0 1px 4px rgba(20,20,50,.35)}
 .map-pin{background:none;border:none}
 .map-pin i{display:block;width:24px;height:24px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2.5px solid #fff;box-shadow:0 3px 8px rgba(20,20,50,.35)}
-@media(max-width:640px){.map-section{padding:27px 20px;border-radius:28px 21px 31px 23px}.home-map{height:320px}}
+@media(max-width:640px){.map-section{border-radius:28px 21px 31px 23px}.home-map{height:500px}}
 </style>
 </head>
 <body>
@@ -213,14 +213,7 @@ body.redeeming .app{display:none}
         <div class="hero-ctas"><button class="primary" id="heroPick" data-go="chat" data-i18n="hero_pick">ask souvs</button><button class="primary" data-go="profile" data-i18n="hero_join">Join us</button></div>
       </section>
       <section class="map-section">
-        <div class="meetup-head"><div><h2 data-i18n="mapsec_title">Explore the map</h2></div><p data-i18n="mapsec_sub">Top spots in the city — tap a pin to see what's there.</p></div>
-        <div id="homeMap" class="home-map" aria-label="City map with top spots"></div>
-        <div class="map-legend" id="mapLegend">
-          <span class="lg-item"><i class="lg-dot" style="background:#2f7de1"></i><span data-i18n="mapsec_spots">Top spots</span> (<span id="lgCountSpots">0</span>)</span>
-          <span class="lg-item"><i class="lg-dot" style="background:#ff7a1a"></i><span data-i18n="mapsec_events">Events</span> (<span id="lgCountEvents">0</span>)</span>
-          <span class="lg-item"><i class="lg-dot" style="background:#1f9d63"></i><span data-i18n="mapsec_deals">Deals</span> (<span id="lgCountDeals">0</span>)</span>
-        </div>
-        <div class="map-chips" id="mapChips"></div>
+        <div id="homeMap" class="home-map" aria-label="City map with spots, events and deals"></div>
       </section>
       <section class="meetup-section">
         <div class="meetup-head"><div><h2 data-i18n="meet_title">Make more friends</h2></div><p data-i18n="meet_sub">Connect with another traveler or a local person.</p></div>
