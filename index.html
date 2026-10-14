@@ -178,6 +178,17 @@ body.redeeming .app{display:none}
 .header{padding-bottom:8px}
 .hero{padding-top:10px;padding-bottom:4px}
 .map-section{margin-top:8px}
+/* City search bar over the map, Bounce-style (2026-10-14) */
+.city-search{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:810;width:min(560px,calc(100% - 28px));display:flex;align-items:center;gap:10px;background:#fff;border-radius:999px;box-shadow:0 10px 30px rgba(23,32,64,.25);padding:0 20px;height:56px}
+.city-search .cs-icon{flex:0 0 auto}
+.city-search input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:17px;font-weight:600;color:#171a21}
+.city-search input::placeholder{color:#8a8f98;font-weight:500}
+.city-results{position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border-radius:18px;box-shadow:0 18px 40px rgba(23,32,64,.28);padding:6px}
+.city-results[hidden]{display:none}
+.city-result{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border:0;border-radius:12px;background:transparent;font:inherit;font-size:16px;font-weight:600;color:#171a21;text-align:left;cursor:pointer}
+.city-result:hover{background:#f1f4f9}
+.city-result i{color:#16846f;font-style:normal;font-weight:900}
+@media(max-width:760px){.city-search{height:52px;padding:0 16px}.city-search input{font-size:16px}}
 </style>
 </head>
 <body>
@@ -205,18 +216,6 @@ body.redeeming .app{display:none}
   <header class="header">
     <div class="brandline"><img class="logo-head" src="img/souvs-head.webp" alt="Souvs bird"/><button class="logo-link" data-go="home" data-i18n-aria="nav_home" aria-label="Home"><img class="logo" src="souvs-logo.webp" alt="Souvs logo"/></button></div>
     <div class="header-tools"><div class="lang-switcher"><button class="lang-button" id="langButton" aria-haspopup="menu" aria-expanded="false"><span id="langLabel">EN</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="lang-menu" id="langMenu" role="menu" data-i18n-aria="lang_choose" aria-label="Choose a language" hidden><button class="lang-option" data-lang="en" role="menuitem">English</button><button class="lang-option" data-lang="es" role="menuitem">Español</button><button class="lang-option" data-lang="pt" role="menuitem">Português</button><button class="lang-option" data-lang="fr" role="menuitem">Français</button><button class="lang-option" data-lang="de" role="menuitem">Deutsch</button></div></div>
-    <div class="city-switcher">
-      <button class="city-button" id="cityButton" aria-haspopup="menu" aria-expanded="false"><span class="city-dot"></span><span id="cityLabel">NYC</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
-      <div class="city-menu" id="cityMenu" role="menu" data-i18n-aria="city_choose" aria-label="Choose a city" hidden>
-        <button class="city-option" data-city="New York City" data-live="true" role="menuitem"><span><strong>New York City</strong><small class="cur-ind" data-i18n="city_current">Current city</small></span><i class="cur-check">✓</i></button>
-        <button class="city-option" data-city="Miami" data-live="true" role="menuitem"><span><strong>Miami</strong><small class="cur-ind" data-i18n="city_current" hidden>Current city</small></span><i class="cur-check" hidden>✓</i></button>
-        <button class="city-option" data-city="Chicago" data-live="true" role="menuitem"><span><strong>Chicago</strong><small class="cur-ind" data-i18n="city_current" hidden>Current city</small></span><i class="cur-check" hidden>✓</i></button>
-        <button class="city-option" data-city="Los Angeles" data-live="true" role="menuitem"><span><strong>Los Angeles</strong><small class="cur-ind" data-i18n="city_current" hidden>Current city</small></span><i class="cur-check" hidden>✓</i></button>
-        
-        <button class="city-option" data-city="San Francisco" data-live="true" role="menuitem"><span><strong>San Francisco</strong><small class="cur-ind" data-i18n="city_current" hidden>Current city</small></span><i class="cur-check" hidden>✓</i></button>
-        <div class="city-teaser" id="cityTeaser" hidden><strong id="teaserTitle"></strong><p data-i18n="city_teaser">It’s coming soon. Join the waitlist and we’ll email you when the crew lands.</p><button class="primary" id="notifyButton" data-i18n="notify_me">Notify me</button></div>
-      </div>
-    </div>
     </div>
   </header>
 
@@ -227,6 +226,7 @@ body.redeeming .app{display:none}
       </section>
       <section class="map-section">
         <div id="homeMap" class="home-map" aria-label="City map with spots, events and deals"></div>
+        <div class="city-search" id="citySearchWrap"><svg class="cs-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#20242b" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20.5 20.5-4.6-4.6"/></svg><input id="citySearch" type="text" value="New York, US" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="cityResults" data-i18n-aria="city_choose" aria-label="Choose a city" data-i18n-ph="city_search_ph" placeholder="Search a city"/><div class="city-results" id="cityResults" role="listbox" hidden></div></div>
         <div class="nav-legend" id="navLegend" aria-label="Map legend"><span class="nl-item"><i class="lg-dot" style="background:#2f7de1"></i><span data-i18n="mapsec_spots">Top spots</span> <b id="lgCountSpots">0</b></span><span class="nl-item"><i class="lg-dot" style="background:#ff7a1a"></i><span data-i18n="mapsec_events">Events</span> <b id="lgCountEvents">0</b></span><span class="nl-item"><i class="lg-dot" style="background:#1f9d63"></i><span data-i18n="mapsec_deals">Deals</span> <b id="lgCountDeals">0</b></span></div>
       </section>
       <section class="meetup-section">
@@ -525,6 +525,7 @@ en:{
   sug_souvs_2: "hidden spots I shouldn't miss?",
   souvs_fallback: "hmm, let me think about that one — try asking about events, deals, or a neighborhood and I'll dig in.",
   meet_title: "Make new friends",
+  city_search_ph: "Search a city",
   meet_sub: "Connect with another traveler or a local person.",
   meet_cta: "Create your profile →",
   around_title: "Around right now",
@@ -998,6 +999,7 @@ es:{
   sug_souvs_2: "¿rincones que no me puedo perder?",
   souvs_fallback: "mmm, déjame pensar en eso — pregúntame por eventos, ofertas o un barrio y me pongo a ello.",
   meet_title: "Haz nuevos amigos",
+  city_search_ph: "Busca una ciudad",
   meet_sub: "Conecta con otro viajero o con una persona local.",
   meet_cta: "Crea tu perfil →",
   around_title: "Por aquí ahora mismo",
@@ -1470,6 +1472,7 @@ pt:{
   sug_souvs_2: "cantinhos que não posso perder?",
   souvs_fallback: "hmm, deixa eu pensar nisso — pergunta sobre eventos, ofertas ou um bairro que eu vou atrás.",
   meet_title: "Faça novos amigos",
+  city_search_ph: "Busque uma cidade",
   meet_sub: "Conecte-se com outro viajante ou uma pessoa local.",
   meet_cta: "Crie seu perfil →",
   around_title: "Por aqui agora",
@@ -1943,6 +1946,7 @@ fr:{
   sug_souvs_2: "des coins cachés à ne pas rater ?",
   souvs_fallback: "hmm, laisse-moi réfléchir — demande-moi des événements, des bons plans ou un quartier et je creuse.",
   meet_title: "Faites-vous de nouveaux amis",
+  city_search_ph: "Rechercher une ville",
   meet_sub: "Connectez-vous avec un autre voyageur ou un local.",
   meet_cta: "Créez votre profil →",
   around_title: "Dans le coin en ce moment",
@@ -2416,6 +2420,7 @@ de:{
   sug_souvs_2: "Geheimtipps, die ich nicht verpassen darf?",
   souvs_fallback: "hmm, lass mich kurz nachdenken — frag mich nach Events, Deals oder einem Viertel und ich suche.",
   meet_title: "Finde neue Freunde",
+  city_search_ph: "Stadt suchen",
   meet_sub: "Vernetze dich mit einem anderen Reisenden oder einer Person vor Ort.",
   meet_cta: "Erstelle dein Profil →",
   around_title: "Gerade in der Nähe",
@@ -2823,10 +2828,10 @@ document.addEventListener("click",function(e){
   }
 });
   $$('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
-  const cityButton=$('#cityButton'),cityMenu=$('#cityMenu'),teaser=$('#cityTeaser');
-  cityButton.addEventListener('click',()=>{const willOpen=cityMenu.hidden;cityMenu.hidden=!willOpen;cityButton.setAttribute('aria-expanded',String(willOpen));teaser.hidden=true});
   const CITY_INFO={'New York City':{key:'nyc',short:'NYC',hello:'NYC'},'Miami':{key:'miami',short:'MIA',hello:'Miami'},'Chicago':{key:'chicago',short:'CHI',hello:'Chicago'},'Los Angeles':{key:'la',short:'LA',hello:'Los Angeles'},'San Francisco':{key:'sf',short:'SF',hello:'San Francisco'}};
   const CITY_BY_KEY={nyc:'New York City',miami:'Miami',chicago:'Chicago',la:'Los Angeles',sf:'San Francisco'};
+  const CITY_SEARCH_TXT={nyc:'New York, US',miami:'Miami, US',chicago:'Chicago, US',la:'Los Angeles, US',sf:'San Francisco, US'};
+  function closeCityResults(){const r=document.getElementById('cityResults');if(r)r.hidden=true;const i=document.getElementById('citySearch');if(i){i.setAttribute('aria-expanded','false');if(document.activeElement!==i)i.value=CITY_SEARCH_TXT[currentCity]||''}}
 /* ---- site location: ask only once, always open on the user's city ---- */
 const GEO_ASKED_KEY='souvs-geo-asked',GEO_OK_KEY='souvs-geo-ok';
 CITY_INFO['New York City'].lat=40.7128;CITY_INFO['New York City'].lng=-74.0060;
@@ -2874,13 +2879,14 @@ function autoSelectCityFromLocation(){
 }const LOGO_SRC=(document.querySelector('img.logo')||{src:''}).src;
   function cityGuides(){return Object.entries(guides).filter(([k,g])=>(g.city||'nyc')===currentCity).map(([k])=>k);}
   function applyCityCopy(){const hh=document.getElementById('heroHello');if(hh){const ci=CITY_INFO[CITY_BY_KEY[currentCity]];hh.textContent=t('hero_hello')+', '+(ci?(ci.hello||ci.short):currentCity)}const hs=document.getElementById('heroSub');const subKey={nyc:'hero_sub',miami:'hero_sub_miami',chicago:'hero_sub_chicago',la:'hero_sub_la',sf:'hero_sub_sf'}[currentCity]||'hero_sub';if(hs)hs.textContent=t(subKey);const ct=document.getElementById('chatTitle');if(ct)ct.textContent=t('chat_title');document.title=window.__pageTitle||('Souvs \u2014 '+(ci?(ci.title||ci.short):currentCity));}
-    function switchCity(cityName){const info=CITY_INFO[cityName];if(!info)return;currentCity=info.key;document.documentElement.dataset.city=currentCity;try{localStorage.setItem('souvs-city',currentCity)}catch(e){}const lbl=document.getElementById('cityLabel');if(lbl)lbl.textContent=info.short;$$('.city-option').forEach(o=>{const active=o.dataset.live&&CITY_INFO[o.dataset.city]&&CITY_INFO[o.dataset.city].key===currentCity;o.querySelectorAll('.cur-ind,.cur-check').forEach(el=>{el.hidden=!active})});const inCity=cityGuides();if(!inCity.includes(currentGuide))currentGuide=inCity[0];cityMenu.hidden=true;cityButton.setAttribute('aria-expanded','false');applyCityCopy();syncCityCards();renderChat();dealReset();if(window.renderEvents)window.renderEvents();if(window.renderHomeEvents)window.renderHomeEvents();}
-  $$('.city-option').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.live){switchCity(b.dataset.city);return}const city=b.dataset.city;$('#teaserTitle').textContent=t('city_teaser_title',{city});teaser.hidden=false;$('#notifyButton').dataset.city=city}));
+    function switchCity(cityName){const info=CITY_INFO[cityName];if(!info)return;currentCity=info.key;document.documentElement.dataset.city=currentCity;try{localStorage.setItem('souvs-city',currentCity)}catch(e){}const lbl=document.getElementById('cityLabel');if(lbl)lbl.textContent=info.short;$$('.city-option').forEach(o=>{const active=o.dataset.live&&CITY_INFO[o.dataset.city]&&CITY_INFO[o.dataset.city].key===currentCity;o.querySelectorAll('.cur-ind,.cur-check').forEach(el=>{el.hidden=!active})});const inCity=cityGuides();if(!inCity.includes(currentGuide))currentGuide=inCity[0];closeCityResults();applyCityCopy();syncCityCards();renderChat();dealReset();if(window.renderEvents)window.renderEvents();if(window.renderHomeEvents)window.renderHomeEvents();}
+  const citySearchEl=$('#citySearch'),cityResultsEl=$('#cityResults');
+  function renderCityResults(all){if(!cityResultsEl||!citySearchEl)return;const q=all?'':(citySearchEl.value||'').trim().toLowerCase();const cur=CITY_BY_KEY[currentCity];cityResultsEl.innerHTML='';let n=0;Object.keys(CITY_INFO).forEach(name=>{const full=CITY_SEARCH_TXT[CITY_INFO[name].key];if(q&&name.toLowerCase().indexOf(q)<0&&full.toLowerCase().indexOf(q)<0)return;const b=document.createElement('button');b.type='button';b.className='city-result';b.setAttribute('role','option');const s=document.createElement('span');s.textContent=full;b.appendChild(s);if(name===cur){const i=document.createElement('i');i.textContent='\u2713';b.appendChild(i)}b.addEventListener('mousedown',e=>{e.preventDefault();closeCityResults();citySearchEl.blur();switchCity(name)});cityResultsEl.appendChild(b);n++});cityResultsEl.hidden=!n;citySearchEl.setAttribute('aria-expanded',String(!!n))}
+  if(citySearchEl){closeCityResults();citySearchEl.addEventListener('focus',()=>{citySearchEl.select();renderCityResults(true)});citySearchEl.addEventListener('input',()=>renderCityResults(false));citySearchEl.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCityResults();citySearchEl.blur()}else if(e.key==='Enter'){e.preventDefault();const f=cityResultsEl?cityResultsEl.querySelector('.city-result'):null;if(f)f.dispatchEvent(new Event('mousedown'))}})}
   function isLiveCity(v){return v==='New York City'||v==='Miami'}
   function syncSignupCopy(){const live=isLiveCity($('#signupCity').value);const h=document.querySelector('.form-honesty');h.setAttribute('data-i18n',live?'signup_honesty_live':'signup_honesty');h.textContent=t(live?'signup_honesty_live':'signup_honesty');const b=$('#signupForm button[type="submit"]');b.setAttribute('data-i18n',live?'signup_submit_live':'signup_submit');b.textContent=t(live?'signup_submit_live':'signup_submit')}
   $('#signupCity').addEventListener('change',syncSignupCopy);
-  $('#notifyButton').addEventListener('click',e=>{$('#signupCity').value=e.currentTarget.dataset.city;cityMenu.hidden=true;cityButton.setAttribute('aria-expanded','false');syncSignupCopy();go('signup')});
-  document.addEventListener('click',e=>{if(!e.target.closest('.city-switcher')){cityMenu.hidden=true;cityButton.setAttribute('aria-expanded','false')}});
+  document.addEventListener('click',e=>{if(!e.target.closest('#citySearchWrap'))closeCityResults()});
 function syncCityCards(){}
   function renderChat(reset=true){const g=guides.souvs;$('#typing').hidden=true;const profile=$('#chatProfile');profile.className=`chat-profile ${g.color}`;$('#chatImage').src=g.image;$('#chatImage').alt=g.name;const cn=$('#chatName');if(cn)cn.textContent=g.name;const cr=$('#chatRole');if(cr)cr.textContent=t(g.roleKey);$('#statusName').textContent=g.name;$('#chatInput').placeholder=t('chat_ask',{name:g.name});const sug=$('#suggestions');sug.innerHTML='';[0,1,2].forEach(i=>{const b=document.createElement('button');b.type='button';b.textContent=t('sug_souvs_'+i);b.addEventListener('click',()=>{sendChat(b.textContent)});sug.appendChild(b)});if(reset){const m=$('#messages');m.innerHTML='';const wb=document.createElement('div');wb.className='bubble guide';wb.textContent=t('welcome_souvs');m.appendChild(wb);}}
   async function sendChat(text){text=text.trim();if(!text)return;const critter='souvs',g=guides[critter],m=$('#messages');const history=[...m.querySelectorAll('.bubble')].slice(-8).map(b=>({role:b.classList.contains('user')?'user':'assistant',content:b.textContent}));m.insertAdjacentHTML('beforeend',`<div class="bubble user"></div>`);m.lastElementChild.textContent=text;$('#chatInput').value='';$('#typing').hidden=false;m.scrollTop=m.scrollHeight;let reply;const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),10000);try{const response=await fetch('/.netlify/functions/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({critter,message:text,history,lang}),signal:controller.signal});if(!response.ok)throw new Error(`Chat request failed: ${response.status}`);const data=await response.json();if(typeof data.reply!=='string'||!data.reply.trim())throw new Error('Chat response was empty');reply=data.reply.trim()}catch(error){reply=g.reply(text)}finally{clearTimeout(timeout)}if(currentGuide!==critter)return;$('#typing').hidden=true;const d=document.createElement('div');d.className='bubble guide';d.textContent=reply;m.appendChild(d);m.scrollTop=m.scrollHeight}
@@ -4167,7 +4173,7 @@ presenceTick();
   }
   function init(){
     if(window.L&&document.getElementById('homeMap')){
-      map=L.map('homeMap',{scrollWheelZoom:false});
+      map=L.map('homeMap',{scrollWheelZoom:false,zoomControl:false});L.control.zoom({position:'bottomright'}).addTo(map);
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'}).addTo(map);
       layer=L.layerGroup().addTo(map);
     }
