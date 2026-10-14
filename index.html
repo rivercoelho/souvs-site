@@ -167,12 +167,17 @@ body.redeeming .app{display:none}
 .hero{justify-content:flex-end}
 .brandline{gap:2px}
 @media(max-width:640px){.logo-head{height:56px}}
-/* Compact map legend in the top bar (2026-10-14) */
-.nav-legend{display:flex;align-items:center;gap:10px;padding:7px 12px;border:1px solid rgba(255,255,255,.5);border-radius:999px;background:#d5d9de;color:#1f2733;box-shadow:0 10px 24px rgba(29,25,62,.2);font-size:11.5px;font-weight:800;line-height:1;flex:0 1 auto;min-width:0}
+/* Map legend — compact pill at the bottom of the map (2026-10-14) */
+.map-section{position:relative}
+.nav-legend{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;z-index:800;display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.94);color:#1f2733;box-shadow:0 6px 18px rgba(29,25,62,.28);font-size:11.5px;font-weight:800;line-height:1;white-space:nowrap;max-width:calc(100% - 20px)}
 .nav-legend .nl-item{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
 .nav-legend .lg-dot{width:9px;height:9px;box-shadow:0 0 0 1.5px #fff}
 .nav-legend b{font-weight:900}
-@media(max-width:760px){.header{flex-wrap:wrap}.nav-legend{order:3;margin:0 auto 2px;gap:7px;padding:6px 9px;font-size:10.5px}.nav-legend .lg-dot{width:8px;height:8px}}
+@media(max-width:760px){.nav-legend{gap:7px;padding:6px 9px;font-size:10.5px;bottom:10px}.nav-legend .lg-dot{width:8px;height:8px}}
+/* Tighter gap between the top bar and the map (2026-10-14) */
+.header{padding-bottom:8px}
+.hero{padding-top:10px;padding-bottom:4px}
+.map-section{margin-top:8px}
 </style>
 </head>
 <body>
@@ -199,7 +204,6 @@ body.redeeming .app{display:none}
 <div class="app">
   <header class="header">
     <div class="brandline"><img class="logo-head" src="img/souvs-head.webp" alt="Souvs bird"/><button class="logo-link" data-go="home" data-i18n-aria="nav_home" aria-label="Home"><img class="logo" src="souvs-logo.webp" alt="Souvs logo"/></button></div>
-    <div class="nav-legend" id="navLegend" aria-label="Map legend"><span class="nl-item"><i class="lg-dot" style="background:#2f7de1"></i><span data-i18n="mapsec_spots">Top spots</span> <b id="lgCountSpots">0</b></span><span class="nl-item"><i class="lg-dot" style="background:#ff7a1a"></i><span data-i18n="mapsec_events">Events</span> <b id="lgCountEvents">0</b></span><span class="nl-item"><i class="lg-dot" style="background:#1f9d63"></i><span data-i18n="mapsec_deals">Deals</span> <b id="lgCountDeals">0</b></span></div>
     <div class="header-tools"><div class="lang-switcher"><button class="lang-button" id="langButton" aria-haspopup="menu" aria-expanded="false"><span id="langLabel">EN</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="lang-menu" id="langMenu" role="menu" data-i18n-aria="lang_choose" aria-label="Choose a language" hidden><button class="lang-option" data-lang="en" role="menuitem">English</button><button class="lang-option" data-lang="es" role="menuitem">Español</button><button class="lang-option" data-lang="pt" role="menuitem">Português</button><button class="lang-option" data-lang="fr" role="menuitem">Français</button><button class="lang-option" data-lang="de" role="menuitem">Deutsch</button></div></div>
     <div class="city-switcher">
       <button class="city-button" id="cityButton" aria-haspopup="menu" aria-expanded="false"><span class="city-dot"></span><span id="cityLabel">NYC</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
@@ -223,6 +227,7 @@ body.redeeming .app{display:none}
       </section>
       <section class="map-section">
         <div id="homeMap" class="home-map" aria-label="City map with spots, events and deals"></div>
+        <div class="nav-legend" id="navLegend" aria-label="Map legend"><span class="nl-item"><i class="lg-dot" style="background:#2f7de1"></i><span data-i18n="mapsec_spots">Top spots</span> <b id="lgCountSpots">0</b></span><span class="nl-item"><i class="lg-dot" style="background:#ff7a1a"></i><span data-i18n="mapsec_events">Events</span> <b id="lgCountEvents">0</b></span><span class="nl-item"><i class="lg-dot" style="background:#1f9d63"></i><span data-i18n="mapsec_deals">Deals</span> <b id="lgCountDeals">0</b></span></div>
       </section>
       <section class="meetup-section">
         <div class="meetup-head"><div><h2 data-i18n="meet_title">Make new friends</h2></div><p data-i18n="meet_sub">Connect with another traveler or a local person.</p></div>
