@@ -156,6 +156,12 @@ body.redeeming .app{display:none}
 .map-chips button:hover{background:var(--blue)}
 .home-map .leaflet-popup-content{font:600 13.5px/1.45 "Nunito","Trebuchet MS",sans-serif;color:#263047}
 .home-map .leaflet-popup-content strong{font-size:15px;font-weight:900}
+.home-map .leaflet-popup-content a{color:#e05f00;font-weight:900}
+.map-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:13px;font-weight:800;font-size:13.5px;color:var(--ink)}
+.lg-item{display:inline-flex;align-items:center;gap:7px}
+.lg-dot{width:13px;height:13px;border-radius:50%;display:inline-block;box-shadow:0 0 0 2px #fff,0 1px 4px rgba(20,20,50,.35)}
+.map-pin{background:none;border:none}
+.map-pin i{display:block;width:24px;height:24px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2.5px solid #fff;box-shadow:0 3px 8px rgba(20,20,50,.35)}
 @media(max-width:640px){.map-section{padding:27px 20px;border-radius:28px 21px 31px 23px}.home-map{height:320px}}
 </style>
 </head>
@@ -209,6 +215,11 @@ body.redeeming .app{display:none}
       <section class="map-section">
         <div class="meetup-head"><div><h2 data-i18n="mapsec_title">Explore the map</h2></div><p data-i18n="mapsec_sub">Top spots in the city — tap a pin to see what's there.</p></div>
         <div id="homeMap" class="home-map" aria-label="City map with top spots"></div>
+        <div class="map-legend" id="mapLegend">
+          <span class="lg-item"><i class="lg-dot" style="background:#2f7de1"></i><span data-i18n="mapsec_spots">Top spots</span> (<span id="lgCountSpots">0</span>)</span>
+          <span class="lg-item"><i class="lg-dot" style="background:#ff7a1a"></i><span data-i18n="mapsec_events">Events</span> (<span id="lgCountEvents">0</span>)</span>
+          <span class="lg-item"><i class="lg-dot" style="background:#1f9d63"></i><span data-i18n="mapsec_deals">Deals</span> (<span id="lgCountDeals">0</span>)</span>
+        </div>
         <div class="map-chips" id="mapChips"></div>
       </section>
       <section class="meetup-section">
@@ -497,6 +508,9 @@ en:{
   hero_pick: "ask souvs",
   mapsec_title: "Explore the map",
   mapsec_sub: "Top spots in the city — tap a pin to see what's there.",
+  mapsec_spots: "Top spots",
+  mapsec_events: "Events",
+  mapsec_deals: "Deals",
   role_souvs: "your city guide",
   welcome_souvs: "Souvs here — ask me anything about the city: events, deals, happy hours, hidden spots.",
   sug_souvs_0: "what's happening this weekend?",
@@ -967,6 +981,9 @@ es:{
   hero_pick: "pregunta a Souvs",
   mapsec_title: "Explora el mapa",
   mapsec_sub: "Los mejores lugares de la ciudad: toca un pin para ver qué hay.",
+  mapsec_spots: "Lugares top",
+  mapsec_events: "Eventos",
+  mapsec_deals: "Ofertas",
   role_souvs: "tu guía de la ciudad",
   welcome_souvs: "Souvs por aquí — pregúntame lo que sea sobre la ciudad: eventos, ofertas, happy hours, rincones.",
   sug_souvs_0: "¿qué hay este finde?",
@@ -1436,6 +1453,9 @@ pt:{
   hero_pick: "pergunte ao Souvs",
   mapsec_title: "Explore o mapa",
   mapsec_sub: "Os melhores lugares da cidade — toque em um pin para ver o que há lá.",
+  mapsec_spots: "Melhores lugares",
+  mapsec_events: "Eventos",
+  mapsec_deals: "Ofertas",
   role_souvs: "seu guia da cidade",
   welcome_souvs: "Souvs na área — me pergunta o que quiser sobre a cidade: eventos, ofertas, happy hours, cantinhos.",
   sug_souvs_0: "o que tá rolando esse fim de semana?",
@@ -1906,6 +1926,9 @@ fr:{
   hero_pick: "demande à Souvs",
   mapsec_title: "Explorez la carte",
   mapsec_sub: "Les meilleurs spots de la ville — touchez une épingle pour voir ce qu'il y a.",
+  mapsec_spots: "Meilleurs spots",
+  mapsec_events: "Événements",
+  mapsec_deals: "Offres",
   role_souvs: "ton guide de la ville",
   welcome_souvs: "Souvs à l'appareil — pose-moi tes questions sur la ville : événements, bons plans, happy hours, coins cachés.",
   sug_souvs_0: "quoi de beau ce week-end ?",
@@ -2376,6 +2399,9 @@ de:{
   hero_pick: "frag Souvs",
   mapsec_title: "Entdecke die Karte",
   mapsec_sub: "Top-Spots der Stadt — tippe auf einen Pin, um zu sehen, was dort los ist.",
+  mapsec_spots: "Top-Spots",
+  mapsec_events: "Events",
+  mapsec_deals: "Deals",
   role_souvs: "dein Stadtguide",
   welcome_souvs: "Souvs hier — frag mich alles über die Stadt: Events, Deals, Happy Hours, Geheimtipps.",
   sug_souvs_0: "was läuft dieses Wochenende?",
@@ -3803,6 +3829,7 @@ var EVENTS=[
  {id:"sf-illuminate",city:"sf",name:"Illuminate SF Festival of Light",com:"ev_com_multi",freq:"ev_annual",desc:"ev_sf_illuminate_desc",sched:"ev_sf_illuminate_sched",venue:"Citywide · Castro to Yerba Buena",link:"http://www.visitcalifornia.com/experience/november-events-california/"},
  {id:"sf-pharaohs",city:"sf",name:"Treasures of the Pharaohs",com:"ev_com_multi",freq:"ev_onetime",desc:"ev_sf_pharaohs_desc",sched:"ev_sf_pharaohs_sched",venue:"de Young Museum · Golden Gate Park",link:"https://www.7x7.com/sf-arts-culture-fall-2026-2677870451.html"},
 ];
+window.EVENTS=EVENTS;
 function evApi(action,data){
   var payload={action:action};
   for(var k in (data||{}))payload[k]=data[k];
@@ -3995,7 +4022,7 @@ presenceTick();
 </script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// Homepage spots map (Leaflet + OpenStreetMap), follows the current city (2026-10-14)
+// Homepage map (Leaflet + OpenStreetMap): top spots + all listed events & deals, follows the current city (2026-10-14)
 (function(){
   var SPOTS={
     nyc:{center:[40.758,-73.9855],zoom:12,spots:[
@@ -4035,30 +4062,82 @@ presenceTick();
       ["Chinatown","The oldest Chinatown in North America",37.7941,-122.4078],
       ["Dolores Park","Skyline views & weekend picnics",37.7596,-122.4269]]}
   };
+  var EVENT_LL={"nyc-horrorfest": [40.71609, -73.96247], "nyc-bricjazz": [40.68834, -73.97914], "nyc-newyorker": [40.73159, -73.98892], "nyc-wintervillage": [40.75484, -73.98411], "nyc-queensnightmarket": [40.74747, -73.85178], "nyc-nywff": [40.70659, -74.00308], "nyc-forbiddenforest": [41.28408, -73.81538], "nyc-dogparade": [40.72646, -73.98172], "nyc-droneart": [40.79516, -73.92164], "nyc-diwali": [40.75543, -73.98651], "nyc-olivermeyers": [40.78047, -73.98117], "nyc-marathon": [40.77211, -73.97839], "nyc-halloween": [40.72194, -74.00535], "nyc-myth": [40.8651, -73.9313], "nyc-mundo-lingo": [40.76501, -73.9752], "nyc-forro": [40.71263, -74.00634], "nyc-langroops": [40.75484, -73.98411], "mia-nightmarket": [25.78247, -80.19067], "mia-berryfarm": [25.56554, -80.41558], "mia-betsy": [25.78652, -80.12983], "mia-artwalk": [25.80105, -80.19932], "mia-smorgasburg": [25.80168, -80.19934], "mia-wynmusic": [25.79995, -80.19925], "mia-iiipoints": [25.79822, -80.20184], "mia-seafoodfest": [25.78234, -80.13034], "mia-outshine": [25.78243, -80.13325], "mia-viernes": [25.76565, -80.21936], "mia-alliance": [25.77556, -80.18811], "chi-christkindl": [41.8841, -87.6302], "chi-zoolights": [41.92142, -87.63205], "chi-asianjazz": [41.93171, -87.71351], "chi-zoobrews": [41.92142, -87.63205], "la-autoshow": [34.04054, -118.27139], "la-enchanted": [34.20177, -118.21203], "la-zoolights": [34.15005, -118.28342], "la-smorgasburg": [34.03398, -118.24069], "sf-rmsfmoma": [37.78592, -122.40074], "sf-rooftop": [37.78592, -122.40074], "sf-pharaohs": [37.77194, -122.46863]};
+  var DEAL_LL={"Earls Kitchen + Bar": [25.78072, -80.19061], "The River Oyster Bar": [25.76766, -80.19197], "Cafe La Trova": [25.76627, -80.21063], "Sexy Fish Miami": [25.76435, -80.19305], "Jane Doe Bar & Restaurant": [40.75514, -73.98103], "The Three Monkeys": [40.76238, -73.98582], "Crown Alley": [40.74272, -73.99974], "The Stag's Head": [40.75554, -73.9684], "Pretty Ricky's": [40.71997, -73.98824], "Brando's Speakeasy": [41.87723, -87.62901], "Arbella": [41.89186, -87.63179], "AceBounce": [41.88639, -87.63123], "R.J. Grunts": [41.92003, -87.63663], "Bonaventure Brewing Co.": [34.05269, -118.25566], "Dublin's Irish Whiskey Pub": [34.04909, -118.25912], "Far Bar": [34.04965, -118.23956], "Engine Co. No. 28": [34.04971, -118.25932], "Doc's Clock": [37.75834, -122.41888], "Sugar Lounge": [37.77674, -122.4225], "Summer Place": [37.78979, -122.41063]};
+  var DEAL_BLOCKS={miamiDeals:"miami",nycDeals:"nyc",chicagoDeals:"chicago",laDeals:"la",sfDeals:"sf"};
+  var COLORS={spot:"#2f7de1",event:"#ff7a1a",deal:"#1f9d63"};
   var map=null,layer=null,markers={};
   function cityKey(){return document.documentElement.dataset.city||'nyc';}
   function data(){return SPOTS[cityKey()]||SPOTS.nyc;}
-  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  function esc(s){return String(s==null?"":s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function learnMore(){try{if(typeof t==='function'){var v=t('learn_more');if(v)return v;}}catch(e){}return 'Learn more';}
+  function pinIcon(color){return L.divIcon({className:'map-pin',html:'<i style="background:'+color+'"></i>',iconSize:[24,24],iconAnchor:[12,22],popupAnchor:[0,-20]});}
+  var used={};
+  function place(ll){
+    var k=ll[0].toFixed(5)+','+ll[1].toFixed(5),n=used[k]||0;used[k]=n+1;
+    if(!n)return ll;
+    return [ll[0]+0.0011*n,ll[1]+0.0011*n];
+  }
+  function addPin(ll,color,html){
+    var m=L.marker(place(ll),{icon:pinIcon(color)}).addTo(layer).bindPopup(html);
+    return m;
+  }
+  function cityDeals(){
+    var key=cityKey(),out=[];
+    for(var id in DEAL_BLOCKS){
+      if(DEAL_BLOCKS[id]!==key)continue;
+      var sec=document.getElementById(id);if(!sec)continue;
+      var arts=sec.querySelectorAll('article.mdeal');
+      for(var i=0;i<arts.length;i++){
+        var h=arts[i].querySelector('h3'),o=arts[i].querySelector('.mdeal-offer'),a=arts[i].querySelector('.mdeal-addr'),lnk=arts[i].querySelector('a.mdeal-btn');
+        if(!h)continue;
+        var name=h.textContent.trim();
+        out.push({name:name,offer:o?o.textContent.trim():'',addr:a?a.textContent.trim():'',link:lnk?lnk.href:'',ll:DEAL_LL[name]});
+      }
+    }
+    return out;
+  }
+  function cityEvents(){
+    var key=cityKey(),all=(typeof window!=='undefined'&&window.EVENTS)||[],out=[];
+    for(var i=0;i<all.length;i++){if(all[i].city===key&&EVENT_LL[all[i].id])out.push(all[i]);}
+    return out;
+  }
+  function setCount(id,n){var el=document.getElementById(id);if(el)el.textContent=n;}
   function renderChips(){
     var wrap=document.getElementById('mapChips');if(!wrap)return;wrap.innerHTML='';
     data().spots.forEach(function(s){
       var b=document.createElement('button');b.type='button';b.textContent='📍 '+s[0];
       b.addEventListener('click',function(){
         var m=markers[s[0]];
-        if(map&&m){map.flyTo([s[2],s[3]],Math.max(map.getZoom(),14),{duration:.6});setTimeout(function(){m.openPopup();},650);}
+        if(map&&m){map.flyTo(m.getLatLng(),Math.max(map.getZoom(),14),{duration:.6});setTimeout(function(){m.openPopup();},650);}
         else{window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s[0]),'_blank');}
       });
       wrap.appendChild(b);
     });
   }
   function update(){
-    var d=data();
+    var d=data(),evs=cityEvents(),dls=cityDeals();
+    setCount('lgCountSpots',d.spots.length);
+    setCount('lgCountEvents',evs.length);
+    setCount('lgCountDeals',dls.filter(function(x){return !!x.ll;}).length);
     if(map&&layer){
       map.setView(d.center,d.zoom);
-      layer.clearLayers();markers={};
+      layer.clearLayers();markers={};used={};
       d.spots.forEach(function(s){
-        var m=L.marker([s[2],s[3]]).addTo(layer).bindPopup('<strong>'+esc(s[0])+'</strong><br>'+esc(s[1]));
-        markers[s[0]]=m;
+        markers[s[0]]=addPin([s[2],s[3]],COLORS.spot,'<strong>'+esc(s[0])+'</strong><br>'+esc(s[1]));
+      });
+      evs.forEach(function(e){
+        var html='<strong>'+esc(e.name)+'</strong><br>'+esc(e.venue);
+        if(e.link)html+='<br><a href="'+esc(e.link)+'" target="_blank" rel="noopener">'+esc(learnMore())+'</a>';
+        addPin(EVENT_LL[e.id],COLORS.event,html);
+      });
+      dls.forEach(function(x){
+        if(!x.ll)return;
+        var html='<strong>'+esc(x.name)+'</strong>';
+        if(x.offer)html+='<br>'+esc(x.offer);
+        if(x.addr)html+='<br><span style="color:#7a7466">'+esc(x.addr)+'</span>';
+        if(x.link)html+='<br><a href="'+esc(x.link)+'" target="_blank" rel="noopener">'+esc(learnMore())+'</a>';
+        addPin(x.ll,COLORS.deal,html);
       });
       setTimeout(function(){if(map)map.invalidateSize();},80);
     }
@@ -4073,7 +4152,7 @@ presenceTick();
     update();
   }
   init();
-  if(window.MutationObserver){new MutationObserver(function(){update();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-city']});}
+  if(window.MutationObserver){new MutationObserver(function(){update();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-city','lang']});}
   document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-go="home"]')){setTimeout(function(){if(map)map.invalidateSize();},120);}});
 })();
 </script>
