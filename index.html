@@ -178,6 +178,13 @@ body.redeeming .app{display:none}
 .header{padding-bottom:0}
 .hero{padding-top:0;padding-bottom:0}
 .map-section{margin-top:0}
+/* Bounce-style sheet handle between the map and the content (2026-10-14) */
+.sheet-handle-wrap{position:sticky;top:10px;z-index:60;display:flex;justify-content:center;margin:2px 0 -38px;pointer-events:none}
+.sheet-handle{pointer-events:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;width:76px;height:40px;border:0;border-radius:999px;background:#fff;box-shadow:0 8px 22px rgba(23,32,64,.25);cursor:grab;color:#39404d;touch-action:none}
+.sheet-handle:active{cursor:grabbing}
+.sh-grip{width:42px;height:6px;border-radius:3px;background:#c6ccd6}
+.sh-chev{transition:transform .25s ease}
+.sheet-handle.up .sh-chev{transform:rotate(180deg)}
 /* City search bar over the map, Bounce-style (2026-10-14) */
 .city-search{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:810;width:min(560px,calc(100% - 28px));display:flex;align-items:center;gap:10px;background:#fff;border-radius:999px;box-shadow:0 10px 30px rgba(23,32,64,.25);padding:0 20px;height:56px}
 .city-search .cs-icon{flex:0 0 auto}
@@ -229,6 +236,7 @@ body.redeeming .app{display:none}
         <div class="city-search" id="citySearchWrap"><svg class="cs-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#20242b" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20.5 20.5-4.6-4.6"/></svg><input id="citySearch" type="text" value="New York, US" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="cityResults" data-i18n-aria="city_choose" aria-label="Choose a city" data-i18n-ph="city_search_ph" placeholder="Search a city"/><div class="city-results" id="cityResults" role="listbox" hidden></div></div>
         <div class="nav-legend" id="navLegend" aria-label="Map legend"><span class="nl-item"><i class="lg-dot" style="background:#2f7de1"></i><span data-i18n="mapsec_spots">Top spots</span> <b id="lgCountSpots">0</b></span><span class="nl-item"><i class="lg-dot" style="background:#ff7a1a"></i><span data-i18n="mapsec_events">Events</span> <b id="lgCountEvents">0</b></span><span class="nl-item"><i class="lg-dot" style="background:#1f9d63"></i><span data-i18n="mapsec_deals">Deals</span> <b id="lgCountDeals">0</b></span></div>
       </section>
+      <div class="sheet-handle-wrap"><button class="sheet-handle" id="sheetHandle" type="button" aria-label="Scroll between the map and the content below"><span class="sh-grip"></span><svg class="sh-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div>
       <section class="meetup-section">
         <div class="meetup-head"><div><h2 data-i18n="meet_title">Make new friends</h2></div><p data-i18n="meet_sub">Connect with another traveler or a local person.</p></div>
         <button class="primary" data-go="profile" data-i18n="meet_cta">Create your profile →</button>
@@ -4182,6 +4190,19 @@ presenceTick();
   init();
   if(window.MutationObserver){new MutationObserver(function(){update();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-city','lang']});}
   document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-go="home"]')){setTimeout(function(){if(map)map.invalidateSize();},120);}});
+  /* Sheet handle: tap or flick to jump between the map and the content below */
+  (function(){var btn=document.getElementById('sheetHandle');if(!btn)return;var sec=document.querySelector('.map-section');var wrap=btn.parentElement;var sib=wrap?wrap.nextElementSibling:null;if(!sec||!sib)return;
+  function yOf(el){return el.getBoundingClientRect().top+window.scrollY}
+  function contentY(){return yOf(sib)-4}
+  function mapY(){return yOf(sec)}
+  function pastContent(){return window.scrollY>=contentY()-60}
+  function sync(){btn.classList.toggle('up',pastContent())}
+  var suppress=false;
+  btn.addEventListener('click',function(){if(suppress){suppress=false;return}window.scrollTo({top:pastContent()?mapY():contentY(),behavior:'smooth'})});
+  var sy=null;
+  btn.addEventListener('pointerdown',function(e){sy=e.clientY});
+  btn.addEventListener('pointerup',function(e){if(sy==null)return;var dy=e.clientY-sy;sy=null;if(dy<-24){suppress=true;setTimeout(function(){suppress=false},350);window.scrollTo({top:contentY(),behavior:'smooth'})}else if(dy>24){suppress=true;setTimeout(function(){suppress=false},350);window.scrollTo({top:mapY(),behavior:'smooth'})}});
+  window.addEventListener('scroll',sync,{passive:true});sync();})();
 })();
 </script>
 
