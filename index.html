@@ -9,6 +9,7 @@
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <meta name="theme-color" content="#bfe8f4" />
   <meta name="description" content="Souvs is the AI-powered city guide for NYC, Miami, Chicago, Los Angeles and San Francisco. Find events, local deals, happy hours and hidden spots. Chat with Souvs, your AI city guide." />
   <meta name="keywords" content="nyc tourism, new york city guide, nyc events, things to do in nyc, nyc deals, nyc happy hour, new york events this week, miami tourism, miami travel guide, miami events, things to do in miami, miami deals, miami happy hour, south beach guide, chicago tourism, chicago events, things to do in chicago, chicago deals, los angeles tourism, la events, things to do in los angeles, la deals, san francisco tourism, sf events, things to do in san francisco, sf deals, ai tour guide, city guide app" />
@@ -147,70 +148,15 @@ body.redeeming .app{display:none}
 .rd-status{margin:14px 0;font-weight:800;font-size:18px}
 .rd-status.ok{color:#15803d}.rd-status.done{color:#1d4ed8}.rd-status.bad{color:#b3261e}
 #rdRedeem{width:100%;margin-top:6px}
-/* ===== Bounce-style home (2026-10-13) ===== */
-.bz-hero{flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:0;padding:36px 26px 30px;border-radius:36px;background:linear-gradient(165deg,#8fd0f2 0%,#bfe8f4 38%,#fdf3e0 76%,#ffd9ae 100%);box-shadow:var(--shadow)}
-.bz-hero .hero-hello{top:16px;right:22px;background:rgba(255,255,255,.78);padding:7px 13px;border-radius:999px;font-size:15px;letter-spacing:0;box-shadow:0 6px 16px rgba(38,48,71,.12)}
-.bz-mascot{position:relative;z-index:5;height:clamp(110px,16vw,168px);width:auto;pointer-events:none;filter:drop-shadow(0 14px 20px rgba(20,16,40,.3))}
-.bz-hero .bz-h1{position:relative;z-index:5;margin:10px 0 8px;color:#263550;font-size:clamp(40px,6.4vw,68px);line-height:.95;letter-spacing:-.03em;max-width:720px}
-.bz-sub{position:relative;z-index:5;margin:0 0 20px;color:#43506b;font-size:clamp(16px,2vw,19px);font-weight:700;max-width:560px}
-.bz-search{position:relative;z-index:6;display:flex;align-items:stretch;width:min(680px,100%);background:#fff;border-radius:999px;padding:6px;box-shadow:0 18px 38px rgba(38,53,80,.22)}
-.bz-field{display:flex;align-items:center;gap:8px;padding:0 14px;min-width:0}
-.bz-field select,.bz-field input{border:0;background:transparent;font:inherit;font-weight:800;color:#263550;outline:none;min-width:0}
-.bz-field select{cursor:pointer;max-width:158px}
-.bz-field input{flex:1;width:100%}
-.bz-field.grow{flex:1}
-.bz-ic{font-size:17px;flex:none}
-.bz-div{width:1px;background:rgba(38,48,71,.14);margin:8px 0}
-.bz-go{flex:none;border:0;cursor:pointer;border-radius:999px;background:#ff9d55;color:#fff;font-weight:900;padding:13px 24px;box-shadow:3px 4px 0 #263550}
-.bz-badges{position:relative;z-index:5;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
-.bz-badge{background:#ffd93b;color:#263550;font-size:12.5px;font-weight:900;padding:8px 13px;border-radius:999px;box-shadow:0 8px 18px rgba(38,53,80,.16)}
-.bz-sec{margin-top:16px;padding:38px;border-radius:34px;background:var(--surface-soft);box-shadow:var(--shadow)}
-.bz-sec>h2{font-size:clamp(30px,4vw,44px);color:var(--ink);margin:0 0 6px;text-align:center}
-.bz-lede{text-align:center;color:var(--muted);margin:0 auto 26px;max-width:520px;font-weight:700}
-.bz-how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.bz-card{border-radius:24px;padding:24px;background:#e7f3fd}
-.bz-card:nth-child(2){background:#ffedd9}
-.bz-card:nth-child(3){background:#e9f6e4}
-.bz-cic{width:56px;height:56px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:27px;box-shadow:0 8px 18px rgba(38,53,80,.14);margin-bottom:14px}
-.bz-card h3{margin:0 0 6px;font-size:21px;color:#263550}
-.bz-card p{margin:0 0 12px;color:#5a6478;font-size:14.5px;font-weight:600}
-.bz-link{background:none;border:0;padding:0;font:inherit;font-weight:900;color:var(--pink-dark);cursor:pointer}
-.bz-city-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
-.bz-city-card{position:relative;border:0;cursor:pointer;border-radius:22px;overflow:hidden;min-height:176px;padding:0;text-align:left;color:#fff;grid-column:span 2;background-size:cover;background-position:center;box-shadow:0 12px 26px rgba(38,53,80,.18);transition:transform .18s ease}
-.bz-city-card.wide{grid-column:span 3}
-.bz-city-card:hover{transform:translateY(-3px)}
-.bz-city-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,26,48,0) 38%,rgba(20,26,48,.74))}
-.bz-city-name{position:absolute;left:16px;bottom:13px;z-index:1}
-.bz-city-name strong{display:block;font-size:22px;font-weight:900;letter-spacing:-.02em;line-height:1.05}
-.bz-city-name span{font-size:12.5px;font-weight:800;opacity:.94}
-.bz-why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:8px}
-.bz-feat{background:var(--surface-faint);border-radius:22px;padding:20px}
-.bz-fic{width:48px;height:48px;border-radius:16px;background:#ff9d55;display:grid;place-items:center;font-size:23px;margin-bottom:10px}
-.bz-feat h3{font-size:18px;margin:0 0 4px;color:var(--ink)}
-.bz-feat p{margin:0;color:var(--muted);font-size:13.5px;font-weight:700}
-.bz-faq-wrap{max-width:760px;margin:10px auto 0}
-.bz-qa{border-top:1px solid var(--line)}
-.bz-qa:last-child{border-bottom:1px solid var(--line)}
-.bz-qa summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 2px;font-weight:900;color:var(--ink);font-size:17px}
-.bz-qa summary::-webkit-details-marker{display:none}
-.bz-qa summary:after{content:"+";font-size:25px;font-weight:900;color:#ff9d55;flex:none;line-height:1}
-.bz-qa[open ] summary:after{content:"–"}
-.bz-qa p{margin:0 2px 18px;color:var(--muted);font-weight:600;max-width:660px}
-.bz-join{margin-top:16px;border-radius:34px;padding:42px 30px;text-align:center;background:linear-gradient(120deg,#ff9d55,#ffb37e);box-shadow:var(--shadow)}
-.bz-join h2{font-size:clamp(30px,4.4vw,46px);margin:0 0 8px;color:#263550}
-.bz-join p{margin:0 auto 18px;max-width:480px;font-weight:700;color:#5b4326}
-.bz-join .primary{background:#263550;color:#fff;box-shadow:4px 5px 0 rgba(255,255,255,.85)}
-.bz-footer{margin-top:16px;border-radius:34px;background:#263550;color:#fff;padding:38px 34px 26px}
-.bz-foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:26px}
-.bz-footer .logo{height:56px}
-.bz-foot-tag{color:rgba(255,255,255,.75);font-weight:700;font-size:14px;max-width:260px;margin:10px 0 0}
-.bz-footer h3{color:#fff;font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:6px 0 12px}
-.bz-foot-col{display:grid;gap:9px;align-content:start;justify-items:start}
-.bz-foot-col button,.bz-foot-col a{background:none;border:0;padding:0;text-align:left;color:rgba(255,255,255,.86);font:inherit;font-weight:800;font-size:14.5px;cursor:pointer;text-decoration:none}
-.bz-foot-col button:hover,.bz-foot-col a:hover{color:#ffb37e}
-.bz-foot-bottom{margin-top:28px;padding-top:18px;border-top:1px solid rgba(255,255,255,.18);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:rgba(255,255,255,.62);font-size:12.5px;font-weight:700}
-@media(max-width:880px){.bz-how-grid{grid-template-columns:1fr}.bz-why-grid{grid-template-columns:repeat(2,1fr)}.bz-foot-grid{grid-template-columns:1fr 1fr}.bz-city-grid{grid-template-columns:repeat(2,1fr)}.bz-city-card,.bz-city-card.wide{grid-column:auto;min-height:150px}}
-@media(max-width:640px){.bz-hero{padding:28px 16px 22px;border-radius:28px}.bz-hero .hero-hello{top:10px;right:12px;font-size:12.5px;padding:6px 10px}.bz-mascot{height:104px}.bz-search{flex-direction:column;border-radius:26px;padding:10px;gap:8px}.bz-field{padding:6px 10px}.bz-field select{max-width:none;flex:1}.bz-div{display:none}.bz-go{width:100%;padding:15px}.bz-sec{padding:26px 18px;border-radius:28px}.bz-foot-grid{grid-template-columns:1fr}.bz-footer{padding:30px 22px 22px}}
+/* ===== Homepage spots map (2026-10-14) ===== */
+.map-section{margin-top:16px;padding:38px;border-radius:34px 24px 38px 27px;background:var(--surface-soft);box-shadow:var(--shadow)}
+.home-map{height:400px;border-radius:22px;overflow:hidden;margin-top:20px;z-index:0;background:#dceef0}
+.map-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.map-chips button{padding:9px 13px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-weight:800;font-size:13px;cursor:pointer}
+.map-chips button:hover{background:var(--blue)}
+.home-map .leaflet-popup-content{font:600 13.5px/1.45 "Nunito","Trebuchet MS",sans-serif;color:#263047}
+.home-map .leaflet-popup-content strong{font-size:15px;font-weight:900}
+@media(max-width:640px){.map-section{padding:27px 20px;border-radius:28px 21px 31px 23px}.home-map{height:320px}}
 </style>
 </head>
 <body>
@@ -255,38 +201,15 @@ body.redeeming .app{display:none}
 
   <main>
     <section class="view active" id="homeView" data-view="home">
-      <section class="hero bz-hero">
+      <section class="hero">
         <p class="hero-hello" id="heroHello">hello, NYC</p>
-        <img class="bz-mascot" src="img/souvs-mascot.webp" alt="Souvs, your city guide"/>
-        <h1 class="bz-h1" data-i18n="bz_h1">Explore the city like a local</h1>
-        <p class="bz-sub" data-i18n="bz_sub">Your AI city guide — live events, local deals, happy hours and hidden spots.</p>
-        <form class="bz-search" id="bzSearchForm" role="search">
-          <label class="bz-field"><span class="bz-ic" aria-hidden="true">📍</span><select id="bzCity" aria-label="Choose a city"><option>New York City</option><option>Miami</option><option>Chicago</option><option>Los Angeles</option><option>San Francisco</option></select></label>
-          <span class="bz-div" aria-hidden="true"></span>
-          <label class="bz-field grow"><span class="bz-ic" aria-hidden="true">✨</span><input id="bzMood" data-i18n-ph="bz_mood_ph" placeholder="What are you in the mood for?" maxlength="240" autocomplete="off"/></label>
-          <button class="bz-go" type="submit" data-i18n="hero_pick">ask souvs</button>
-        </form>
-        <div class="bz-badges"><span class="bz-badge" data-i18n="bz_badge1">5 cities live</span><span class="bz-badge" data-i18n="bz_badge2">New events every week</span><span class="bz-badge" data-i18n="bz_badge3">Free to explore</span></div>
+        <img class="hero-mascot" src="img/souvs-mascot.webp" alt="Souvs, your city guide"/>
+        <div class="hero-ctas"><button class="primary" id="heroPick" data-go="chat" data-i18n="hero_pick">ask souvs</button><button class="primary" data-go="profile" data-i18n="hero_join">Join us</button></div>
       </section>
-      <section class="bz-sec">
-        <h2 data-i18n="bz_how_title">How it works</h2>
-        <p class="bz-lede" data-i18n="bz_how_lede">Three steps to your best day in the city.</p>
-        <div class="bz-how-grid">
-          <div class="bz-card"><div class="bz-cic">💬</div><h3 data-i18n="bz_how1_t">Ask Souvs</h3><p data-i18n="bz_how1_p">Tell Souvs your mood — food, music, views, anything — and get a plan in seconds.</p><button class="bz-link" type="button" data-go="chat" data-i18n="bz_how1_cta">Start chatting →</button></div>
-          <div class="bz-card"><div class="bz-cic">🎟️</div><h3 data-i18n="bz_how2_t">Get events &amp; deals</h3><p data-i18n="bz_how2_p">See what's on this week, from festivals to happy hours, and claim local deals.</p><button class="bz-link" type="button" data-go="events" data-i18n="bz_how2_cta">See what's on →</button></div>
-          <div class="bz-card"><div class="bz-cic">👋</div><h3 data-i18n="bz_how3_t">Meet travelers</h3><p data-i18n="bz_how3_p">Create a profile, meet people around you and unbox surprise perks together.</p><button class="bz-link" type="button" data-go="profile" data-i18n="meet_cta">Create your profile →</button></div>
-        </div>
-      </section>
-      <section class="bz-sec">
-        <h2 data-i18n="bz_cities_title">Explore our cities</h2>
-        <p class="bz-lede" data-i18n="bz_cities_sub">Five cities, one guide. Pick yours and start exploring.</p>
-        <div class="bz-city-grid">
-          <button class="bz-city-card" type="button" data-city-link="New York City" style="background-image:url('img/bg-skyline-nyc.webp')"><span class="bz-city-shade"></span><span class="bz-city-name"><strong>New York City</strong><span data-i18n="bz_explore">Explore →</span></span></button>
-          <button class="bz-city-card" type="button" data-city-link="Miami" style="background-image:url('img/bg-skyline-miami.webp')"><span class="bz-city-shade"></span><span class="bz-city-name"><strong>Miami</strong><span data-i18n="bz_explore">Explore →</span></span></button>
-          <button class="bz-city-card" type="button" data-city-link="Chicago" style="background-image:url('img/bg-skyline-chicago.webp')"><span class="bz-city-shade"></span><span class="bz-city-name"><strong>Chicago</strong><span data-i18n="bz_explore">Explore →</span></span></button>
-          <button class="bz-city-card wide" type="button" data-city-link="Los Angeles" style="background-image:url('img/bg-skyline-la.webp')"><span class="bz-city-shade"></span><span class="bz-city-name"><strong>Los Angeles</strong><span data-i18n="bz_explore">Explore →</span></span></button>
-          <button class="bz-city-card wide" type="button" data-city-link="San Francisco" style="background-image:url('img/bg-skyline-sf.webp')"><span class="bz-city-shade"></span><span class="bz-city-name"><strong>San Francisco</strong><span data-i18n="bz_explore">Explore →</span></span></button>
-        </div>
+      <section class="map-section">
+        <div class="meetup-head"><div><h2 data-i18n="mapsec_title">Explore the map</h2></div><p data-i18n="mapsec_sub">Top spots in the city — tap a pin to see what's there.</p></div>
+        <div id="homeMap" class="home-map" aria-label="City map with top spots"></div>
+        <div class="map-chips" id="mapChips"></div>
       </section>
       <section class="meetup-section">
         <div class="meetup-head"><div><h2 data-i18n="meet_title">Make more friends</h2></div><p data-i18n="meet_sub">Connect with another traveler or a local person.</p></div>
@@ -301,38 +224,6 @@ body.redeeming .app{display:none}
         <button class="primary" data-go="events" data-i18n="events_see_all" style="display:block;margin:18px auto 0">See all events →</button>
       </section>
       <section class="deal-banner"><div class="deal-copy"><p class="eyebrow" data-i18n="deal_eyebrow">Perks</p><h2 data-i18n="deal_title">the best deals in the city!</h2><p data-i18n="deal_sub">We listed the best deals happening right now. Enjoy!</p><button class="primary" data-go="perks" data-i18n="deal_cta">Check it out!</button></div></section>
-      <section class="bz-sec">
-        <h2 data-i18n="bz_why_title">Why travelers love Souvs</h2>
-        <div class="bz-why-grid">
-          <div class="bz-feat"><div class="bz-fic">🤖</div><h3 data-i18n="bz_why1_t">Live AI guide</h3><p data-i18n="bz_why1_p">Real answers about the city, day or night.</p></div>
-          <div class="bz-feat"><div class="bz-fic">🎉</div><h3 data-i18n="bz_why2_t">Events &amp; happy hours</h3><p data-i18n="bz_why2_p">What's on this week, kept fresh.</p></div>
-          <div class="bz-feat"><div class="bz-fic">💸</div><h3 data-i18n="bz_why3_t">Deals &amp; perks</h3><p data-i18n="bz_why3_p">Claim local deals and keep them in your wallet.</p></div>
-          <div class="bz-feat"><div class="bz-fic">🤝</div><h3 data-i18n="bz_why4_t">Meet people</h3><p data-i18n="bz_why4_p">Travelers and locals who are up for hanging out.</p></div>
-        </div>
-      </section>
-      <section class="bz-sec">
-        <h2 data-i18n="bz_faq_title">Frequently asked questions</h2>
-        <div class="bz-faq-wrap">
-          <details class="bz-qa"><summary data-i18n="bz_faq1_q">What is Souvs?</summary><p data-i18n="bz_faq1_a">Souvs is an AI city guide for New York City, Miami, Chicago, Los Angeles and San Francisco. Ask about events, deals, happy hours and hidden spots — and meet other travelers along the way.</p></details>
-          <details class="bz-qa"><summary data-i18n="bz_faq2_q">Is Souvs free?</summary><p data-i18n="bz_faq2_a">Yes. Chatting with Souvs and exploring events and deals is free. Claimed perks stay in your wallet on this device.</p></details>
-          <details class="bz-qa"><summary data-i18n="bz_faq3_q">Which cities does Souvs cover?</summary><p data-i18n="bz_faq3_a">New York City, Miami, Chicago, Los Angeles and San Francisco — and more cities are on the way.</p></details>
-          <details class="bz-qa"><summary data-i18n="bz_faq4_q">How do deals and perks work?</summary><p data-i18n="bz_faq4_a">Browse the Deals page, claim a perk to get your code, and show the code at the business. Your claimed deals stay saved in your wallet.</p></details>
-        </div>
-      </section>
-      <section class="bz-join">
-        <h2 data-i18n="bz_join_title">Join the crew</h2>
-        <p data-i18n="bz_join_sub">Create your profile to meet travelers, claim perks and get more from the city.</p>
-        <button class="primary" type="button" data-go="profile" data-i18n="hero_join">Join us</button>
-      </section>
-      <footer class="bz-footer">
-        <div class="bz-foot-grid">
-          <div><img class="logo" src="souvs-logo.webp" alt="Souvs logo"/><p class="bz-foot-tag" data-i18n="bz_foot_tag">Your AI city guide — events, deals and hidden spots.</p></div>
-          <div class="bz-foot-col"><h3 data-i18n="bz_foot_explore">Explore</h3><button type="button" data-go="chat" data-i18n="hero_pick">ask souvs</button><button type="button" data-go="events" data-i18n="bz_foot_events">Events</button><button type="button" data-go="perks" data-i18n="bz_foot_deals">Deals</button><button type="button" data-go="profile" data-i18n="hero_join">Join us</button></div>
-          <div class="bz-foot-col"><h3 data-i18n="bz_foot_cities">Cities</h3><button type="button" data-city-link="New York City">New York City</button><button type="button" data-city-link="Miami">Miami</button><button type="button" data-city-link="Chicago">Chicago</button><button type="button" data-city-link="Los Angeles">Los Angeles</button><button type="button" data-city-link="San Francisco">San Francisco</button></div>
-          <div class="bz-foot-col"><h3 data-i18n="bz_foot_contact">Say hello</h3><a href="mailto:hello@souvs.site">hello@souvs.site</a><a href="https://instagram.com/souvsguide" target="_blank" rel="noopener">@souvsguide</a><a href="https://souvs.site">souvs.site</a></div>
-        </div>
-        <div class="bz-foot-bottom"><span>© 2026 Souvs</span><span data-i18n="bz_foot_cities_line">NYC · Miami · Chicago · Los Angeles · San Francisco</span></div>
-      </footer>
     </section>
 
     <section class="view screen" id="chatView" data-view="chat">
@@ -604,52 +495,8 @@ en:{
   hero_sub_sf: "let the coolest San Francisco locals show you around",
   hero_join: "Join us",
   hero_pick: "ask souvs",
-  bz_h1: "Explore the city like a local",
-  bz_sub: "Your AI city guide — live events, local deals, happy hours and hidden spots.",
-  bz_mood_ph: "What are you in the mood for?",
-  bz_badge1: "5 cities live",
-  bz_badge2: "New events every week",
-  bz_badge3: "Free to explore",
-  bz_how_title: "How it works",
-  bz_how_lede: "Three steps to your best day in the city.",
-  bz_how1_t: "Ask Souvs",
-  bz_how1_p: "Tell Souvs your mood — food, music, views, anything — and get a plan in seconds.",
-  bz_how1_cta: "Start chatting →",
-  bz_how2_t: "Get events & deals",
-  bz_how2_p: "See what's on this week, from festivals to happy hours, and claim local deals.",
-  bz_how2_cta: "See what's on →",
-  bz_how3_t: "Meet travelers",
-  bz_how3_p: "Create a profile, meet people around you and unbox surprise perks together.",
-  bz_cities_title: "Explore our cities",
-  bz_cities_sub: "Five cities, one guide. Pick yours and start exploring.",
-  bz_explore: "Explore →",
-  bz_why_title: "Why travelers love Souvs",
-  bz_why1_t: "Live AI guide",
-  bz_why1_p: "Real answers about the city, day or night.",
-  bz_why2_t: "Events & happy hours",
-  bz_why2_p: "What's on this week, kept fresh.",
-  bz_why3_t: "Deals & perks",
-  bz_why3_p: "Claim local deals and keep them in your wallet.",
-  bz_why4_t: "Meet people",
-  bz_why4_p: "Travelers and locals who are up for hanging out.",
-  bz_faq_title: "Frequently asked questions",
-  bz_faq1_q: "What is Souvs?",
-  bz_faq1_a: "Souvs is an AI city guide for New York City, Miami, Chicago, Los Angeles and San Francisco. Ask about events, deals, happy hours and hidden spots — and meet other travelers along the way.",
-  bz_faq2_q: "Is Souvs free?",
-  bz_faq2_a: "Yes. Chatting with Souvs and exploring events and deals is free. Claimed perks stay in your wallet on this device.",
-  bz_faq3_q: "Which cities does Souvs cover?",
-  bz_faq3_a: "New York City, Miami, Chicago, Los Angeles and San Francisco — and more cities are on the way.",
-  bz_faq4_q: "How do deals and perks work?",
-  bz_faq4_a: "Browse the Deals page, claim a perk to get your code, and show the code at the business. Your claimed deals stay saved in your wallet.",
-  bz_join_title: "Join the crew",
-  bz_join_sub: "Create your profile to meet travelers, claim perks and get more from the city.",
-  bz_foot_tag: "Your AI city guide — events, deals and hidden spots.",
-  bz_foot_explore: "Explore",
-  bz_foot_events: "Events",
-  bz_foot_deals: "Deals",
-  bz_foot_cities: "Cities",
-  bz_foot_contact: "Say hello",
-  bz_foot_cities_line: "NYC · Miami · Chicago · Los Angeles · San Francisco",
+  mapsec_title: "Explore the map",
+  mapsec_sub: "Top spots in the city — tap a pin to see what's there.",
   role_souvs: "your city guide",
   welcome_souvs: "Souvs here — ask me anything about the city: events, deals, happy hours, hidden spots.",
   sug_souvs_0: "what's happening this weekend?",
@@ -1118,52 +965,8 @@ es:{
   hero_sub_sf: "deja que los locales más cool de San Francisco te enseñen la ciudad",
   hero_join: "Únete",
   hero_pick: "pregunta a Souvs",
-  bz_h1: "Explora la ciudad como un local",
-  bz_sub: "Tu guía urbana con IA: eventos en vivo, ofertas locales, happy hours y rincones secretos.",
-  bz_mood_ph: "¿Qué te apetece hoy?",
-  bz_badge1: "5 ciudades en vivo",
-  bz_badge2: "Eventos nuevos cada semana",
-  bz_badge3: "Gratis para explorar",
-  bz_how_title: "Cómo funciona",
-  bz_how_lede: "Tres pasos para tu mejor día en la ciudad.",
-  bz_how1_t: "Pregunta a Souvs",
-  bz_how1_p: "Cuéntale a Souvs qué te apetece — comida, música, vistas, lo que sea — y recibe un plan en segundos.",
-  bz_how1_cta: "Empezar a chatear →",
-  bz_how2_t: "Eventos y ofertas",
-  bz_how2_p: "Mira qué hay esta semana, de festivales a happy hours, y consigue ofertas locales.",
-  bz_how2_cta: "Ver qué hay →",
-  bz_how3_t: "Conoce viajeros",
-  bz_how3_p: "Crea un perfil, conoce gente cerca de ti y descubran perks sorpresa juntos.",
-  bz_cities_title: "Explora nuestras ciudades",
-  bz_cities_sub: "Cinco ciudades, un solo guía. Elige la tuya y empieza a explorar.",
-  bz_explore: "Explorar →",
-  bz_why_title: "Por qué los viajeros aman Souvs",
-  bz_why1_t: "Guía IA en vivo",
-  bz_why1_p: "Respuestas reales sobre la ciudad, día y noche.",
-  bz_why2_t: "Eventos y happy hours",
-  bz_why2_p: "Lo que hay esta semana, siempre actualizado.",
-  bz_why3_t: "Ofertas y perks",
-  bz_why3_p: "Consigue ofertas locales y guárdalas en tu billetera.",
-  bz_why4_t: "Conoce gente",
-  bz_why4_p: "Viajeros y locales con ganas de salir.",
-  bz_faq_title: "Preguntas frecuentes",
-  bz_faq1_q: "¿Qué es Souvs?",
-  bz_faq1_a: "Souvs es una guía urbana con IA para Nueva York, Miami, Chicago, Los Ángeles y San Francisco. Pregunta por eventos, ofertas, happy hours y rincones secretos, y conoce a otros viajeros en el camino.",
-  bz_faq2_q: "¿Souvs es gratis?",
-  bz_faq2_a: "Sí. Chatear con Souvs y explorar eventos y ofertas es gratis. Los perks que consigas quedan en tu billetera en este dispositivo.",
-  bz_faq3_q: "¿Qué ciudades cubre Souvs?",
-  bz_faq3_a: "Nueva York, Miami, Chicago, Los Ángeles y San Francisco, y más ciudades están en camino.",
-  bz_faq4_q: "¿Cómo funcionan las ofertas y los perks?",
-  bz_faq4_a: "Explora la página de ofertas, consigue un perk para obtener tu código y muéstralo en el negocio. Tus ofertas quedan guardadas en tu billetera.",
-  bz_join_title: "Únete al equipo",
-  bz_join_sub: "Crea tu perfil para conocer viajeros, conseguir perks y sacarle más provecho a la ciudad.",
-  bz_foot_tag: "Tu guía urbana con IA: eventos, ofertas y rincones secretos.",
-  bz_foot_explore: "Explorar",
-  bz_foot_events: "Eventos",
-  bz_foot_deals: "Ofertas",
-  bz_foot_cities: "Ciudades",
-  bz_foot_contact: "Salúdanos",
-  bz_foot_cities_line: "NYC · Miami · Chicago · Los Ángeles · San Francisco",
+  mapsec_title: "Explora el mapa",
+  mapsec_sub: "Los mejores lugares de la ciudad: toca un pin para ver qué hay.",
   role_souvs: "tu guía de la ciudad",
   welcome_souvs: "Souvs por aquí — pregúntame lo que sea sobre la ciudad: eventos, ofertas, happy hours, rincones.",
   sug_souvs_0: "¿qué hay este finde?",
@@ -1631,52 +1434,8 @@ pt:{
   hero_sub_sf: "deixe os locais mais legais de San Francisco te mostrarem a cidade",
   hero_join: "Participe",
   hero_pick: "pergunte ao Souvs",
-  bz_h1: "Explore a cidade como um local",
-  bz_sub: "Seu guia da cidade com IA — eventos ao vivo, ofertas locais, happy hours e lugares secretos.",
-  bz_mood_ph: "O que você está a fim de fazer?",
-  bz_badge1: "5 cidades no ar",
-  bz_badge2: "Eventos novos toda semana",
-  bz_badge3: "Grátis para explorar",
-  bz_how_title: "Como funciona",
-  bz_how_lede: "Três passos para o seu melhor dia na cidade.",
-  bz_how1_t: "Pergunte ao Souvs",
-  bz_how1_p: "Conte ao Souvs o que você quer — comida, música, vistas, qualquer coisa — e receba um plano em segundos.",
-  bz_how1_cta: "Começar a conversar →",
-  bz_how2_t: "Eventos e ofertas",
-  bz_how2_p: "Veja o que rola esta semana, de festivais a happy hours, e garanta ofertas locais.",
-  bz_how2_cta: "Ver o que rola →",
-  bz_how3_t: "Conheça viajantes",
-  bz_how3_p: "Crie um perfil, conheça pessoas perto de você e abram juntos perks surpresa.",
-  bz_cities_title: "Explore nossas cidades",
-  bz_cities_sub: "Cinco cidades, um só guia. Escolha a sua e comece a explorar.",
-  bz_explore: "Explorar →",
-  bz_why_title: "Por que os viajantes amam o Souvs",
-  bz_why1_t: "Guia de IA ao vivo",
-  bz_why1_p: "Respostas de verdade sobre a cidade, dia e noite.",
-  bz_why2_t: "Eventos e happy hours",
-  bz_why2_p: "O que rola esta semana, sempre atualizado.",
-  bz_why3_t: "Ofertas e perks",
-  bz_why3_p: "Garanta ofertas locais e guarde na sua carteira.",
-  bz_why4_t: "Conheça pessoas",
-  bz_why4_p: "Viajantes e moradores a fim de sair.",
-  bz_faq_title: "Perguntas frequentes",
-  bz_faq1_q: "O que é o Souvs?",
-  bz_faq1_a: "O Souvs é um guia da cidade com IA para Nova York, Miami, Chicago, Los Angeles e São Francisco. Pergunte sobre eventos, ofertas, happy hours e lugares secretos — e conheça outros viajantes pelo caminho.",
-  bz_faq2_q: "O Souvs é grátis?",
-  bz_faq2_a: "Sim. Conversar com o Souvs e explorar eventos e ofertas é grátis. Os perks que você garantir ficam na sua carteira neste aparelho.",
-  bz_faq3_q: "Quais cidades o Souvs cobre?",
-  bz_faq3_a: "Nova York, Miami, Chicago, Los Angeles e São Francisco — e mais cidades estão a caminho.",
-  bz_faq4_q: "Como funcionam as ofertas e os perks?",
-  bz_faq4_a: "Navegue pela página de ofertas, garanta um perk para receber seu código e mostre o código no local. Suas ofertas ficam salvas na sua carteira.",
-  bz_join_title: "Junte-se à turma",
-  bz_join_sub: "Crie seu perfil para conhecer viajantes, garantir perks e aproveitar mais a cidade.",
-  bz_foot_tag: "Seu guia da cidade com IA — eventos, ofertas e lugares secretos.",
-  bz_foot_explore: "Explorar",
-  bz_foot_events: "Eventos",
-  bz_foot_deals: "Ofertas",
-  bz_foot_cities: "Cidades",
-  bz_foot_contact: "Fale com a gente",
-  bz_foot_cities_line: "NYC · Miami · Chicago · Los Ángeles · San Francisco",
+  mapsec_title: "Explore o mapa",
+  mapsec_sub: "Os melhores lugares da cidade — toque em um pin para ver o que há lá.",
   role_souvs: "seu guia da cidade",
   welcome_souvs: "Souvs na área — me pergunta o que quiser sobre a cidade: eventos, ofertas, happy hours, cantinhos.",
   sug_souvs_0: "o que tá rolando esse fim de semana?",
@@ -2145,52 +1904,8 @@ fr:{
   hero_sub_sf: "laissez les locaux les plus cool de San Francisco vous faire visiter",
   hero_join: "Rejoignez-nous",
   hero_pick: "demande à Souvs",
-  bz_h1: "Explorez la ville comme un local",
-  bz_sub: "Votre guide urbain IA — événements en direct, offres locales, happy hours et lieux secrets.",
-  bz_mood_ph: "De quoi avez-vous envie ?",
-  bz_badge1: "5 villes en ligne",
-  bz_badge2: "De nouveaux événements chaque semaine",
-  bz_badge3: "Gratuit à explorer",
-  bz_how_title: "Comment ça marche",
-  bz_how_lede: "Trois étapes pour votre plus belle journée en ville.",
-  bz_how1_t: "Demandez à Souvs",
-  bz_how1_p: "Dites à Souvs ce qui vous tente — cuisine, musique, vues, tout — et recevez un plan en quelques secondes.",
-  bz_how1_cta: "Commencer à discuter →",
-  bz_how2_t: "Événements et offres",
-  bz_how2_p: "Voyez ce qui se passe cette semaine, des festivals aux happy hours, et profitez des offres locales.",
-  bz_how2_cta: "Voir le programme →",
-  bz_how3_t: "Rencontrez des voyageurs",
-  bz_how3_p: "Créez un profil, rencontrez des gens autour de vous et débloquez ensemble des perks surprise.",
-  bz_cities_title: "Explorez nos villes",
-  bz_cities_sub: "Cinq villes, un seul guide. Choisissez la vôtre et partez explorer.",
-  bz_explore: "Explorer →",
-  bz_why_title: "Pourquoi les voyageurs adorent Souvs",
-  bz_why1_t: "Guide IA en direct",
-  bz_why1_p: "De vraies réponses sur la ville, jour et nuit.",
-  bz_why2_t: "Événements et happy hours",
-  bz_why2_p: "Le programme de la semaine, toujours à jour.",
-  bz_why3_t: "Offres et perks",
-  bz_why3_p: "Profitez des offres locales et gardez-les dans votre portefeuille.",
-  bz_why4_t: "Rencontrer du monde",
-  bz_why4_p: "Voyageurs et locaux partants pour sortir.",
-  bz_faq_title: "Questions fréquentes",
-  bz_faq1_q: "Qu'est-ce que Souvs ?",
-  bz_faq1_a: "Souvs est un guide urbain IA pour New York, Miami, Chicago, Los Angeles et San Francisco. Posez vos questions sur les événements, les offres, les happy hours et les lieux secrets — et rencontrez d'autres voyageurs en route.",
-  bz_faq2_q: "Souvs est-il gratuit ?",
-  bz_faq2_a: "Oui. Discuter avec Souvs et explorer les événements et les offres est gratuit. Les perks que vous obtenez restent dans votre portefeuille sur cet appareil.",
-  bz_faq3_q: "Quelles villes couvre Souvs ?",
-  bz_faq3_a: "New York, Miami, Chicago, Los Angeles et San Francisco — et d'autres villes arrivent.",
-  bz_faq4_q: "Comment fonctionnent les offres et les perks ?",
-  bz_faq4_a: "Parcourez la page des offres, obtenez un perk pour recevoir votre code et montrez le code sur place. Vos offres restent enregistrées dans votre portefeuille.",
-  bz_join_title: "Rejoignez l'équipe",
-  bz_join_sub: "Créez votre profil pour rencontrer des voyageurs, obtenir des perks et profiter davantage de la ville.",
-  bz_foot_tag: "Votre guide urbain IA — événements, offres et lieux secrets.",
-  bz_foot_explore: "Explorer",
-  bz_foot_events: "Événements",
-  bz_foot_deals: "Offres",
-  bz_foot_cities: "Villes",
-  bz_foot_contact: "Dites bonjour",
-  bz_foot_cities_line: "NYC · Miami · Chicago · Los Angeles · San Francisco",
+  mapsec_title: "Explorez la carte",
+  mapsec_sub: "Les meilleurs spots de la ville — touchez une épingle pour voir ce qu'il y a.",
   role_souvs: "ton guide de la ville",
   welcome_souvs: "Souvs à l'appareil — pose-moi tes questions sur la ville : événements, bons plans, happy hours, coins cachés.",
   sug_souvs_0: "quoi de beau ce week-end ?",
@@ -2659,52 +2374,8 @@ de:{
   hero_sub_sf: "lass dich von den coolsten San-Francisco-Locals herumführen",
   hero_join: "Mach mit",
   hero_pick: "frag Souvs",
-  bz_h1: "Erkunde die Stadt wie ein Einheimischer",
-  bz_sub: "Dein KI-Stadtführer — Live-Events, lokale Deals, Happy Hours und versteckte Orte.",
-  bz_mood_ph: "Worauf hast du Lust?",
-  bz_badge1: "5 Städte live",
-  bz_badge2: "Jede Woche neue Events",
-  bz_badge3: "Kostenlos entdecken",
-  bz_how_title: "So funktioniert's",
-  bz_how_lede: "Drei Schritte zu deinem besten Tag in der Stadt.",
-  bz_how1_t: "Frag Souvs",
-  bz_how1_p: "Sag Souvs, worauf du Lust hast — Essen, Musik, Aussichten, alles — und erhalte in Sekunden einen Plan.",
-  bz_how1_cta: "Chat starten →",
-  bz_how2_t: "Events & Deals",
-  bz_how2_p: "Sieh dir an, was diese Woche los ist — von Festivals bis Happy Hours — und sichere dir lokale Deals.",
-  bz_how2_cta: "Ansehen, was los ist →",
-  bz_how3_t: "Reisende treffen",
-  bz_how3_p: "Erstelle ein Profil, triff Leute in deiner Nähe und packt gemeinsam Überraschungs-Perks aus.",
-  bz_cities_title: "Entdecke unsere Städte",
-  bz_cities_sub: "Fünf Städte, ein Guide. Wähle deine und leg los.",
-  bz_explore: "Entdecken →",
-  bz_why_title: "Warum Reisende Souvs lieben",
-  bz_why1_t: "Live-KI-Guide",
-  bz_why1_p: "Echte Antworten zur Stadt, Tag und Nacht.",
-  bz_why2_t: "Events & Happy Hours",
-  bz_why2_p: "Was diese Woche los ist — immer aktuell.",
-  bz_why3_t: "Deals & Perks",
-  bz_why3_p: "Lokale Deals sichern und in deiner Wallet behalten.",
-  bz_why4_t: "Leute treffen",
-  bz_why4_p: "Reisende und Locals, die Lust haben, etwas zu unternehmen.",
-  bz_faq_title: "Häufige Fragen",
-  bz_faq1_q: "Was ist Souvs?",
-  bz_faq1_a: "Souvs ist ein KI-Stadtführer für New York City, Miami, Chicago, Los Angeles und San Francisco. Frag nach Events, Deals, Happy Hours und versteckten Orten — und triff unterwegs andere Reisende.",
-  bz_faq2_q: "Ist Souvs kostenlos?",
-  bz_faq2_a: "Ja. Mit Souvs chatten und Events und Deals entdecken ist kostenlos. Gesicherte Perks bleiben in deiner Wallet auf diesem Gerät.",
-  bz_faq3_q: "Welche Städte deckt Souvs ab?",
-  bz_faq3_a: "New York City, Miami, Chicago, Los Angeles und San Francisco — weitere Städte folgen.",
-  bz_faq4_q: "Wie funktionieren Deals und Perks?",
-  bz_faq4_a: "Stöbere auf der Deals-Seite, sichere dir einen Perk für deinen Code und zeige den Code vor Ort. Deine Deals bleiben in deiner Wallet gespeichert.",
-  bz_join_title: "Werde Teil der Crew",
-  bz_join_sub: "Erstelle dein Profil, um Reisende zu treffen, Perks zu sichern und mehr aus der Stadt zu holen.",
-  bz_foot_tag: "Dein KI-Stadtführer — Events, Deals und versteckte Orte.",
-  bz_foot_explore: "Entdecken",
-  bz_foot_events: "Events",
-  bz_foot_deals: "Deals",
-  bz_foot_cities: "Städte",
-  bz_foot_contact: "Sag Hallo",
-  bz_foot_cities_line: "NYC · Miami · Chicago · Los Angeles · San Francisco",
+  mapsec_title: "Entdecke die Karte",
+  mapsec_sub: "Top-Spots der Stadt — tippe auf einen Pin, um zu sehen, was dort los ist.",
   role_souvs: "dein Stadtguide",
   welcome_souvs: "Souvs hier — frag mich alles über die Stadt: Events, Deals, Happy Hours, Geheimtipps.",
   sug_souvs_0: "was läuft dieses Wochenende?",
@@ -4322,18 +3993,88 @@ renderHomeEvents();
 presenceTick();
 })();
 </script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// Bounce-style home: hero search + city cards (2026-10-13)
+// Homepage spots map (Leaflet + OpenStreetMap), follows the current city (2026-10-14)
 (function(){
-  var SLUG2NAME={nyc:"New York City",miami:"Miami",chicago:"Chicago",la:"Los Angeles",sf:"San Francisco"};
-  var sel=document.getElementById('bzCity');
-  function syncSel(){if(!sel)return;var n=SLUG2NAME[document.documentElement.dataset.city||'nyc'];if(n&&(sel.value!==n))sel.value=n;}
-  syncSel();
-  if(window.MutationObserver){new MutationObserver(syncSel).observe(document.documentElement,{attributes:true,attributeFilter:['data-city']});}
-  function pickCity(name){var o=document.querySelector('.city-option[data-city="'+name+'"]');if(o)o.click();}
-  document.querySelectorAll('[data-city-link]').forEach(function(b){b.addEventListener('click',function(){pickCity(b.getAttribute('data-city-link'));window.scrollTo({top:0,behavior:'smooth'});});});
-  var form=document.getElementById('bzSearchForm');
-  if(form){form.addEventListener('submit',function(e){e.preventDefault();var mood=document.getElementById('bzMood').value.trim();pickCity(sel.value);var goBtn=document.querySelector('#homeView [data-go="chat"]')||document.querySelector('[data-go="chat"]');if(goBtn)goBtn.click();if(mood){var ci=document.getElementById('chatInput');var cf=document.getElementById('chatForm');if(ci&&cf){ci.value=mood;if(cf.requestSubmit)cf.requestSubmit();else cf.dispatchEvent(new Event('submit',{cancelable:true,bubbles:true}));}}});}
+  var SPOTS={
+    nyc:{center:[40.758,-73.9855],zoom:12,spots:[
+      ["Times Square","The crossroads — shows, lights & people-watching",40.758,-73.9855],
+      ["Central Park","The city's green backyard",40.7812,-73.9665],
+      ["Bryant Park","Movies, markets & the Winter Village",40.7536,-73.9832],
+      ["Brooklyn Bridge","Walk it for skyline views",40.7061,-73.9969],
+      ["The Met","Art from everywhere, forever",40.7794,-73.9632],
+      ["Grand Central","The grand hall & the whispering gallery",40.7527,-73.9772],
+      ["Washington Square Park","Street performers & the arch",40.7308,-73.9973]]},
+    miami:{center:[25.79,-80.17],zoom:12,spots:[
+      ["Ocean Drive","Art deco, cafés & the beach across the street",25.7825,-80.1301],
+      ["Wynwood Walls","Street-art walls & galleries",25.8011,-80.1994],
+      ["Calle Ocho","Little Havana — coffee, cigars & live music",25.7655,-80.2197],
+      ["Bayside Marketplace","Bayfront shops & boat tours",25.7784,-80.1867],
+      ["Bayfront Park","Concerts & bay views",25.7725,-80.1859],
+      ["Pérez Art Museum","Modern art on the bay",25.786,-80.1862]]},
+    chicago:{center:[41.885,-87.63],zoom:12,spots:[
+      ["Millennium Park","Cloud Gate (the Bean) & concerts",41.8826,-87.6233],
+      ["Navy Pier","Ferris wheel & lake views",41.8917,-87.5996],
+      ["Chicago Riverwalk","Bars & boats along the river",41.888,-87.6296],
+      ["Magnificent Mile","Shopping & skyline icons",41.8949,-87.6242],
+      ["Lincoln Park Zoo","A free zoo in the park",41.9211,-87.634],
+      ["Willis Tower","The Skydeck ledge",41.8789,-87.6359]]},
+    la:{center:[34.05,-118.34],zoom:10,spots:[
+      ["Griffith Observatory","City views & the Hollywood sign",34.1184,-118.3004],
+      ["Santa Monica Pier","The pier, the beach & the sunset",34.0099,-118.4973],
+      ["Hollywood Sign","The famous letters in the hills",34.1341,-118.3215],
+      ["The Grove","Shops, dining & the farmers market",34.072,-118.3578],
+      ["Venice Beach","Boardwalk, skaters & Muscle Beach",33.985,-118.4695],
+      ["Arts District","Breweries, murals & warehouse cool",34.0339,-118.2295]]},
+    sf:{center:[37.795,-122.44],zoom:12,spots:[
+      ["Golden Gate Bridge","The bridge — walk it if you can",37.8199,-122.4783],
+      ["Fisherman's Wharf","Sea lions & sourdough",37.808,-122.4177],
+      ["Ferry Building","Farmers market & bay views",37.7955,-122.3937],
+      ["Golden Gate Park","Gardens, museums & bison",37.7694,-122.4862],
+      ["Chinatown","The oldest Chinatown in North America",37.7941,-122.4078],
+      ["Dolores Park","Skyline views & weekend picnics",37.7596,-122.4269]]}
+  };
+  var map=null,layer=null,markers={};
+  function cityKey(){return document.documentElement.dataset.city||'nyc';}
+  function data(){return SPOTS[cityKey()]||SPOTS.nyc;}
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  function renderChips(){
+    var wrap=document.getElementById('mapChips');if(!wrap)return;wrap.innerHTML='';
+    data().spots.forEach(function(s){
+      var b=document.createElement('button');b.type='button';b.textContent='📍 '+s[0];
+      b.addEventListener('click',function(){
+        var m=markers[s[0]];
+        if(map&&m){map.flyTo([s[2],s[3]],Math.max(map.getZoom(),14),{duration:.6});setTimeout(function(){m.openPopup();},650);}
+        else{window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s[0]),'_blank');}
+      });
+      wrap.appendChild(b);
+    });
+  }
+  function update(){
+    var d=data();
+    if(map&&layer){
+      map.setView(d.center,d.zoom);
+      layer.clearLayers();markers={};
+      d.spots.forEach(function(s){
+        var m=L.marker([s[2],s[3]]).addTo(layer).bindPopup('<strong>'+esc(s[0])+'</strong><br>'+esc(s[1]));
+        markers[s[0]]=m;
+      });
+      setTimeout(function(){if(map)map.invalidateSize();},80);
+    }
+    renderChips();
+  }
+  function init(){
+    if(window.L&&document.getElementById('homeMap')){
+      map=L.map('homeMap',{scrollWheelZoom:false});
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'}).addTo(map);
+      layer=L.layerGroup().addTo(map);
+    }
+    update();
+  }
+  init();
+  if(window.MutationObserver){new MutationObserver(function(){update();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-city']});}
+  document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-go="home"]')){setTimeout(function(){if(map)map.invalidateSize();},120);}});
 })();
 </script>
 
